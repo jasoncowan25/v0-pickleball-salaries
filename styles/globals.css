@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* --- Dark-first palette (Coinbase-inspired) --- */
+    --background: 222 47% 7%;          /* page background (#0b0f14 vibe) */
+    --foreground: 210 40% 98%;         /* near-white text */
+
+    --card: 222 47% 9%;                /* panels/cards slightly lighter than bg */
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 9%;
+    --popover-foreground: 210 40% 98%;
+
+    /* Primary = Cobalt */
+    --primary: 219 100% 60%;           /* #2a5bff-ish for dark mode pop */
+    --primary-foreground: 0 0% 100%;
+
+    /* Subtle surfaces for inputs/hover */
+    --secondary: 222 47% 12%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 222 20% 14%;              /* table row hover / muted chips */
+    --muted-foreground: 215 16% 72%;
+
+    --accent: 222 47% 12%;             /* lightweight accent bg */
+    --accent-foreground: 210 40% 98%;
+
+    /* Semantic colors */
+    --destructive: 0 62% 50%;          /* red */
+    --destructive-foreground: 0 0% 100%;
+
+    /* NEW: success for +deltas (Coinbase green) */
+    --success: 142 72% 40%;            /* ~#16a34a */
+
+    /* Chrome */
+    --border: 222 20% 18%;             /* subtle borders on dark */
+    --input: 222 20% 18%;
+    --ring: 219 100% 60%;              /* cobalt focus ring */
+
+    /* Radius (keep template’s curvature) */
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground; }
+}
