@@ -1,6 +1,13 @@
 export type Tour = "PPA" | "MLP" | "APP"
 export type Gender = "M" | "F" | "Mixed"
 
+export interface PlayerTour {
+  code: "PPA" | "MLP" | "APP"
+  appearances?: number
+  earnings?: number
+  active?: boolean
+}
+
 export interface Player {
   id: string
   slug: string
@@ -11,6 +18,7 @@ export interface Player {
   headshotUrl?: string
   sponsors?: string[]
   handedness?: "R" | "L"
+  tours?: PlayerTour[]
   totals: {
     ytdPrize: number
     allTimePrize: number
@@ -67,6 +75,11 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/ben-johns-pickleball.png",
     sponsors: ["JOOLA", "Vulcan"],
     handedness: "R",
+    tours: [
+      { code: "PPA", appearances: 15, earnings: 75000, active: true },
+      { code: "MLP", appearances: 8, earnings: 18750, active: true },
+      { code: "APP", appearances: 3, earnings: 18750, active: true },
+    ],
     totals: {
       ytdPrize: 125000,
       allTimePrize: 450000,
@@ -84,6 +97,10 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/anna-leigh-waters-pickleball.png",
     sponsors: ["HEAD", "Fila"],
     handedness: "R",
+    tours: [
+      { code: "PPA", appearances: 12, earnings: 68000, active: true },
+      { code: "MLP", appearances: 6, earnings: 17000, active: true },
+    ],
     totals: {
       ytdPrize: 98000,
       allTimePrize: 320000,
@@ -101,6 +118,11 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/jw-johnson-pickleball.png",
     sponsors: ["Franklin", "Adidas"],
     handedness: "R",
+    tours: [
+      { code: "MLP", appearances: 10, earnings: 50000, active: true },
+      { code: "PPA", appearances: 5, earnings: 25000, active: true },
+      { code: "APP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 87500,
       allTimePrize: 285000,
@@ -118,6 +140,11 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/catherine-parenteau-pickleball.png",
     sponsors: ["Selkirk", "Lululemon"],
     handedness: "R",
+    tours: [
+      { code: "APP", appearances: 10, earnings: 40000, active: true },
+      { code: "PPA", appearances: 3, earnings: 15000, active: true },
+      { code: "MLP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 76000,
       allTimePrize: 245000,
@@ -135,6 +162,11 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/riley-newman-pickleball.png",
     sponsors: ["Paddletek", "Nike"],
     handedness: "L",
+    tours: [
+      { code: "PPA", appearances: 8, earnings: 20000, active: true },
+      { code: "MLP", appearances: 4, earnings: 10000, active: true },
+      { code: "APP", appearances: 1, earnings: 5000, active: true },
+    ],
     totals: {
       ytdPrize: 72000,
       allTimePrize: 220000,
@@ -152,6 +184,11 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/meghan-dizon-pickleball.png",
     sponsors: ["Engage", "Under Armour"],
     handedness: "R",
+    tours: [
+      { code: "MLP", appearances: 10, earnings: 50000, active: true },
+      { code: "PPA", appearances: 4, earnings: 16000, active: true },
+      { code: "APP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 65000,
       allTimePrize: 195000,
@@ -169,6 +206,11 @@ export const mockPlayers: Player[] = [
     primaryTour: "PPA",
     sponsors: ["Selkirk", "Nike"],
     handedness: "R",
+    tours: [
+      { code: "PPA", appearances: 15, earnings: 75000, active: true },
+      { code: "MLP", appearances: 8, earnings: 18750, active: true },
+      { code: "APP", appearances: 3, earnings: 18750, active: true },
+    ],
     totals: {
       ytdPrize: 68000,
       allTimePrize: 210000,
@@ -185,6 +227,11 @@ export const mockPlayers: Player[] = [
     primaryTour: "APP",
     sponsors: ["HEAD", "Wilson"],
     handedness: "R",
+    tours: [
+      { code: "APP", appearances: 10, earnings: 40000, active: true },
+      { code: "PPA", appearances: 3, earnings: 15000, active: true },
+      { code: "MLP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 58000,
       allTimePrize: 185000,
@@ -201,6 +248,11 @@ export const mockPlayers: Player[] = [
     primaryTour: "MLP",
     sponsors: ["JOOLA", "Adidas"],
     handedness: "R",
+    tours: [
+      { code: "MLP", appearances: 10, earnings: 50000, active: true },
+      { code: "PPA", appearances: 4, earnings: 16000, active: true },
+      { code: "APP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 62000,
       allTimePrize: 195000,
@@ -217,6 +269,11 @@ export const mockPlayers: Player[] = [
     primaryTour: "PPA",
     sponsors: ["Paddletek", "Fila"],
     handedness: "R",
+    tours: [
+      { code: "PPA", appearances: 10, earnings: 40000, active: true },
+      { code: "MLP", appearances: 4, earnings: 16000, active: true },
+      { code: "APP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 55000,
       allTimePrize: 175000,
@@ -233,6 +290,11 @@ export const mockPlayers: Player[] = [
     primaryTour: "APP",
     sponsors: ["Franklin", "Under Armour"],
     handedness: "L",
+    tours: [
+      { code: "APP", appearances: 10, earnings: 40000, active: true },
+      { code: "PPA", appearances: 4, earnings: 16000, active: true },
+      { code: "MLP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 59000,
       allTimePrize: 180000,
@@ -249,6 +311,11 @@ export const mockPlayers: Player[] = [
     primaryTour: "MLP",
     sponsors: ["Engage", "Lululemon"],
     handedness: "R",
+    tours: [
+      { code: "MLP", appearances: 10, earnings: 50000, active: true },
+      { code: "PPA", appearances: 4, earnings: 16000, active: true },
+      { code: "APP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 52000,
       allTimePrize: 165000,
@@ -265,6 +332,11 @@ export const mockPlayers: Player[] = [
     primaryTour: "PPA",
     sponsors: ["Vulcan", "Nike"],
     handedness: "R",
+    tours: [
+      { code: "PPA", appearances: 10, earnings: 40000, active: true },
+      { code: "MLP", appearances: 4, earnings: 16000, active: true },
+      { code: "APP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 38000,
       allTimePrize: 120000,
@@ -281,6 +353,11 @@ export const mockPlayers: Player[] = [
     primaryTour: "APP",
     sponsors: ["HEAD", "Wilson"],
     handedness: "L",
+    tours: [
+      { code: "APP", appearances: 10, earnings: 40000, active: true },
+      { code: "PPA", appearances: 4, earnings: 16000, active: true },
+      { code: "MLP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 42000,
       allTimePrize: 135000,
@@ -297,6 +374,11 @@ export const mockPlayers: Player[] = [
     primaryTour: "MLP",
     sponsors: ["Selkirk", "Adidas"],
     handedness: "R",
+    tours: [
+      { code: "MLP", appearances: 10, earnings: 50000, active: true },
+      { code: "PPA", appearances: 4, earnings: 16000, active: true },
+      { code: "APP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 45000,
       allTimePrize: 140000,
@@ -313,6 +395,11 @@ export const mockPlayers: Player[] = [
     primaryTour: "PPA",
     sponsors: ["Franklin", "Fila"],
     handedness: "R",
+    tours: [
+      { code: "PPA", appearances: 10, earnings: 40000, active: true },
+      { code: "MLP", appearances: 4, earnings: 16000, active: true },
+      { code: "APP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 48000,
       allTimePrize: 150000,
@@ -329,6 +416,11 @@ export const mockPlayers: Player[] = [
     primaryTour: "APP",
     sponsors: ["JOOLA", "Under Armour"],
     handedness: "L",
+    tours: [
+      { code: "APP", appearances: 10, earnings: 40000, active: true },
+      { code: "PPA", appearances: 4, earnings: 16000, active: true },
+      { code: "MLP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 41000,
       allTimePrize: 130000,
@@ -345,6 +437,11 @@ export const mockPlayers: Player[] = [
     primaryTour: "MLP",
     sponsors: ["Paddletek", "Lululemon"],
     handedness: "R",
+    tours: [
+      { code: "MLP", appearances: 10, earnings: 50000, active: true },
+      { code: "PPA", appearances: 4, earnings: 16000, active: true },
+      { code: "APP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 39000,
       allTimePrize: 125000,
@@ -361,6 +458,11 @@ export const mockPlayers: Player[] = [
     primaryTour: "PPA",
     sponsors: ["Engage", "Nike"],
     handedness: "R",
+    tours: [
+      { code: "PPA", appearances: 10, earnings: 40000, active: true },
+      { code: "MLP", appearances: 4, earnings: 16000, active: true },
+      { code: "APP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 44000,
       allTimePrize: 138000,
@@ -377,6 +479,11 @@ export const mockPlayers: Player[] = [
     primaryTour: "APP",
     sponsors: ["Vulcan", "Wilson"],
     handedness: "R",
+    tours: [
+      { code: "APP", appearances: 10, earnings: 40000, active: true },
+      { code: "PPA", appearances: 4, earnings: 16000, active: true },
+      { code: "MLP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 46000,
       allTimePrize: 145000,
@@ -393,6 +500,11 @@ export const mockPlayers: Player[] = [
     primaryTour: "MLP",
     sponsors: ["HEAD", "Adidas"],
     handedness: "L",
+    tours: [
+      { code: "MLP", appearances: 10, earnings: 50000, active: true },
+      { code: "PPA", appearances: 4, earnings: 16000, active: true },
+      { code: "APP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 37000,
       allTimePrize: 118000,
@@ -409,6 +521,11 @@ export const mockPlayers: Player[] = [
     primaryTour: "PPA",
     sponsors: ["Selkirk", "Fila"],
     handedness: "R",
+    tours: [
+      { code: "PPA", appearances: 10, earnings: 40000, active: true },
+      { code: "MLP", appearances: 4, earnings: 16000, active: true },
+      { code: "APP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 43000,
       allTimePrize: 136000,
@@ -425,6 +542,11 @@ export const mockPlayers: Player[] = [
     primaryTour: "APP",
     sponsors: ["Franklin", "Under Armour"],
     handedness: "R",
+    tours: [
+      { code: "APP", appearances: 10, earnings: 40000, active: true },
+      { code: "PPA", appearances: 4, earnings: 16000, active: true },
+      { code: "MLP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 40000,
       allTimePrize: 128000,
@@ -441,6 +563,11 @@ export const mockPlayers: Player[] = [
     primaryTour: "MLP",
     sponsors: ["JOOLA", "Lululemon"],
     handedness: "R",
+    tours: [
+      { code: "MLP", appearances: 10, earnings: 50000, active: true },
+      { code: "PPA", appearances: 4, earnings: 16000, active: true },
+      { code: "APP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 36000,
       allTimePrize: 115000,
@@ -457,6 +584,11 @@ export const mockPlayers: Player[] = [
     primaryTour: "PPA",
     sponsors: ["Paddletek", "Nike"],
     handedness: "L",
+    tours: [
+      { code: "PPA", appearances: 10, earnings: 40000, active: true },
+      { code: "MLP", appearances: 4, earnings: 16000, active: true },
+      { code: "APP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 35000,
       allTimePrize: 112000,
@@ -473,6 +605,11 @@ export const mockPlayers: Player[] = [
     primaryTour: "APP",
     sponsors: ["Engage", "Wilson"],
     handedness: "R",
+    tours: [
+      { code: "APP", appearances: 10, earnings: 40000, active: true },
+      { code: "PPA", appearances: 4, earnings: 16000, active: true },
+      { code: "MLP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 38000,
       allTimePrize: 122000,
@@ -489,6 +626,11 @@ export const mockPlayers: Player[] = [
     primaryTour: "MLP",
     sponsors: ["Vulcan", "Adidas"],
     handedness: "R",
+    tours: [
+      { code: "MLP", appearances: 10, earnings: 50000, active: true },
+      { code: "PPA", appearances: 4, earnings: 16000, active: true },
+      { code: "APP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 33000,
       allTimePrize: 105000,
@@ -505,6 +647,11 @@ export const mockPlayers: Player[] = [
     primaryTour: "PPA",
     sponsors: ["HEAD", "Fila"],
     handedness: "L",
+    tours: [
+      { code: "PPA", appearances: 10, earnings: 40000, active: true },
+      { code: "MLP", appearances: 4, earnings: 16000, active: true },
+      { code: "APP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 34000,
       allTimePrize: 108000,
@@ -521,6 +668,11 @@ export const mockPlayers: Player[] = [
     primaryTour: "APP",
     sponsors: ["Selkirk", "Under Armour"],
     handedness: "R",
+    tours: [
+      { code: "APP", appearances: 10, earnings: 40000, active: true },
+      { code: "PPA", appearances: 4, earnings: 16000, active: true },
+      { code: "MLP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 32000,
       allTimePrize: 102000,
@@ -537,6 +689,11 @@ export const mockPlayers: Player[] = [
     primaryTour: "MLP",
     sponsors: ["Franklin", "Lululemon"],
     handedness: "R",
+    tours: [
+      { code: "MLP", appearances: 10, earnings: 50000, active: true },
+      { code: "PPA", appearances: 4, earnings: 16000, active: true },
+      { code: "APP", appearances: 2, earnings: 10000, active: true },
+    ],
     totals: {
       ytdPrize: 31000,
       allTimePrize: 98000,

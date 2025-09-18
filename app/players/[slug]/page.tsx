@@ -333,19 +333,19 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                       tabIndex={0}
                     >
                       <td className="py-3 px-4 font-semibold">{yearData.year}</td>
-                      <td className="py-3 px-4 text-right text-muted-foreground tabular-nums">
+                      <td className="py-3 px-4 text-right tabular-nums text-secondary-foreground">
                         {currency(yearData.ppa)}
                       </td>
-                      <td className="py-3 px-4 text-right text-muted-foreground tabular-nums">
+                      <td className="py-3 px-4 text-right tabular-nums text-secondary-foreground">
                         {currency(yearData.app)}
                       </td>
-                      <td className="py-3 px-4 text-right text-muted-foreground tabular-nums">
+                      <td className="py-3 px-4 text-right tabular-nums text-secondary-foreground">
                         {currency(yearData.mlp)}
                       </td>
-                      <td className="py-3 px-4 text-right text-muted-foreground tabular-nums">
+                      <td className="py-3 px-4 text-right tabular-nums text-secondary-foreground">
                         {currency(yearData.major)}
                       </td>
-                      <td className="py-3 px-4 text-right text-muted-foreground tabular-nums">
+                      <td className="py-3 px-4 text-right tabular-nums text-secondary-foreground">
                         {currency(yearData.contracts)}
                       </td>
                       <td className="py-3 px-4 text-right font-semibold tabular-nums bg-gray-50">
@@ -416,10 +416,6 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                     <SelectItem value="2022">2022</SelectItem>
                   </SelectContent>
                 </Select>
-                <Button variant="outline" size="sm" className="hidden md:flex bg-transparent">
-                  <Download className="h-4 w-4 mr-2" />
-                  Export CSV
-                </Button>
               </div>
             </div>
 
@@ -528,10 +524,6 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                   Endorsements, contracts, bonuses, and other transactions
                 </p>
               </div>
-              <Button variant="outline" size="sm" className="hidden md:flex bg-transparent">
-                <Download className="h-4 w-4 mr-2" />
-                Export CSV
-              </Button>
             </div>
 
             <div className="space-y-4">
