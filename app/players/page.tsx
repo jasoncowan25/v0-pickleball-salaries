@@ -9,12 +9,14 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Search, ChevronLeft, ChevronRight, ArrowUp, ArrowDown, X } from "lucide-react"
-import { mockPlayers } from "@/lib/mock-data"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { Search, ChevronLeft, ChevronRight, ArrowUp, ArrowDown, X, Info } from "lucide-react"
+import { mockPlayers, events } from "@/lib/mock-data"
 import type { Gender } from "@/lib/mock-data"
 import { TourBadges } from "@/components/TourBadges"
 import { computePrimaryTour, visibleTours, type TourCode } from "@/lib/tours"
 import { KpiCard } from "@/components/kpi-card"
+import { useUpdateQueryParam } from "@/hooks/use-update-query-param"
 
 type PlayerRow = {
   id: string
@@ -32,6 +34,24 @@ type PlayerRow = {
   headshotUrl?: string
   tours: TourCode[]
   primaryTour: TourCode | null
+}
+
+type Money = number
+
+function getYearFilteredPlayers(allPlayers: PlayerRow[], year: number): PlayerRow[] {
+  // For now, return all players as we don't have year-specific filtering in the data structure
+  return allPlayers
+}
+
+function computeGlobalTotalsForYear(allPlayers: PlayerRow[], year: number) {
+  const players = getYearFilteredPlayers(allPlayers, year)
+  const totalPrizeMoney: Money = players.reduce((sum, p) => sum + (p.total - p.contract), 0)
+  const reportedContracts: Money = players.reduce((sum, p) => sum + p.contract, 0)
+
+  // Filter events by year if events have date property
+  const eventsTracked = events?.filter((e) => new Date(e.date).getFullYear() === year).length || 42
+
+  return { totalPrizeMoney, eventsTracked, reportedContracts }
 }
 
 const EARNINGS_THRESHOLD_USD = 2500
@@ -76,6 +96,7 @@ const rankize = (players: PlayerRow[]): PlayerRow[] => {
 export default function PlayersPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const updateQueryParam = useUpdateQueryParam()
 
   const [search, setSearch] = useState(searchParams.get("search") || "")
   const [year, setYear] = useState(searchParams.get("year") || "2024")
@@ -86,7 +107,6 @@ export default function PlayersPage() {
   )
   const [currentPage, setCurrentPage] = useState(Number.parseInt(searchParams.get("page") || "1"))
   const [pageSize, setPageSize] = useState(Number.parseInt(searchParams.get("pageSize") || "25"))
-  const [scope, setScope] = useState(searchParams.get("scope") || "filters")
 
   const playerRows: PlayerRow[] = useMemo(() => {
     return mockPlayers.map((player) => {
@@ -170,73 +190,57 @@ export default function PlayersPage() {
     return `Showing ${paginatedPlayers.length} of ${filteredAndSortedPlayers.length} players`
   }
 
-  const updateURL = (updates: Record<string, string>) => {
-    const params = new URLSearchParams(searchParams.toString())
-    Object.entries(updates).forEach(([key, value]) => {
-      if (value) {
-        params.set(key, value)
-      } else {
-        params.delete(key)
-      }
-    })
-    router.push(`?${params.toString()}`, { scroll: false })
-  }
-
   const handleSort = (column: string) => {
     if (column === "rank") {
       setSortColumn("total")
       setSortDirection("desc")
-      updateURL({ sort: "total", dir: "desc" })
+      updateQueryParam("sort", "total")
+      updateQueryParam("dir", "desc")
     } else {
       const newDirection = sortColumn === column && sortDirection === "desc" ? "asc" : "desc"
       setSortColumn(column)
       setSortDirection(newDirection)
-      updateURL({ sort: column, dir: newDirection })
+      updateQueryParam("sort", column)
+      updateQueryParam("dir", newDirection)
     }
   }
 
   const handleGenderChange = (newGender: Gender | "all") => {
     setGender(newGender)
     setCurrentPage(1)
-    updateURL({ gender: newGender === "all" ? "" : newGender, page: "1" })
+    updateQueryParam("gender", newGender === "all" ? "" : newGender)
+    updateQueryParam("page", "1")
   }
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
-    updateURL({ page: page.toString() })
+    updateQueryParam("page", page.toString())
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
   const handlePageSizeChange = (size: number) => {
     setPageSize(size)
     setCurrentPage(1)
-    updateURL({ pageSize: size.toString(), page: "1" })
+    updateQueryParam("pageSize", size.toString())
+    updateQueryParam("page", "1")
   }
 
   const handleSearchChange = (value: string) => {
     setSearch(value)
     setCurrentPage(1)
-    updateURL({ search: value || "", page: "1" })
+    updateQueryParam("search", value || "")
+    updateQueryParam("page", "1")
   }
 
   const handleYearChange = (newYear: string) => {
     setYear(newYear)
     setCurrentPage(1)
-    updateURL({ year: newYear, page: "1" })
+    updateQueryParam("year", newYear)
+    updateQueryParam("page", "1")
   }
 
-  const kpiData = useMemo(() => {
-    const dataSet = scope === "all" ? playerRows : filteredAndSortedPlayers
-    const totalPrizeMoney = dataSet.reduce((sum, player) => sum + (player.total - player.contract), 0)
-    const totalContracts = dataSet.reduce((sum, player) => sum + player.contract, 0)
-    const eventsCount = 42 // Mock stable count based on current data
-
-    return {
-      totalPrizeMoney,
-      totalContracts,
-      eventsCount,
-    }
-  }, [playerRows, filteredAndSortedPlayers, scope])
+  const selectedYear = Number.parseInt(year)
+  const { totalPrizeMoney, eventsTracked, reportedContracts } = computeGlobalTotalsForYear(playerRows, selectedYear)
 
   const activeFilters = useMemo(() => {
     const filters = []
@@ -250,13 +254,13 @@ export default function PlayersPage() {
   const clearFilter = (key: string) => {
     if (key === "search") {
       setSearch("")
-      updateURL({ search: "" })
+      updateQueryParam("search", "")
     } else if (key === "gender") {
       setGender("all")
-      updateURL({ gender: "" })
+      updateQueryParam("gender", "")
     } else if (key === "year") {
       setYear("2024")
-      updateURL({ year: "2024" })
+      updateQueryParam("year", "2024")
     }
     setCurrentPage(1)
   }
@@ -266,7 +270,10 @@ export default function PlayersPage() {
     setGender("all")
     setYear("2024")
     setCurrentPage(1)
-    updateURL({ search: "", gender: "", year: "2024", page: "1" })
+    updateQueryParam("search", "")
+    updateQueryParam("gender", "")
+    updateQueryParam("year", "2024")
+    updateQueryParam("page", "1")
   }
 
   const SortIcon = ({ column }: { column: string }) => {
@@ -276,54 +283,57 @@ export default function PlayersPage() {
     return sortDirection === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />
   }
 
-  const selectedYear = Number.parseInt(year)
+  const getGenderLabel = () => {
+    if (gender === "all") return "All"
+    return gender === "M" ? "Men" : "Women"
+  }
 
   return (
     <div className="min-h-screen bg-background">
       <main className="container py-6">
-        <div className="sticky top-[var(--header-height,56px)] z-20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b pb-2 mb-4">
-          <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between mb-4">
-            <div className="flex-1">
-              <div className="text-xs font-medium text-muted-foreground mb-1">Search players</div>
-              <div className="relative">
+        <div className="border-b pb-2 mb-4">
+          <div className="grid grid-cols-12 gap-3 md:gap-4 items-end mb-4">
+            <div className="col-span-12 md:col-span-8">
+              <div className="sr-only">Search players</div>
+              <div className="relative w-full">
                 <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
-                  className="pl-8"
+                  className="pl-8 h-11 w-full"
                   placeholder="Search players..."
                   value={search}
                   onChange={(e) => handleSearchChange(e.target.value)}
+                  aria-label="Search players"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:w-[440px]">
-              <div>
-                <div className="text-xs font-medium text-muted-foreground mb-1">Gender</div>
-                <Select value={gender} onValueChange={handleGenderChange}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All</SelectItem>
-                    <SelectItem value="M">Men</SelectItem>
-                    <SelectItem value="F">Women</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <div className="text-xs font-medium text-muted-foreground mb-1">Year</div>
-                <Select value={year} onValueChange={handleYearChange}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="2024">2024</SelectItem>
-                    <SelectItem value="2023">2023</SelectItem>
-                    <SelectItem value="2022">2022</SelectItem>
-                    <SelectItem value="2021">2021</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+            <div className="col-span-6 md:col-span-2">
+              <div className="sr-only">Gender</div>
+              <Select value={gender} onValueChange={handleGenderChange}>
+                <SelectTrigger className="h-11" aria-label="Gender">
+                  <SelectValue>{getGenderLabel()}</SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="M">Men</SelectItem>
+                  <SelectItem value="F">Women</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="col-span-6 md:col-span-2">
+              <div className="sr-only">Year</div>
+              <Select value={year} onValueChange={handleYearChange}>
+                <SelectTrigger className="h-11" aria-label="Year">
+                  <SelectValue>{year}</SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="2024">2024</SelectItem>
+                  <SelectItem value="2023">2023</SelectItem>
+                  <SelectItem value="2022">2022</SelectItem>
+                  <SelectItem value="2021">2021</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
@@ -349,29 +359,33 @@ export default function PlayersPage() {
           )}
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3 mb-6">
-          <KpiCard title={`Total Prize Money (${year})`} value={formatUSD(kpiData.totalPrizeMoney)} />
-          <KpiCard title={`Events Tracked (${year})`} value={kpiData.eventsCount.toString()} />
-          <KpiCard title="Reported Contracts" value={formatUSD(kpiData.totalContracts)} />
+        <div className="flex items-center gap-2 mb-4">
+          <h3 className="text-sm font-medium text-muted-foreground">KPI Scope</h3>
+          <TooltipProvider delayDuration={150}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  aria-label="KPI details"
+                  className="inline-flex h-5 w-5 items-center justify-center text-muted-foreground hover:text-foreground"
+                >
+                  <Info className="h-4 w-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" align="start" className="max-w-xs text-sm">
+                <p>Scope reflects filters applied (year, gender, search)</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
 
-        <div className="flex items-center gap-2 mb-6">
-          <span className="text-sm text-muted-foreground">KPI Scope:</span>
-          <Select
-            value={scope}
-            onValueChange={(value) => {
-              setScope(value)
-              updateURL({ scope: value })
-            }}
-          >
-            <SelectTrigger className="w-40">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="filters">Current Filters</SelectItem>
-              <SelectItem value="all">All {year}</SelectItem>
-            </SelectContent>
-          </Select>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-6">
+          <KpiCard title={`Total Prize Money (${selectedYear})`} value={formatUSD(totalPrizeMoney)} />
+          <KpiCard title={`Events Tracked (${selectedYear})`} value={eventsTracked.toString()} />
+          <KpiCard
+            title="Reported Contracts"
+            value={formatUSD(reportedContracts)}
+            tooltip="Reported player contracts and sponsorships, based on available sources"
+          />
         </div>
 
         <Card className="p-6">
@@ -379,18 +393,18 @@ export default function PlayersPage() {
             <div>
               <h2 className="text-lg font-semibold">{getTitle()}</h2>
               <p className="text-sm text-muted-foreground">{getSubtitle()}</p>
+
+              {(gender !== "all" || (search?.length ?? 0) > 0) && (
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Filtered by:
+                  {gender !== "all" && <span className="ml-1">Gender = {gender === "M" ? "Men" : "Women"}</span>}
+                  {(search?.length ?? 0) > 0 && <span className="ml-2">Search = "{search}"</span>}
+                </p>
+              )}
             </div>
             <div className="text-xs text-muted-foreground md:text-right">
               Last updated: {new Date().toLocaleDateString()}
             </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2 mb-2 text-xs">
-            <span className="text-muted-foreground">Legend:</span>
-            <Badge className="bg-blue-100 text-blue-800">PPA</Badge>
-            <Badge className="bg-green-100 text-green-800">MLP</Badge>
-            <Badge className="bg-purple-100 text-purple-800">APP</Badge>
-            <Badge className="bg-muted text-foreground/80">Major</Badge>
           </div>
 
           <div className="hidden md:block">
@@ -402,6 +416,13 @@ export default function PlayersPage() {
                       <div
                         onClick={() => handleSort("rank")}
                         className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer flex items-center justify-center gap-1 ${sortColumn === "rank" || sortColumn === "total" ? "bg-muted/40" : ""}`}
+                        aria-sort={
+                          sortColumn === "rank" || sortColumn === "total"
+                            ? sortDirection === "asc"
+                              ? "ascending"
+                              : "descending"
+                            : "none"
+                        }
                       >
                         Rank <SortIcon column="rank" />
                       </div>
@@ -410,6 +431,9 @@ export default function PlayersPage() {
                       <div
                         onClick={() => handleSort("name")}
                         className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer flex items-center gap-1 ${sortColumn === "name" ? "bg-muted/40" : ""}`}
+                        aria-sort={
+                          sortColumn === "name" ? (sortDirection === "asc" ? "ascending" : "descending") : "none"
+                        }
                       >
                         Player <SortIcon column="name" />
                       </div>
@@ -421,6 +445,9 @@ export default function PlayersPage() {
                       <div
                         onClick={() => handleSort("ppa")}
                         className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer flex items-center justify-end gap-1 ${sortColumn === "ppa" ? "bg-muted/40" : ""}`}
+                        aria-sort={
+                          sortColumn === "ppa" ? (sortDirection === "asc" ? "ascending" : "descending") : "none"
+                        }
                       >
                         PPA <SortIcon column="ppa" />
                       </div>
@@ -429,6 +456,9 @@ export default function PlayersPage() {
                       <div
                         onClick={() => handleSort("app")}
                         className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer flex items-center justify-end gap-1 ${sortColumn === "app" ? "bg-muted/40" : ""}`}
+                        aria-sort={
+                          sortColumn === "app" ? (sortDirection === "asc" ? "ascending" : "descending") : "none"
+                        }
                       >
                         APP <SortIcon column="app" />
                       </div>
@@ -437,6 +467,9 @@ export default function PlayersPage() {
                       <div
                         onClick={() => handleSort("mlp")}
                         className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer flex items-center justify-end gap-1 ${sortColumn === "mlp" ? "bg-muted/40" : ""}`}
+                        aria-sort={
+                          sortColumn === "mlp" ? (sortDirection === "asc" ? "ascending" : "descending") : "none"
+                        }
                       >
                         MLP <SortIcon column="mlp" />
                       </div>
@@ -445,22 +478,44 @@ export default function PlayersPage() {
                       <div
                         onClick={() => handleSort("major")}
                         className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer flex items-center justify-end gap-1 ${sortColumn === "major" ? "bg-muted/40" : ""}`}
+                        aria-sort={
+                          sortColumn === "major" ? (sortDirection === "asc" ? "ascending" : "descending") : "none"
+                        }
                       >
-                        Major <SortIcon column="major" />
+                        Majors <SortIcon column="major" />
                       </div>
                     </th>
                     <th className="text-right p-3">
-                      <div
-                        onClick={() => handleSort("contract")}
-                        className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer flex items-center justify-end gap-1 ${sortColumn === "contract" ? "bg-muted/40" : ""}`}
-                      >
-                        Contract <SortIcon column="contract" />
-                      </div>
+                      <TooltipProvider delayDuration={150}>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <div
+                              onClick={() => handleSort("contract")}
+                              className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer flex items-center justify-end gap-1 ${sortColumn === "contract" ? "bg-muted/40" : ""}`}
+                              aria-sort={
+                                sortColumn === "contract"
+                                  ? sortDirection === "asc"
+                                    ? "ascending"
+                                    : "descending"
+                                  : "none"
+                              }
+                            >
+                              Contract <Info className="h-3 w-3 ml-1" /> <SortIcon column="contract" />
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent side="bottom" align="end" className="max-w-xs text-sm">
+                            <p>Reported player contracts and sponsorships, based on available sources</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     </th>
-                    <th className="text-right p-3 bg-muted/40">
+                    <th className="text-right p-3 bg-muted/30">
                       <div
                         onClick={() => handleSort("total")}
                         className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer flex items-center justify-end gap-1 ${sortColumn === "total" ? "bg-muted/60" : ""}`}
+                        aria-sort={
+                          sortColumn === "total" ? (sortDirection === "asc" ? "ascending" : "descending") : "none"
+                        }
                       >
                         Total <SortIcon column="total" />
                       </div>
@@ -549,37 +604,32 @@ export default function PlayersPage() {
                     </Button>
                   </div>
 
+                  <div className="text-2xl font-bold tabular-nums">{formatUSD(player.total)}</div>
+
                   <div className="flex items-center gap-2 flex-wrap">
                     <TourBadges tours={player.tours || []} primary={player.primaryTour} mobile={true} />
                   </div>
 
-                  <div className="space-y-1">
-                    <div className="text-2xl font-bold tabular-nums">
-                      <span className="text-xs text-muted-foreground">Year Total</span>
-                      <div>{formatUSD(player.total)}</div>
+                  <div className="grid grid-cols-2 gap-1 text-xs">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">PPA:</span>
+                      <span className="tabular-nums">{player.ppa > 0 ? formatUSD(player.ppa) : "—"}</span>
                     </div>
-
-                    <div className="grid grid-cols-2 gap-1 text-xs">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">PPA:</span>
-                        <span className="tabular-nums">{player.ppa > 0 ? formatUSD(player.ppa) : "—"}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">APP:</span>
-                        <span className="tabular-nums">{player.app > 0 ? formatUSD(player.app) : "—"}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">MLP:</span>
-                        <span className="tabular-nums">{player.mlp > 0 ? formatUSD(player.mlp) : "—"}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Major:</span>
-                        <span className="tabular-nums">{player.major > 0 ? formatUSD(player.major) : "—"}</span>
-                      </div>
-                      <div className="flex justify-between col-span-2">
-                        <span className="text-muted-foreground">Contract:</span>
-                        <span className="tabular-nums">{player.contract > 0 ? formatUSD(player.contract) : "—"}</span>
-                      </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">APP:</span>
+                      <span className="tabular-nums">{player.app > 0 ? formatUSD(player.app) : "—"}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">MLP:</span>
+                      <span className="tabular-nums">{player.mlp > 0 ? formatUSD(player.mlp) : "—"}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Majors:</span>
+                      <span className="tabular-nums">{player.major > 0 ? formatUSD(player.major) : "—"}</span>
+                    </div>
+                    <div className="flex justify-between col-span-2">
+                      <span className="text-muted-foreground">Contract:</span>
+                      <span className="tabular-nums">{player.contract > 0 ? formatUSD(player.contract) : "—"}</span>
                     </div>
                   </div>
                 </div>
