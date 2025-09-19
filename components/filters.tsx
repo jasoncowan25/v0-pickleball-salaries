@@ -98,7 +98,7 @@ export function Filters({ onFiltersChange, showActiveStatus = false }: FiltersPr
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-4 p-4 bg-card/50 rounded-lg">
+    <div className="flex flex-wrap items-center gap-4 p-4 bg-card/50 rounded-lg w-full max-w-full overflow-x-hidden">
       <div className="flex-1 min-w-[200px]">
         <Input
           placeholder="Search players..."
@@ -107,7 +107,7 @@ export function Filters({ onFiltersChange, showActiveStatus = false }: FiltersPr
         />
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <span className="text-sm font-medium">Tours:</span>
         {tours.map((tour) => (
           <Button
@@ -138,7 +138,11 @@ export function Filters({ onFiltersChange, showActiveStatus = false }: FiltersPr
         <SelectTrigger className="w-[140px]">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent
+          position="popper"
+          align="start"
+          className="min-w-[var(--radix-select-trigger-width)] max-w-[calc(100vw-1rem)]"
+        >
           {genders.map((gender) => (
             <SelectItem key={gender.value} value={gender.value}>
               {gender.label}
@@ -152,7 +156,11 @@ export function Filters({ onFiltersChange, showActiveStatus = false }: FiltersPr
           <SelectTrigger className="w-[140px]">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent
+            position="popper"
+            align="start"
+            className="min-w-[var(--radix-select-trigger-width)] max-w-[calc(100vw-1rem)]"
+          >
             {activeStatuses.map((status) => (
               <SelectItem key={status.value} value={status.value}>
                 {status.label}
@@ -166,7 +174,11 @@ export function Filters({ onFiltersChange, showActiveStatus = false }: FiltersPr
         <SelectTrigger className="w-[100px]">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent
+          position="popper"
+          align="start"
+          className="min-w-[var(--radix-select-trigger-width)] max-w-[calc(100vw-1rem)]"
+        >
           {years.map((year) => (
             <SelectItem key={year} value={year}>
               {year}

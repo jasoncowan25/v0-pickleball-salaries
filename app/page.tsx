@@ -119,9 +119,9 @@ export default function Page() {
     <div className="min-h-screen bg-background">
       <main className="container py-6">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold mb-2">Pickleball Earnings Index</h1>
+          <h1 className="text-3xl font-bold mb-2">Pickleball Earnings Leaders</h1>
           <p className="text-muted-foreground mb-2">
-            Track professional pickleball earnings across PPA, MLP, and APP tours
+            Tracking pro pickleball prize money and contracts across PPA, MLP, and APP tours.
           </p>
           <p className="text-sm text-muted-foreground">Last updated: {new Date().toLocaleDateString()}</p>
         </div>

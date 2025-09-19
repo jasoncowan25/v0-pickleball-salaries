@@ -92,6 +92,13 @@
     /* Updated sidebar ring to match Dink Bank yellow */
     --sidebar-ring: 51 100% 50%;
   }
+
+  /* Add overflow-x hidden and width 100% to prevent horizontal scroll on iOS */
+  html,
+  body {
+    overflow-x: hidden;
+    width: 100%;
+  }
 }
 
 @layer base {

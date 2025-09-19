@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useMemo } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useMemo, useTransition } from "react"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Card } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -16,7 +16,7 @@ import type { Gender } from "@/lib/mock-data"
 import { TourBadges } from "@/components/TourBadges"
 import { computePrimaryTour, visibleTours, type TourCode } from "@/lib/tours"
 import { KpiCard } from "@/components/kpi-card"
-import { useUpdateQueryParam } from "@/hooks/use-update-query-param"
+import { mergeSearchParams, stripEmpty } from "@/lib/url"
 
 type PlayerRow = {
   id: string
@@ -95,18 +95,28 @@ const rankize = (players: PlayerRow[]): PlayerRow[] => {
 
 export default function PlayersPage() {
   const router = useRouter()
+  const pathname = usePathname()
   const searchParams = useSearchParams()
-  const updateQueryParam = useUpdateQueryParam()
+  const [isPending, startTransition] = useTransition()
 
-  const [search, setSearch] = useState(searchParams.get("search") || "")
-  const [year, setYear] = useState(searchParams.get("year") || "2024")
-  const [gender, setGender] = useState<Gender | "all">((searchParams.get("gender") as Gender | "all") || "all")
-  const [sortColumn, setSortColumn] = useState(searchParams.get("sort") || "total")
-  const [sortDirection, setSortDirection] = useState<"asc" | "desc">(
-    (searchParams.get("dir") as "asc" | "desc") || "desc",
-  )
-  const [currentPage, setCurrentPage] = useState(Number.parseInt(searchParams.get("page") || "1"))
-  const [pageSize, setPageSize] = useState(Number.parseInt(searchParams.get("pageSize") || "25"))
+  const search = searchParams.get("search") || ""
+  const year = searchParams.get("year") || "2024"
+  const gender = (searchParams.get("gender") as Gender | "all") || "all"
+  const sortColumn = searchParams.get("sort") || "total"
+  const sortDirection = (searchParams.get("dir") as "asc" | "desc") || "desc"
+  const currentPage = Number.parseInt(searchParams.get("page") || "1")
+  const pageSize = Number.parseInt(searchParams.get("pageSize") || "25")
+
+  function setFilter(updates: Record<string, string | undefined | null>) {
+    const merged = mergeSearchParams(searchParams, updates)
+    const cleaned = stripEmpty(merged)
+    const qs = cleaned.toString()
+    const href = qs ? `${pathname}?${qs}` : pathname
+
+    startTransition(() => {
+      router.replace(href, { scroll: false })
+    })
+  }
 
   const playerRows: PlayerRow[] = useMemo(() => {
     return mockPlayers.map((player) => {
@@ -192,51 +202,32 @@ export default function PlayersPage() {
 
   const handleSort = (column: string) => {
     if (column === "rank") {
-      setSortColumn("total")
-      setSortDirection("desc")
-      updateQueryParam("sort", "total")
-      updateQueryParam("dir", "desc")
+      setFilter({ sort: "total", dir: "desc" })
     } else {
       const newDirection = sortColumn === column && sortDirection === "desc" ? "asc" : "desc"
-      setSortColumn(column)
-      setSortDirection(newDirection)
-      updateQueryParam("sort", column)
-      updateQueryParam("dir", newDirection)
+      setFilter({ sort: column, dir: newDirection })
     }
   }
 
   const handleGenderChange = (newGender: Gender | "all") => {
-    setGender(newGender)
-    setCurrentPage(1)
-    updateQueryParam("gender", newGender === "all" ? "" : newGender)
-    updateQueryParam("page", "1")
+    setFilter({ gender: newGender === "all" ? null : newGender, page: "1" })
   }
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page)
-    updateQueryParam("page", page.toString())
+    setFilter({ page: page.toString() })
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
   const handlePageSizeChange = (size: number) => {
-    setPageSize(size)
-    setCurrentPage(1)
-    updateQueryParam("pageSize", size.toString())
-    updateQueryParam("page", "1")
+    setFilter({ pageSize: size.toString(), page: "1" })
   }
 
   const handleSearchChange = (value: string) => {
-    setSearch(value)
-    setCurrentPage(1)
-    updateQueryParam("search", value || "")
-    updateQueryParam("page", "1")
+    setFilter({ search: value || null, page: "1" })
   }
 
   const handleYearChange = (newYear: string) => {
-    setYear(newYear)
-    setCurrentPage(1)
-    updateQueryParam("year", newYear)
-    updateQueryParam("page", "1")
+    setFilter({ year: newYear, page: "1" })
   }
 
   const selectedYear = Number.parseInt(year)
@@ -253,27 +244,24 @@ export default function PlayersPage() {
 
   const clearFilter = (key: string) => {
     if (key === "search") {
-      setSearch("")
-      updateQueryParam("search", "")
+      setFilter({ search: null, page: "1" })
     } else if (key === "gender") {
-      setGender("all")
-      updateQueryParam("gender", "")
+      setFilter({ gender: null, page: "1" })
     } else if (key === "year") {
-      setYear("2024")
-      updateQueryParam("year", "2024")
+      setFilter({ year: null, page: "1" }) // Remove year parameter instead of setting to "2024"
     }
-    setCurrentPage(1)
   }
 
   const clearAllFilters = () => {
-    setSearch("")
-    setGender("all")
-    setYear("2024")
-    setCurrentPage(1)
-    updateQueryParam("search", "")
-    updateQueryParam("gender", "")
-    updateQueryParam("year", "2024")
-    updateQueryParam("page", "1")
+    setFilter({
+      search: null,
+      gender: null,
+      year: null,
+      page: "1",
+      sort: null,
+      dir: null,
+      pageSize: null,
+    })
   }
 
   const SortIcon = ({ column }: { column: string }) => {
@@ -410,7 +398,7 @@ export default function PlayersPage() {
           <div className="hidden md:block">
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="sticky top-0 bg-background">
+                <thead>
                   <tr className="border-b">
                     <th className="text-center p-3">
                       <div
