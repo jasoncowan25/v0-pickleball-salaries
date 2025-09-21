@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useTransition } from "react"
+import { Suspense, useMemo, useTransition } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Card } from "@/components/ui/card"
@@ -95,7 +95,7 @@ const rankize = (players: PlayerRow[]): PlayerRow[] => {
   }))
 }
 
-export default function PlayersPage() {
+function PlayersPageContent() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -718,5 +718,26 @@ export default function PlayersPage() {
         </Card>
       </main>
     </div>
+  )
+}
+
+export default function PlayersPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-background">
+          <main className="container py-6">
+            <div className="flex items-center justify-center py-12">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+                <p className="text-muted-foreground">Loading players...</p>
+              </div>
+            </div>
+          </main>
+        </div>
+      }
+    >
+      <PlayersPageContent />
+    </Suspense>
   )
 }

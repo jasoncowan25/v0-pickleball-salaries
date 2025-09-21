@@ -1,9 +1,10 @@
 "use client"
 
+import { Suspense } from "react"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-export default function LanguageSwitcher() {
+function LanguageSwitcherContent() {
   const router = useRouter()
   const pathname = usePathname()
   const params = useSearchParams()
@@ -28,5 +29,23 @@ export default function LanguageSwitcher() {
         </SelectContent>
       </Select>
     </div>
+  )
+}
+
+export default function LanguageSwitcher() {
+  return (
+    <Suspense
+      fallback={
+        <div className="w-[180px]">
+          <Select disabled>
+            <SelectTrigger aria-label="Language">
+              <SelectValue placeholder="Loading..." />
+            </SelectTrigger>
+          </Select>
+        </div>
+      }
+    >
+      <LanguageSwitcherContent />
+    </Suspense>
   )
 }

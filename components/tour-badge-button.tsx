@@ -1,5 +1,6 @@
 "use client"
 
+import { Suspense } from "react"
 import { Badge } from "@/components/ui/badge"
 import { useSearchParams, useRouter } from "next/navigation"
 
@@ -11,7 +12,7 @@ interface TourBadgeButtonProps {
   isPrimary?: boolean
 }
 
-export function TourBadgeButton({ tour, active, isPrimary = false }: TourBadgeButtonProps) {
+function TourBadgeButtonContent({ tour, active, isPrimary = false }: TourBadgeButtonProps) {
   const router = useRouter()
   const params = useSearchParams()
   const current = params.get("tour") ?? "all"
@@ -48,5 +49,19 @@ export function TourBadgeButton({ tour, active, isPrimary = false }: TourBadgeBu
         {tour}
       </Badge>
     </button>
+  )
+}
+
+export function TourBadgeButton({ tour, active, isPrimary = false }: TourBadgeButtonProps) {
+  return (
+    <Suspense
+      fallback={
+        <Badge variant="outline" className="cursor-pointer">
+          {tour}
+        </Badge>
+      }
+    >
+      <TourBadgeButtonContent tour={tour} active={active} isPrimary={isPrimary} />
+    </Suspense>
   )
 }

@@ -1,8 +1,8 @@
 "use client"
 
 import * as React from "react"
+import { Suspense } from "react"
 import { useSearchParams } from "next/navigation"
-
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -16,7 +16,7 @@ type FormStatus = "idle" | "submitting" | "success" | "error"
 
 const humanQuestion = "What is 3 + 4?"
 
-export default function SubmitCorrectionForm() {
+function SubmitCorrectionFormContent() {
   const params = useSearchParams()
   const [status, setStatus] = React.useState<FormStatus>("idle")
   const [errorMsg, setErrorMsg] = React.useState<string | null>(null)
@@ -377,5 +377,22 @@ export default function SubmitCorrectionForm() {
         </div>
       </form>
     </Card>
+  )
+}
+
+export default function SubmitCorrectionForm() {
+  return (
+    <Suspense
+      fallback={
+        <Card className="p-6">
+          <div className="space-y-2 mb-4">
+            <h1 className="text-2xl font-semibold">Submit a correction</h1>
+            <p className="text-sm text-muted-foreground">Loading form...</p>
+          </div>
+        </Card>
+      }
+    >
+      <SubmitCorrectionFormContent />
+    </Suspense>
   )
 }
