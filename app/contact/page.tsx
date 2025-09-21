@@ -1,8 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -10,63 +8,78 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { contactSchema, type ContactInput, categoryLabels, categories } from "@/lib/validation/contact"
+
+const categories = ["general", "data-correction", "press", "partnership"] as const
+const categoryLabels = {
+  general: "General Inquiry",
+  "data-correction": "Data Correction",
+  press: "Press Inquiry",
+  partnership: "Partnership",
+}
 
 export default function ContactPage() {
-  const [renderedAt] = React.useState<number>(() => Date.now())
+  const [formData, setFormData] = React.useState({
+    name: "",
+    email: "",
+    category: "general",
+    subject: "",
+    message: "",
+    consent: false,
+  })
   const [status, setStatus] = React.useState<"idle" | "success" | "error">("idle")
   const [formError, setFormError] = React.useState<string>("")
+  const [isSubmitting, setIsSubmitting] = React.useState(false)
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    setValue,
-    formState: { errors, isSubmitting },
-  } = useForm<ContactInput>({
-    resolver: zodResolver(contactSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      category: "general",
-      subject: "",
-      message: "",
-      consent: false,
-      company: "", // honeypot
-      renderedAt,
-    },
-  })
-
-  async function onSubmit(values: ContactInput) {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
     setStatus("idle")
     setFormError("")
+    setIsSubmitting(true)
+
+    // Basic validation
+    if (!formData.name.trim()) {
+      setFormError("Name is required")
+      setIsSubmitting(false)
+      return
+    }
+    if (!formData.email.trim() || !formData.email.includes("@")) {
+      setFormError("Valid email is required")
+      setIsSubmitting(false)
+      return
+    }
+    if (!formData.subject.trim()) {
+      setFormError("Subject is required")
+      setIsSubmitting(false)
+      return
+    }
+    if (!formData.message.trim()) {
+      setFormError("Message is required")
+      setIsSubmitting(false)
+      return
+    }
+    if (!formData.consent) {
+      setFormError("You must agree to the Terms and Privacy Policy")
+      setIsSubmitting(false)
+      return
+    }
+
     try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      })
-      const json = await res.json()
-      if (!res.ok || !json.ok) {
-        setStatus("error")
-        setFormError(json?.error ?? "Something went wrong.")
-        return
-      }
+      // Simulate API call for now
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       setStatus("success")
-      reset({
-        ...values,
+      setFormData({
         name: "",
         email: "",
+        category: "general",
         subject: "",
         message: "",
         consent: false,
-        company: "",
-        renderedAt: Date.now(),
-        category: "general",
       })
     } catch {
       setStatus("error")
       setFormError("Network error. Please try again.")
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -79,7 +92,7 @@ export default function ContactPage() {
             Questions, corrections, or press inquiries? Use this form and we'll get back to you.
           </CardDescription>
         </CardHeader>
-        <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <form onSubmit={handleSubmit} noValidate>
           <CardContent className="space-y-6">
             {status === "success" && (
               <p
@@ -103,21 +116,28 @@ export default function ContactPage() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="name">Full name</Label>
-                <Input id="name" aria-invalid={!!errors.name} {...register("name")} />
-                {errors.name && <FieldError msg={errors.name.message} />}
+                <Input
+                  id="name"
+                  value={formData.name}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" aria-invalid={!!errors.email} {...register("email")} />
-                {errors.email && <FieldError msg={errors.email.message} />}
+                <Input
+                  id="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
+                />
               </div>
             </div>
 
             <div className="space-y-2">
               <Label>Category</Label>
               <Select
-                defaultValue="general"
-                onValueChange={(v) => setValue("category", v as any, { shouldValidate: true })}
+                value={formData.category}
+                onValueChange={(value) => setFormData((prev) => ({ ...prev, category: value }))}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select a category" />
@@ -134,23 +154,33 @@ export default function ContactPage() {
 
             <div className="space-y-2">
               <Label htmlFor="subject">Subject</Label>
-              <Input id="subject" aria-invalid={!!errors.subject} {...register("subject")} />
-              {errors.subject && <FieldError msg={errors.subject.message} />}
+              <Input
+                id="subject"
+                value={formData.subject}
+                onChange={(e) => setFormData((prev) => ({ ...prev, subject: e.target.value }))}
+              />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="message">Message</Label>
-              <Textarea id="message" rows={6} aria-invalid={!!errors.message} {...register("message")} />
-              {errors.message && <FieldError msg={errors.message.message} />}
+              <Textarea
+                id="message"
+                rows={6}
+                value={formData.message}
+                onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))}
+              />
             </div>
 
             <div className="flex items-start gap-3">
-              <Checkbox id="consent" {...register("consent")} />
+              <Checkbox
+                id="consent"
+                checked={formData.consent}
+                onCheckedChange={(checked) => setFormData((prev) => ({ ...prev, consent: !!checked }))}
+              />
               <div className="space-y-1">
                 <Label htmlFor="consent" className="font-normal">
                   I agree to the Terms and Privacy Policy.
                 </Label>
-                {errors.consent && <FieldError msg={errors.consent.message} />}
                 <p className="text-xs text-muted-foreground">
                   By submitting, you agree to our{" "}
                   <a className="underline" href="/terms">
@@ -164,17 +194,6 @@ export default function ContactPage() {
                 </p>
               </div>
             </div>
-
-            {/* Honeypot + timing */}
-            <input
-              type="text"
-              tabIndex={-1}
-              autoComplete="off"
-              className="hidden"
-              aria-hidden="true"
-              {...register("company")}
-            />
-            <input type="hidden" value={renderedAt} {...register("renderedAt", { valueAsNumber: true })} />
           </CardContent>
           <CardFooter className="flex items-center justify-between">
             <div className="text-xs text-muted-foreground">
@@ -196,9 +215,4 @@ export default function ContactPage() {
       </Card>
     </div>
   )
-}
-
-function FieldError({ msg }: { msg?: string }) {
-  if (!msg) return null
-  return <p className="text-xs text-red-600">{msg}</p>
 }

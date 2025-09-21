@@ -2,7 +2,6 @@
 
 import Link from "next/link"
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
-import { Linkedin, Twitter } from "lucide-react"
 import LanguageSwitcher from "@/components/language-switcher"
 
 export default function SiteFooter() {
@@ -49,10 +48,9 @@ export default function SiteFooter() {
                 href="https://www.linkedin.com/company/dinkbank"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 hover:underline"
+                className="hover:underline"
               >
-                <Linkedin className="h-4 w-4" aria-hidden="true" />
-                <span>LinkedIn</span>
+                LinkedIn
               </a>
             </li>
             <li>
@@ -60,10 +58,9 @@ export default function SiteFooter() {
                 href="https://twitter.com/dinkbank"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 hover:underline"
+                className="hover:underline"
               >
-                <Twitter className="h-4 w-4" aria-hidden="true" />
-                <span>X (Twitter)</span>
+                X (Twitter)
               </a>
             </li>
           </ul>
@@ -124,10 +121,9 @@ export default function SiteFooter() {
                     href="https://www.linkedin.com/company/dinkbank"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 hover:underline"
+                    className="hover:underline"
                   >
-                    <Linkedin className="h-4 w-4" aria-hidden="true" />
-                    <span>LinkedIn</span>
+                    LinkedIn
                   </a>
                 </li>
                 <li>
@@ -135,10 +131,9 @@ export default function SiteFooter() {
                     href="https://twitter.com/dinkbank"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 hover:underline"
+                    className="hover:underline"
                   >
-                    <Twitter className="h-4 w-4" aria-hidden="true" />
-                    <span>X (Twitter)</span>
+                    X (Twitter)
                   </a>
                 </li>
               </ul>
