@@ -1,6 +1,38 @@
 import { NextResponse } from "next/server"
-import { contactSchema } from "@/lib/validation/contact"
 import { checkRateLimit } from "@/lib/rate-limit"
+
+const categories = ["general", "press", "correction", "sponsor", "other"] as const
+type Category = (typeof categories)[number]
+
+function validateContactData(body: any) {
+  const errors: string[] = []
+
+  if (!body.name || typeof body.name !== "string" || body.name.length < 2 || body.name.length > 80) {
+    errors.push("Please enter your full name.")
+  }
+
+  if (!body.email || typeof body.email !== "string" || !body.email.includes("@") || body.email.length > 120) {
+    errors.push("Enter a valid email.")
+  }
+
+  if (!body.category || !categories.includes(body.category)) {
+    errors.push("Please select a valid category.")
+  }
+
+  if (!body.subject || typeof body.subject !== "string" || body.subject.length < 3 || body.subject.length > 120) {
+    errors.push("Subject is too short.")
+  }
+
+  if (!body.message || typeof body.message !== "string" || body.message.length < 20 || body.message.length > 2000) {
+    errors.push("Message should be at least 20 characters.")
+  }
+
+  if (body.consent !== true) {
+    errors.push("You must agree to continue.")
+  }
+
+  return errors
+}
 
 function getIP(req: Request) {
   const xff = req.headers.get("x-forwarded-for")
@@ -31,16 +63,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, error: "Too many submissions. Try again later." }, { status: 429 })
     }
 
-    // validate
-    const parsed = contactSchema.safeParse(body)
-    if (!parsed.success) {
-      const first = parsed.error.issues[0]
-      return NextResponse.json({ ok: false, error: first?.message ?? "Invalid input." }, { status: 400 })
+    const validationErrors = validateContactData(body)
+    if (validationErrors.length > 0) {
+      return NextResponse.json({ ok: false, error: validationErrors[0] }, { status: 400 })
     }
-    const data = parsed.data
 
     // MVP: log only (no email send; no DB)
-    console.log("CONTACT_FORM", { ip, ts: Date.now(), ...data, company: undefined })
+    console.log("CONTACT_FORM", { ip, ts: Date.now(), ...body, company: undefined })
 
     return NextResponse.json({ ok: true })
   } catch (e) {
