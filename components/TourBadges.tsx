@@ -1,6 +1,8 @@
 import { TourBadge } from "./TourBadge"
 import { TOUR_META, type TourCode } from "@/lib/tours"
 
+export { TourBadge }
+
 type Props = {
   tours: TourCode[]
   primary?: TourCode

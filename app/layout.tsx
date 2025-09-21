@@ -8,10 +8,10 @@ import ScrollToTopOnRoute from "@/components/scroll-to-top-on-route"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Pickleball Earnings Leaders – Pro Prize Money & Contracts Tracker | Dink Bank",
+  title: "Pickleball Earnings Leaders – Pro Prize Money & Contracts Tracker | DinkBank",
   description: "Tracking pro pickleball prize money and contracts across PPA, MLP, and APP tours.",
   openGraph: {
-    title: "Pickleball Earnings Leaders – Pro Prize Money & Contracts Tracker | Dink Bank",
+    title: "Pickleball Earnings Leaders – Pro Prize Money & Contracts Tracker | DinkBank",
     description: "Tracking pro pickleball prize money and contracts across PPA, MLP, and APP tours.",
     type: "website",
   },

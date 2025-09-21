@@ -3,16 +3,17 @@
 import { useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { KpiCard } from "@/components/kpi-card"
-import { EarningsBreakdown } from "@/components/earnings-breakdown"
-import { formatCurrencyUSD, formatDelta } from "@/lib/format"
+import { formatCurrencyUSD } from "@/lib/format"
 import { getRankedPlayers } from "@/lib/rank"
 import { mockPlayers, events } from "@/lib/mock-data"
 import type { Player } from "@/lib/mock-data"
 import Link from "next/link"
+import { TourBadge } from "@/components/TourBadges"
+import { computePrimaryTour, visibleTours } from "@/lib/tours"
+import { TOUR_META } from "@/lib/tours"
 
 export default function Page() {
   const [activeTab, setActiveTab] = useState<"thisyear" | "alltime">("thisyear")
@@ -39,79 +40,88 @@ export default function Page() {
       key: "name" as keyof (Player & { rank: number; rankValue: number }),
       header: "Player",
       cell: (player: Player & { rank: number }) => (
-        <div className="flex items-center gap-3">
-          <Avatar className="h-8 w-8">
-            <AvatarImage src={player.headshotUrl || "/placeholder.svg"} alt={player.name} />
-            <AvatarFallback>
-              {player.name
-                .split(" ")
-                .map((n) => n[0])
-                .join("")}
-            </AvatarFallback>
-          </Avatar>
-          <div>
-            <div className="font-medium">{player.name}</div>
-            <div className="text-sm text-muted-foreground">
-              {player.gender ? `${player.gender} • ` : ""}
-              {player.country}
+        <Link href={`/players/${player.slug}`} className="block">
+          <div className="flex items-center gap-3 hover:underline font-medium transition-all">
+            <Avatar className="h-8 w-8">
+              <AvatarImage src={player.headshotUrl || "/placeholder.svg"} alt={player.name} />
+              <AvatarFallback>
+                {player.name
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <div className="font-medium">{player.name}</div>
+              <div className="text-sm text-muted-foreground">
+                {player.gender ? `${player.gender} • ` : ""}
+                {player.country}
+              </div>
             </div>
           </div>
-        </div>
+        </Link>
       ),
     },
     {
+      key: "tours" as keyof (Player & { rank: number; rankValue: number }),
+      header: "Tours",
+      cell: (player: Player & { rank: number }) => {
+        const enhancedPlayer = {
+          ...player,
+          tours: player.tours || [],
+        }
+        const tours = visibleTours(enhancedPlayer)
+        const primaryTour = computePrimaryTour(enhancedPlayer)
+
+        if (tours.length === 0) return <span className="text-gray-400">—</span>
+
+        const visibleToursList = tours.slice(0, 3)
+        const overflowCount = tours.length - 3
+
+        return (
+          <div className="flex items-center gap-1 flex-wrap">
+            {visibleToursList.map((tour) => (
+              <TourBadge key={tour} code={tour} primary={tour === primaryTour} />
+            ))}
+            {overflowCount > 0 && (
+              <div
+                className="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600"
+                title={`Also: ${tours
+                  .slice(3)
+                  .map((t) => TOUR_META[t].label)
+                  .join(", ")}`}
+              >
+                +{overflowCount}
+              </div>
+            )}
+          </div>
+        )
+      },
+    },
+    {
       key: "rankValue" as keyof (Player & { rank: number; rankValue: number }),
-      header: activeTab === "thisyear" ? "This Year Prize" : "All-Time Prize",
+      header: activeTab === "thisyear" ? "Prize (2024)" : "Prize (All-Time)",
       cell: (player: Player & { rank: number; rankValue: number }) => (
-        <div className="font-semibold tabular-nums">{formatCurrencyUSD(player.rankValue)}</div>
+        <div className="font-semibold tabular-nums text-right">{formatCurrencyUSD(player.rankValue)}</div>
       ),
     },
     {
       key: "totals" as keyof (Player & { rank: number; rankValue: number }),
-      header: "Contracts",
+      header: "Contract",
       cell: (player: Player & { rank: number }) => (
-        <div className="text-muted-foreground tabular-nums">
+        <div className="text-muted-foreground tabular-nums text-right">
           {formatCurrencyUSD(player.totals.reportedContracts || 0)}
         </div>
       ),
     },
     {
-      key: "totals" as keyof (Player & { rank: number; rankValue: number }),
-      header: "Endorsements",
-      cell: (player: Player & { rank: number }) => (
-        <div className="text-muted-foreground tabular-nums">
-          {formatCurrencyUSD(player.totals.endorsementsEstimate)}
+      key: "total" as keyof (Player & { rank: number; rankValue: number }),
+      header: "Total",
+      cell: (player: Player & { rank: number; rankValue: number }) => (
+        <div className="font-bold tabular-nums text-right">
+          {formatCurrencyUSD(player.rankValue + (player.totals.reportedContracts || 0))}
         </div>
       ),
-    },
-    {
-      key: "primaryTour" as keyof (Player & { rank: number; rankValue: number }),
-      header: "Tours",
-      cell: (player: Player & { rank: number }) => (
-        <div className="flex gap-1">
-          {player.primaryTour && (
-            <Badge
-              variant="secondary"
-              className={`text-xs font-medium ${
-                player.primaryTour === "PPA"
-                  ? "bg-blue-100 text-blue-800"
-                  : player.primaryTour === "MLP"
-                    ? "bg-green-100 text-green-800"
-                    : player.primaryTour === "APP"
-                      ? "bg-purple-100 text-purple-800"
-                      : ""
-              }`}
-            >
-              {player.primaryTour}
-            </Badge>
-          )}
-        </div>
-      ),
-    },
-    {
-      key: "id" as keyof (Player & { rank: number; rankValue: number }),
-      header: "Details",
-      cell: (player: Player & { rank: number }) => <EarningsBreakdown player={player} />,
     },
   ]
 
@@ -128,25 +138,9 @@ export default function Page() {
 
         {/* KPI Cards */}
         <div className="grid gap-4 md:grid-cols-3 mb-6">
-          <KpiCard
-            title="Total Prize Money This Year"
-            value={formatCurrencyUSD(totalPrizeThisYear)}
-            delta={{
-              value: formatCurrencyUSD(15000),
-              percentage: formatDelta(12.5),
-              isPositive: true,
-            }}
-          />
+          <KpiCard title="Total Prize Money This Year" value={formatCurrencyUSD(totalPrizeThisYear)} />
           <KpiCard title="Events Tracked" value={eventsTracked.toString()} />
-          <KpiCard
-            title="Reported Contracts"
-            value={formatCurrencyUSD(totalContracts)}
-            delta={{
-              value: formatCurrencyUSD(50000),
-              percentage: formatDelta(8.2),
-              isPositive: true,
-            }}
-          />
+          <KpiCard title="Reported Contracts" value={formatCurrencyUSD(totalContracts)} />
         </div>
 
         <Tabs
@@ -176,7 +170,19 @@ export default function Page() {
                   <thead>
                     <tr className="border-b">
                       {columns.map((column) => (
-                        <th key={column.key} className="text-left py-3 px-4 font-medium text-muted-foreground">
+                        <th
+                          key={column.key}
+                          className={`text-left py-3 px-4 font-medium text-muted-foreground ${
+                            column.header === "Total" ? "bg-muted/30" : ""
+                          } ${
+                            column.header === "Prize (2024)" ||
+                            column.header === "Prize (All-Time)" ||
+                            column.header === "Contract" ||
+                            column.header === "Total"
+                              ? "text-right"
+                              : ""
+                          }`}
+                        >
                           {column.header}
                         </th>
                       ))}
@@ -186,7 +192,10 @@ export default function Page() {
                     {topPlayers.map((player, index) => (
                       <tr key={player.id} className="border-b hover:bg-muted/50">
                         {columns.map((column) => (
-                          <td key={column.key} className="py-3 px-4">
+                          <td
+                            key={column.key}
+                            className={`py-3 px-4 ${column.header === "Total" ? "bg-muted/30" : ""}`}
+                          >
                             {column.cell(player, index)}
                           </td>
                         ))}
@@ -198,81 +207,75 @@ export default function Page() {
 
               {/* Mobile Cards - hidden on desktop */}
               <div className="md:hidden space-y-4">
-                {topPlayers.map((player, index) => (
-                  <div key={player.id} className="bg-muted/30 rounded-lg p-4 shadow-sm border">
-                    {/* Card Header: Rank + Name on left, Breakdown button on right */}
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-3">
-                        <Avatar className="h-10 w-10">
-                          <AvatarImage src={player.headshotUrl || "/placeholder.svg"} alt={player.name} />
-                          <AvatarFallback>
-                            {player.name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <div className="font-semibold text-lg">
-                            #{player.rank} {player.name}
+                {topPlayers.map((player, index) => {
+                  const enhancedPlayer = {
+                    ...player,
+                    tours: player.tours || [],
+                  }
+                  const tours = visibleTours(enhancedPlayer)
+                  const primaryTour = computePrimaryTour(enhancedPlayer)
+                  const totalEarnings = player.rankValue + (player.totals.reportedContracts || 0)
+
+                  return (
+                    <div key={player.id} className="bg-muted/30 rounded-lg p-4 shadow-sm border">
+                      <div className="flex items-center justify-between mb-4">
+                        <Link
+                          href={`/players/${player.slug}`}
+                          className="flex items-center gap-3 hover:underline font-medium transition-all"
+                        >
+                          <Avatar className="h-10 w-10">
+                            <AvatarImage src={player.headshotUrl || "/placeholder.svg"} alt={player.name} />
+                            <AvatarFallback>
+                              {player.name
+                                .split(" ")
+                                .map((n) => n[0])
+                                .join("")}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <div className="font-semibold text-lg">
+                              #{player.rank} {player.name}
+                            </div>
+                            <div className="text-sm text-muted-foreground">
+                              {player.gender ? `${player.gender} • ` : ""}
+                              {player.country}
+                            </div>
                           </div>
-                          <div className="text-sm text-muted-foreground">
-                            {player.gender ? `${player.gender} • ` : ""}
-                            {player.country}
-                          </div>
+                        </Link>
+                      </div>
+
+                      <div className="mb-4">
+                        <div className="text-2xl font-bold tabular-nums">{formatCurrencyUSD(totalEarnings)}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {activeTab === "thisyear" ? "2025 Earnings" : "All-Time Earnings"}
                         </div>
                       </div>
-                      <div className="min-h-[44px] min-w-[44px] flex items-center">
-                        <EarningsBreakdown player={player} />
+
+                      <div className="border-t border-muted-foreground/20 pt-3 mb-3">
+                        <div className="flex justify-between items-center text-sm mb-3">
+                          <div>
+                            <span className="text-muted-foreground">Prize: </span>
+                            <span className="font-semibold tabular-nums">{formatCurrencyUSD(player.rankValue)}</span>
+                          </div>
+                          <div>
+                            <span className="text-muted-foreground">Contract: </span>
+                            <span className="font-semibold tabular-nums">
+                              {formatCurrencyUSD(player.totals.reportedContracts || 0)}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-1">
+                          {tours.length === 0 ? (
+                            <span className="text-gray-400">—</span>
+                          ) : (
+                            tours.map((tour) => <TourBadge key={tour} code={tour} primary={tour === primaryTour} />)
+                          )}
+                        </div>
                       </div>
                     </div>
-
-                    {/* Prize Money - most prominent */}
-                    <div className="mb-2">
-                      <div className="text-2xl font-bold tabular-nums">{formatCurrencyUSD(player.rankValue)}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {activeTab === "thisyear" ? "This Year Prize" : "All-Time Prize"}
-                      </div>
-                    </div>
-
-                    {/* Contracts */}
-                    <div className="mb-2">
-                      <div className="text-lg font-medium tabular-nums text-muted-foreground">
-                        {formatCurrencyUSD(player.totals.reportedContracts || 0)}
-                      </div>
-                      <div className="text-xs text-muted-foreground">Contracts</div>
-                    </div>
-
-                    {/* Endorsements */}
-                    <div className="mb-3">
-                      <div className="text-lg font-medium tabular-nums text-muted-foreground">
-                        {formatCurrencyUSD(player.totals.endorsementsEstimate)}
-                      </div>
-                      <div className="text-xs text-muted-foreground">Endorsements</div>
-                    </div>
-
-                    {/* Tour Icons */}
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-muted-foreground">Tours:</span>
-                      {player.primaryTour && (
-                        <Badge
-                          variant="secondary"
-                          className={`text-xs font-medium ${
-                            player.primaryTour === "PPA"
-                              ? "bg-blue-100 text-blue-800"
-                              : player.primaryTour === "MLP"
-                                ? "bg-green-100 text-green-800"
-                                : player.primaryTour === "APP"
-                                  ? "bg-purple-100 text-purple-800"
-                                  : ""
-                          }`}
-                        >
-                          {player.primaryTour}
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
 
               <div className="mt-4 text-center">

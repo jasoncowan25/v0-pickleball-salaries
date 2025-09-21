@@ -6,7 +6,6 @@ import Link from "next/link"
 import { Card } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
@@ -23,7 +22,7 @@ import { formatCurrency, formatShortDate } from "@/lib/format"
 import { mockPlayers } from "@/lib/mock-data"
 import { getPlayerPayouts } from "@/lib/rank"
 import { generatePlayerJsonLd } from "@/lib/jsonld"
-import { Download, FileText } from "lucide-react"
+import { FileText } from "lucide-react"
 
 interface PlayerPageProps {
   params: {
@@ -204,15 +203,7 @@ export default function PlayerPage({ params }: PlayerPageProps) {
 
         {/* KPI Cards */}
         <div className="grid gap-4 md:grid-cols-4 mb-6">
-          <KpiCard
-            title="This Year Prize Money"
-            value={formatCurrency(player.totals.ytdPrize)}
-            delta={{
-              value: formatCurrency(5000),
-              percentage: "+8.5%",
-              isPositive: true,
-            }}
-          />
+          <KpiCard title="This Year Prize Money" value={formatCurrency(player.totals.ytdPrize)} />
           <KpiCard title="All-Time Prize Money" value={formatCurrency(player.totals.allTimePrize)} />
           <KpiCard title="Reported Contracts" value={formatCurrency(player.totals.reportedContracts || 0)} />
           <KpiCard title="Endorsements (Est.)" value={formatCurrency(player.totals.endorsementsEstimate || 0)} />
