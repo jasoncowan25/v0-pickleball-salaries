@@ -45,11 +45,11 @@ export default function ClientLayout({
   ]
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex h-14 items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <Image src="/dink-bank-logo.png" alt="DinkBank Logo" width={130} height={24} className="h-6 w-36" />
+            <Image src="/dink-bank-logo-new.png" alt="DinkBank Logo" width={160} height={40} className="w-auto h-12" />
           </Link>
 
           <div className="hidden md:flex">
@@ -112,8 +112,12 @@ export default function ClientLayout({
           </div>
         </div>
       </header>
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8">{children}</main>
+
+      <main id="main" className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8">
+        {children}
+      </main>
+
       <SiteFooter />
-    </>
+    </div>
   )
 }

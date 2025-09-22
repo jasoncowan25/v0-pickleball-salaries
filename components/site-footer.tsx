@@ -6,7 +6,7 @@ import LanguageSwitcher from "@/components/language-switcher"
 
 export default function SiteFooter() {
   return (
-    <footer role="contentinfo" aria-labelledby="footer-heading" className="mt-16 border-t bg-muted/40">
+    <footer role="contentinfo" aria-labelledby="footer-heading" className="border-t bg-muted/40">
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
@@ -45,17 +45,7 @@ export default function SiteFooter() {
           <ul className="mt-4 space-y-2 text-sm">
             <li>
               <a
-                href="https://www.linkedin.com/company/dinkbank"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:underline"
-              >
-                LinkedIn
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://twitter.com/dinkbank"
+                href="https://twitter.com/DinkBankHQ"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:underline"
@@ -118,17 +108,7 @@ export default function SiteFooter() {
               <ul className="space-y-2 text-sm">
                 <li>
                   <a
-                    href="https://www.linkedin.com/company/dinkbank"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:underline"
-                  >
-                    LinkedIn
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://twitter.com/dinkbank"
+                    href="https://twitter.com/DinkBankHQ"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:underline"

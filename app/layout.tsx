@@ -25,7 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} min-h-dvh w-full antialiased bg-background text-foreground`}>
+      <body className={`${inter.className} w-full antialiased bg-background text-foreground`}>
         <ScrollToTopOnRoute />
         <ClientLayout>{children}</ClientLayout>
       </body>

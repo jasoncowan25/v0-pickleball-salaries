@@ -17,13 +17,13 @@ import { TOUR_META } from "@/lib/tours"
 
 export default function Page() {
   const [activeTab, setActiveTab] = useState<"thisyear" | "alltime">("thisyear")
+  const [mobileDisplayCount, setMobileDisplayCount] = useState<5 | 10>(5)
 
-  // Get ranked players based on active tab
   const rankedPlayers = getRankedPlayers(activeTab === "thisyear" ? "ytd" : "alltime")
 
-  const topPlayers = rankedPlayers.slice(0, 5)
+  const desktopPlayers = rankedPlayers.slice(0, 10)
+  const mobilePlayers = rankedPlayers.slice(0, mobileDisplayCount)
 
-  // Calculate KPIs
   const totalPrizeThisYear = mockPlayers.reduce((sum, player) => sum + player.totals.ytdPrize, 0)
   const totalContracts = mockPlayers.reduce((sum, player) => sum + (player.totals.reportedContracts || 0), 0)
   const eventsTracked = events.length
@@ -135,7 +135,6 @@ export default function Page() {
         <p className="text-sm text-muted-foreground">Last updated: {new Date().toLocaleDateString()}</p>
       </div>
 
-      {/* KPI Cards */}
       <div className="grid gap-4 md:grid-cols-3 mb-6">
         <KpiCard title="Total Prize Money This Year" value={formatCurrencyUSD(totalPrizeThisYear)} />
         <KpiCard title="Events Tracked" value={eventsTracked.toString()} />
@@ -149,17 +148,19 @@ export default function Page() {
         </TabsList>
 
         <TabsContent value={activeTab} className="space-y-6">
-          {/* Data Table */}
           <Card className="p-6">
             <div className="mb-4">
               <h2 className="text-lg font-semibold">
                 {activeTab === "thisyear" ? "This Year's Top Earners" : "All-Time Top Earners"}
               </h2>
-              <p className="text-sm text-muted-foreground">Showing top {topPlayers.length} players</p>
+              <p className="text-sm text-muted-foreground">
+                <span className="hidden md:inline">Showing Top 10 of {rankedPlayers.length} players</span>
+                <span className="md:hidden">
+                  Showing Top {mobileDisplayCount} of {rankedPlayers.length} players
+                </span>
+              </p>
             </div>
 
-            {/* Responsive leaderboard with desktop table and mobile cards */}
-            {/* Desktop Table - hidden on mobile */}
             <div className="hidden md:block overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -167,7 +168,7 @@ export default function Page() {
                     {columns.map((column) => (
                       <th
                         key={column.key}
-                        className={`text-left py-3 px-4 font-medium text-muted-foreground ${
+                        className={`text-left py-2 px-3 font-medium text-muted-foreground ${
                           column.header === "Total" ? "bg-muted/30" : ""
                         } ${
                           column.header === "Prize (2024)" ||
@@ -184,10 +185,10 @@ export default function Page() {
                   </tr>
                 </thead>
                 <tbody>
-                  {topPlayers.map((player, index) => (
+                  {desktopPlayers.map((player, index) => (
                     <tr key={player.id} className="border-b hover:bg-muted/50">
                       {columns.map((column) => (
-                        <td key={column.key} className={`py-3 px-4 ${column.header === "Total" ? "bg-muted/30" : ""}`}>
+                        <td key={column.key} className={`py-2 px-3 ${column.header === "Total" ? "bg-muted/30" : ""}`}>
                           {column.cell(player, index)}
                         </td>
                       ))}
@@ -197,9 +198,8 @@ export default function Page() {
               </table>
             </div>
 
-            {/* Mobile Cards - hidden on desktop */}
-            <div className="md:hidden space-y-4">
-              {topPlayers.map((player, index) => {
+            <div className="md:hidden space-y-3">
+              {mobilePlayers.map((player, index) => {
                 const enhancedPlayer = {
                   ...player,
                   tours: player.tours || [],
@@ -209,13 +209,13 @@ export default function Page() {
                 const totalEarnings = player.rankValue + (player.totals.reportedContracts || 0)
 
                 return (
-                  <div key={player.id} className="bg-muted/30 rounded-lg p-4 shadow-sm border">
-                    <div className="flex items-center justify-between mb-4">
+                  <div key={player.id} className="bg-muted/30 rounded-lg p-3 shadow-sm border">
+                    <div className="flex items-center justify-between mb-3">
                       <Link
                         href={`/players/${player.slug}`}
                         className="flex items-center gap-3 hover:underline font-medium transition-all"
                       >
-                        <Avatar className="h-10 w-10">
+                        <Avatar className="h-9 w-9">
                           <AvatarImage src={player.headshotUrl || "/placeholder.svg"} alt={player.name} />
                           <AvatarFallback>
                             {player.name
@@ -225,7 +225,7 @@ export default function Page() {
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <div className="font-semibold text-lg">
+                          <div className="font-semibold">
                             #{player.rank} {player.name}
                           </div>
                           <div className="text-sm text-muted-foreground">
@@ -236,15 +236,15 @@ export default function Page() {
                       </Link>
                     </div>
 
-                    <div className="mb-4">
-                      <div className="text-2xl font-bold tabular-nums">{formatCurrencyUSD(totalEarnings)}</div>
+                    <div className="mb-3">
+                      <div className="text-xl font-bold tabular-nums">{formatCurrencyUSD(totalEarnings)}</div>
                       <div className="text-sm text-muted-foreground">
                         {activeTab === "thisyear" ? "2025 Earnings" : "All-Time Earnings"}
                       </div>
                     </div>
 
-                    <div className="border-t border-muted-foreground/20 pt-3 mb-3">
-                      <div className="flex justify-between items-center text-sm mb-3">
+                    <div className="border-t border-muted-foreground/20 pt-2 mb-2">
+                      <div className="flex justify-between items-center text-sm mb-2">
                         <div>
                           <span className="text-muted-foreground">Prize: </span>
                           <span className="font-semibold tabular-nums">{formatCurrencyUSD(player.rankValue)}</span>
@@ -270,10 +270,24 @@ export default function Page() {
               })}
             </div>
 
-            <div className="mt-4 text-center">
-              <Link href="/players">
-                <Button variant="outline">See All Players</Button>
-              </Link>
+            <div className="mt-4">
+              <div className="hidden md:block text-center">
+                <Link href="/players">
+                  <Button variant="secondary">View Full Leaderboard →</Button>
+                </Link>
+              </div>
+
+              <div className="md:hidden text-center">
+                {mobileDisplayCount === 5 ? (
+                  <Button variant="secondary" onClick={() => setMobileDisplayCount(10)}>
+                    Show Top 10
+                  </Button>
+                ) : (
+                  <Link href="/players">
+                    <Button variant="secondary">View Full Leaderboard →</Button>
+                  </Link>
+                )}
+              </div>
             </div>
           </Card>
         </TabsContent>
