@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { KpiCard } from "@/components/kpi-card"
 import { formatCurrencyUSD } from "@/lib/format"
@@ -14,6 +13,7 @@ import Link from "next/link"
 import { TourBadge } from "@/components/TourBadges"
 import { computePrimaryTour, visibleTours } from "@/lib/tours"
 import { TOUR_META } from "@/lib/tours"
+import PlayerProfileLink from "@/components/PlayerProfileLink"
 
 export default function Page() {
   const [activeTab, setActiveTab] = useState<"thisyear" | "alltime">("thisyear")
@@ -40,26 +40,13 @@ export default function Page() {
       key: "name" as keyof (Player & { rank: number; rankValue: number }),
       header: "Player",
       cell: (player: Player & { rank: number }) => (
-        <Link href={`/players/${player.slug}`} className="block">
-          <div className="flex items-center gap-3 hover:underline font-medium transition-all">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src={player.headshotUrl || "/placeholder.svg"} alt={player.name} />
-              <AvatarFallback>
-                {player.name
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")}
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <div className="font-medium">{player.name}</div>
-              <div className="text-sm text-muted-foreground">
-                {player.gender ? `${player.gender} • ` : ""}
-                {player.country}
-              </div>
-            </div>
-          </div>
-        </Link>
+        <PlayerProfileLink
+          href={`/players/${player.slug}`}
+          name={player.name}
+          gender={player.gender}
+          location={player.country}
+          headshotUrl={player.headshotUrl}
+        />
       ),
     },
     {
@@ -211,29 +198,16 @@ export default function Page() {
                 return (
                   <div key={player.id} className="bg-muted/30 rounded-lg p-3 shadow-sm border">
                     <div className="flex items-center justify-between mb-3">
-                      <Link
-                        href={`/players/${player.slug}`}
-                        className="flex items-center gap-3 hover:underline font-medium transition-all"
-                      >
-                        <Avatar className="h-9 w-9">
-                          <AvatarImage src={player.headshotUrl || "/placeholder.svg"} alt={player.name} />
-                          <AvatarFallback>
-                            {player.name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <div className="font-semibold">
-                            #{player.rank} {player.name}
-                          </div>
-                          <div className="text-sm text-muted-foreground">
-                            {player.gender ? `${player.gender} • ` : ""}
-                            {player.country}
-                          </div>
-                        </div>
-                      </Link>
+                      <div className="flex items-center gap-3">
+                        <PlayerProfileLink
+                          href={`/players/${player.slug}`}
+                          name={`#${player.rank} ${player.name}`}
+                          gender={player.gender}
+                          location={player.country}
+                          headshotUrl={player.headshotUrl}
+                          avatarSize="large"
+                        />
+                      </div>
                     </div>
 
                     <div className="mb-3">

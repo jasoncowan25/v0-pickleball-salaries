@@ -10,6 +10,13 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Pickleball Earnings Leaders – Pro Prize Money & Contracts Tracker | DinkBank",
   description: "Tracking pro pickleball prize money and contracts across PPA, MLP, and APP tours.",
+  icons: {
+    icon: [
+      { url: "/dinkbank_favicon.png", sizes: "32x32", type: "image/png" },
+      { url: "/dinkbank_favicon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/dinkbank_favicon.png",
+  },
   openGraph: {
     title: "Pickleball Earnings Leaders – Pro Prize Money & Contracts Tracker | DinkBank",
     description: "Tracking pro pickleball prize money and contracts across PPA, MLP, and APP tours.",

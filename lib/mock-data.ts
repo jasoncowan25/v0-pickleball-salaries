@@ -196,7 +196,6 @@ export const mockPlayers: Player[] = [
       endorsementsEstimate: 60000,
     },
   },
-  // New mock players
   {
     id: "PKB-1201",
     slug: "tyson-mcguffin",
@@ -204,6 +203,7 @@ export const mockPlayers: Player[] = [
     country: "US",
     gender: "M",
     primaryTour: "PPA",
+    headshotUrl: "/tyson-mcguffin-pickleball.png",
     sponsors: ["Selkirk", "Nike"],
     handedness: "R",
     tours: [
@@ -225,6 +225,7 @@ export const mockPlayers: Player[] = [
     country: "BR",
     gender: "F",
     primaryTour: "APP",
+    headshotUrl: "/simone-jardim-pickleball.png",
     sponsors: ["HEAD", "Wilson"],
     handedness: "R",
     tours: [
@@ -246,6 +247,7 @@ export const mockPlayers: Player[] = [
     country: "US",
     gender: "M",
     primaryTour: "MLP",
+    headshotUrl: "/collin-johns-pickleball.png",
     sponsors: ["JOOLA", "Adidas"],
     handedness: "R",
     tours: [
@@ -267,6 +269,7 @@ export const mockPlayers: Player[] = [
     country: "CZ",
     gender: "F",
     primaryTour: "PPA",
+    headshotUrl: "/lucy-kovalova-pickleball.png",
     sponsors: ["Paddletek", "Fila"],
     handedness: "R",
     tours: [
@@ -288,6 +291,7 @@ export const mockPlayers: Player[] = [
     country: "US",
     gender: "M",
     primaryTour: "APP",
+    headshotUrl: "/zane-navratil-pickleball.png",
     sponsors: ["Franklin", "Under Armour"],
     handedness: "L",
     tours: [
@@ -309,6 +313,7 @@ export const mockPlayers: Player[] = [
     country: "US",
     gender: "F",
     primaryTour: "MLP",
+    headshotUrl: "/lea-jansen-pickleball.png",
     sponsors: ["Engage", "Lululemon"],
     handedness: "R",
     tours: [
@@ -330,6 +335,7 @@ export const mockPlayers: Player[] = [
     country: "US",
     gender: "M",
     primaryTour: "PPA",
+    headshotUrl: "/parker-reed-pickleball.png",
     sponsors: ["Vulcan", "Nike"],
     handedness: "R",
     tours: [
@@ -351,6 +357,7 @@ export const mockPlayers: Player[] = [
     country: "US",
     gender: "F",
     primaryTour: "APP",
+    headshotUrl: "/jessie-irvine-pickleball.png",
     sponsors: ["HEAD", "Wilson"],
     handedness: "L",
     tours: [
@@ -372,6 +379,7 @@ export const mockPlayers: Player[] = [
     country: "US",
     gender: "M",
     primaryTour: "MLP",
+    headshotUrl: "/dylan-frazier-pickleball.png",
     sponsors: ["Selkirk", "Adidas"],
     handedness: "R",
     tours: [
@@ -393,6 +401,7 @@ export const mockPlayers: Player[] = [
     country: "US",
     gender: "F",
     primaryTour: "PPA",
+    headshotUrl: "/callie-smith-pickleball.png",
     sponsors: ["Franklin", "Fila"],
     handedness: "R",
     tours: [
@@ -414,6 +423,7 @@ export const mockPlayers: Player[] = [
     country: "AR",
     gender: "M",
     primaryTour: "APP",
+    headshotUrl: "/federico-staksrud-pickleball.png",
     sponsors: ["JOOLA", "Under Armour"],
     handedness: "L",
     tours: [
@@ -435,6 +445,7 @@ export const mockPlayers: Player[] = [
     country: "US",
     gender: "F",
     primaryTour: "MLP",
+    headshotUrl: "/etta-wright-pickleball.png",
     sponsors: ["Paddletek", "Lululemon"],
     handedness: "R",
     tours: [
@@ -456,6 +467,7 @@ export const mockPlayers: Player[] = [
     country: "CA",
     gender: "M",
     primaryTour: "PPA",
+    headshotUrl: "/hayden-patriquin-pickleball.png",
     sponsors: ["Engage", "Nike"],
     handedness: "R",
     tours: [
@@ -477,6 +489,7 @@ export const mockPlayers: Player[] = [
     country: "US",
     gender: "F",
     primaryTour: "APP",
+    headshotUrl: "/anna-bright-pickleball.png",
     sponsors: ["Vulcan", "Wilson"],
     handedness: "R",
     tours: [
@@ -498,6 +511,7 @@ export const mockPlayers: Player[] = [
     country: "US",
     gender: "M",
     primaryTour: "MLP",
+    headshotUrl: "/thomas-wilson-pickleball.png",
     sponsors: ["HEAD", "Adidas"],
     handedness: "L",
     tours: [
@@ -519,6 +533,7 @@ export const mockPlayers: Player[] = [
     country: "GE",
     gender: "F",
     primaryTour: "PPA",
+    headshotUrl: "/salome-devidze-pickleball.png",
     sponsors: ["Selkirk", "Fila"],
     handedness: "R",
     tours: [
@@ -540,6 +555,7 @@ export const mockPlayers: Player[] = [
     country: "US",
     gender: "M",
     primaryTour: "APP",
+    headshotUrl: "/jay-devilliers-pickleball.png",
     sponsors: ["Franklin", "Under Armour"],
     handedness: "R",
     tours: [
@@ -561,6 +577,7 @@ export const mockPlayers: Player[] = [
     country: "US",
     gender: "F",
     primaryTour: "MLP",
+    headshotUrl: "/jorja-johnson-pickleball.png",
     sponsors: ["JOOLA", "Lululemon"],
     handedness: "R",
     tours: [
@@ -582,6 +599,7 @@ export const mockPlayers: Player[] = [
     country: "US",
     gender: "M",
     primaryTour: "PPA",
+    headshotUrl: "/matt-wright-pickleball.png",
     sponsors: ["Paddletek", "Nike"],
     handedness: "L",
     tours: [
@@ -603,6 +621,7 @@ export const mockPlayers: Player[] = [
     country: "RU",
     gender: "F",
     primaryTour: "APP",
+    headshotUrl: "/irina-tereschenko-pickleball.png",
     sponsors: ["Engage", "Wilson"],
     handedness: "R",
     tours: [
@@ -624,6 +643,7 @@ export const mockPlayers: Player[] = [
     country: "US",
     gender: "M",
     primaryTour: "MLP",
+    headshotUrl: "/christian-alshon-pickleball.png",
     sponsors: ["Vulcan", "Adidas"],
     handedness: "R",
     tours: [
@@ -645,6 +665,7 @@ export const mockPlayers: Player[] = [
     country: "US",
     gender: "F",
     primaryTour: "PPA",
+    headshotUrl: "/kate-fahey-pickleball.png",
     sponsors: ["HEAD", "Fila"],
     handedness: "L",
     tours: [
@@ -666,6 +687,7 @@ export const mockPlayers: Player[] = [
     country: "RO",
     gender: "M",
     primaryTour: "APP",
+    headshotUrl: "/andrei-daescu-pickleball.png",
     sponsors: ["Selkirk", "Under Armour"],
     handedness: "R",
     tours: [
@@ -687,6 +709,7 @@ export const mockPlayers: Player[] = [
     country: "US",
     gender: "F",
     primaryTour: "MLP",
+    headshotUrl: "/lacy-schneemann-pickleball.png",
     sponsors: ["Franklin", "Lululemon"],
     handedness: "R",
     tours: [

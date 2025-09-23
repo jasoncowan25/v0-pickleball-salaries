@@ -4,7 +4,6 @@ import { Suspense, useMemo, useTransition } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Card } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
@@ -15,7 +14,8 @@ import { computePrimaryTour, visibleTours, type TourCode } from "@/lib/tours"
 import { KpiCard } from "@/components/kpi-card"
 import { mergeSearchParams, stripEmpty } from "@/lib/url"
 import { TourBadge } from "@/components/TourBadge"
-import { PlayersFiltersClean } from "@/components/players-filters-clean"
+import PlayersFiltersClean from "@/components/players-filters-clean"
+import PlayerProfileLink from "@/components/PlayerProfileLink"
 
 type Tour = "PPA" | "MLP" | "APP"
 
@@ -235,9 +235,13 @@ function PlayersPageContent() {
     setFilter({ gender: newGender === "all" ? null : newGender, page: "1" })
   }
 
-  // Add tour filter handler
   const handleTourChange = (newTour: Tour | "all") => {
-    setFilter({ tour: newTour === "all" ? null : newTour.toLowerCase(), page: "1" })
+    // If the same tour is clicked again, toggle it off (set to "all")
+    if (tour.toLowerCase() === newTour.toLowerCase() && newTour !== "all") {
+      setFilter({ tour: null, page: "1" })
+    } else {
+      setFilter({ tour: newTour === "all" ? null : newTour.toLowerCase(), page: "1" })
+    }
   }
 
   const handlePageChange = (page: number) => {
@@ -483,25 +487,13 @@ function PlayersPageContent() {
                           <tr key={player.id} className="border-b hover:bg-muted/20">
                             <td className="text-center p-3 font-semibold tabular-nums">#{player.rank}</td>
                             <td className="p-3">
-                              <Link href={`/players/${player.slug}`} className="block">
-                                <div className="flex items-center gap-3 hover:underline font-medium transition-all">
-                                  <Avatar className="h-8 w-8">
-                                    <AvatarImage src={player.headshotUrl || "/placeholder.svg"} alt={player.name} />
-                                    <AvatarFallback>
-                                      {player.name
-                                        .split(" ")
-                                        .map((n) => n[0])
-                                        .join("")}
-                                    </AvatarFallback>
-                                  </Avatar>
-                                  <div>
-                                    <div className="font-medium">{player.name}</div>
-                                    <div className="text-sm text-muted-foreground">
-                                      {player.gender} • {player.nation}
-                                    </div>
-                                  </div>
-                                </div>
-                              </Link>
+                              <PlayerProfileLink
+                                href={`/players/${player.slug}`}
+                                name={player.name}
+                                gender={player.gender}
+                                location={player.nation}
+                                headshotUrl={player.headshotUrl}
+                              />
                             </td>
                             <td className="whitespace-nowrap px-3 py-3.5 align-middle">
                               <div className="flex items-center gap-1 flex-wrap">
@@ -554,23 +546,13 @@ function PlayersPageContent() {
                   return (
                     <div key={player.id} className="bg-muted/30 rounded-lg p-4 shadow-sm border space-y-2">
                       <div className="flex items-center justify-between">
-                        <Link
+                        <PlayerProfileLink
                           href={`/players/${player.slug}`}
-                          className="flex items-center gap-3 hover:underline font-medium transition-all"
-                        >
-                          <Avatar className="h-10 w-10">
-                            <AvatarImage src={player.headshotUrl || "/placeholder.svg"} alt={player.name} />
-                            <AvatarFallback className="text-sm font-semibold">
-                              {player.name
-                                .split(" ")
-                                .map((n) => n[0])
-                                .join("")}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div className="font-medium">
-                            #{player.rank} {player.name}
-                          </div>
-                        </Link>
+                          name={`#${player.rank} ${player.name}`}
+                          headshotUrl={player.headshotUrl}
+                          avatarSize="large"
+                          className="flex-1"
+                        />
                         <Button variant="outline" size="sm" asChild>
                           <Link href={`/players/${player.slug}`}>View</Link>
                         </Button>

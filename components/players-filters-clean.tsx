@@ -21,7 +21,7 @@ interface PlayersFiltersCleanProps {
   onClearFilter: (key: string) => void
 }
 
-export function PlayersFiltersClean({
+function PlayersFiltersClean({
   search,
   gender,
   year,
@@ -209,3 +209,5 @@ export function PlayersFiltersClean({
     </>
   )
 }
+
+export default PlayersFiltersClean

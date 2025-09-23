@@ -414,7 +414,7 @@ export default function PlayerPage({ params }: PlayerPageProps) {
               <div className="text-center py-12">
                 <FileText className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                 <p className="text-muted-foreground">No data yet for {selectedYear}</p>
-                <Link href="/sources" className="text-primary hover:underline text-sm">
+                <Link href="/sources" className="hover:underline text-sm text-foreground">
                   View our sources →
                 </Link>
               </div>

@@ -5,56 +5,48 @@ import { cn } from "@/lib/utils"
 interface PlayerAvatarProps {
   playerImage?: string | null
   playerName: string
-  size?: "sm" | "md" | "lg"
+  size?: "small" | "large"
+  href?: string
   className?: string
 }
 
 const sizeClasses = {
-  sm: "h-8 w-8 text-xs",
-  md: "h-10 w-10 text-sm",
-  lg: "h-16 w-16 text-lg",
+  small: "h-12 w-12 text-base",
+  large: "h-24 w-24 text-2xl",
 }
 
-export function PlayerAvatar({ playerImage, playerName, size = "md", className }: PlayerAvatarProps) {
-  // Generate initials from player name
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2) // Limit to 2 characters max
+const getInitials = (name: string): string => {
+  const words = name.trim().split(/\s+/)
+  if (words.length === 1) {
+    return words[0].charAt(0).toUpperCase()
   }
+  // Take first letter of first word and first letter of last word
+  const firstInitial = words[0].charAt(0).toUpperCase()
+  const lastInitial = words[words.length - 1].charAt(0).toUpperCase()
+  return firstInitial + lastInitial
+}
 
+export function PlayerAvatar({ playerImage, playerName, size = "small", href, className }: PlayerAvatarProps) {
   const initials = getInitials(playerName)
 
-  return (
-    <Avatar
-      className={cn(
-        // Base styles with professional sports-finance aesthetic
-        "border border-gray-200 transition-all duration-200",
-        // Hover state with subtle elevation
-        "hover:shadow-md hover:border-gray-300",
-        // Size variants
-        sizeClasses[size],
-        className,
-      )}
-      aria-label={`${playerName} profile picture`}
-    >
-      <AvatarImage src={playerImage || "/placeholder.svg"} alt={`${playerName} headshot`} className="object-cover" />
-      <AvatarFallback
-        className={cn(
-          // Professional styling with high contrast
-          "bg-gray-50 text-gray-900 font-bold",
-          // Ensure text scales with avatar size
-          size === "sm" && "text-xs",
-          size === "md" && "text-sm",
-          size === "lg" && "text-lg",
-        )}
-        aria-label={`${playerName} initials`}
-      >
-        {initials}
+  const avatarElement = (
+    <Avatar className={cn("border border-gray-300 shrink-0", sizeClasses[size], className)}>
+      {playerImage ? (
+        <AvatarImage src={playerImage || "/placeholder.svg"} alt={playerName} className="object-cover object-center" />
+      ) : null}
+      <AvatarFallback className="bg-gray-100 text-gray-800 font-bold" role="img" aria-label={playerName}>
+        <span aria-hidden="true">{initials}</span>
       </AvatarFallback>
     </Avatar>
   )
+
+  if (href) {
+    return (
+      <a href={href} className="inline-block">
+        {avatarElement}
+      </a>
+    )
+  }
+
+  return avatarElement
 }
