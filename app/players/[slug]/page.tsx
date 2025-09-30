@@ -202,11 +202,10 @@ export default function PlayerPage({ params }: PlayerPageProps) {
         </Card>
 
         {/* KPI Cards */}
-        <div className="grid gap-4 md:grid-cols-4 mb-6">
+        <div className="grid gap-4 md:grid-cols-3 mb-6">
           <KpiCard title="This Year Prize Money" value={formatCurrency(player.totals.ytdPrize)} />
           <KpiCard title="All-Time Prize Money" value={formatCurrency(player.totals.allTimePrize)} />
           <KpiCard title="Reported Contracts" value={formatCurrency(player.totals.reportedContracts || 0)} />
-          <KpiCard title="Endorsements (Est.)" value={formatCurrency(player.totals.endorsementsEstimate || 0)} />
         </div>
 
         <div className="w-full mb-6">

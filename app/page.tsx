@@ -254,7 +254,7 @@ export default function Page() {
               <div className="md:hidden text-center">
                 {mobileDisplayCount === 5 ? (
                   <Button variant="secondary" onClick={() => setMobileDisplayCount(10)}>
-                    Show Top 10
+                    Show Full Top 10
                   </Button>
                 ) : (
                   <Link href="/players">
