@@ -1,6 +1,6 @@
 "use client"
 
-import { Suspense, useMemo, useTransition, useState } from "react"
+import { Suspense, useMemo, useTransition, useState, useEffect } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Card } from "@/components/ui/card"
@@ -14,13 +14,14 @@ import { computePrimaryTour, visibleTours, type TourCode } from "@/lib/tours"
 import { KpiCard } from "@/components/kpi-card"
 import { mergeSearchParams, stripEmpty } from "@/lib/url"
 import { TourBadge } from "@/components/TourBadge"
-import PlayersFiltersClean from "@/components/players-filters-clean"
 import PlayerProfileLink from "@/components/PlayerProfileLink"
 import { MobileFilterBar } from "@/components/mobile-filter-bar"
 import { FilterBottomSheet } from "@/components/filter-bottom-sheet"
+import PlayersFiltersClean from "@/components/players-filters-clean"
 import { useFilterParams } from "@/hooks/use-filter-params"
-
-type Tour = "PPA" | "MLP" | "APP"
+import { composePrefix, composeHeading, type Tour } from "@/lib/filter-composition"
+import { getDisplayYear } from "@/lib/displayYear"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 
 type PlayerRow = {
   id: string
@@ -44,8 +45,26 @@ type PlayerRow = {
 type Money = number
 
 function getYearFilteredPlayers(allPlayers: PlayerRow[], year: number): PlayerRow[] {
-  // For now, return all players as we don't have year-specific filtering in the data structure
-  return allPlayers
+  const currentYear = getDisplayYear()
+
+  // If it's the current year, return players as-is
+  if (year === currentYear) {
+    return allPlayers
+  }
+
+  // For past years, simulate lower earnings (each year back = 20% reduction)
+  const yearDiff = currentYear - year
+  const multiplier = Math.max(0.2, 1 - yearDiff * 0.2)
+
+  return allPlayers.map((player) => ({
+    ...player,
+    ppa: Math.floor(player.ppa * multiplier),
+    app: Math.floor(player.app * multiplier),
+    mlp: Math.floor(player.mlp * multiplier),
+    major: Math.floor(player.major * multiplier),
+    contract: Math.floor(player.contract * multiplier),
+    total: Math.floor(player.total * multiplier),
+  }))
 }
 
 function computeGlobalTotalsForYear(allPlayers: PlayerRow[], year: number) {
@@ -107,8 +126,9 @@ function PlayersPageContent() {
   const [isFilterSheetOpen, setIsFilterSheetOpen] = useState(false)
   const { filterState, activeFilters, updateFilters, clearFilter, clearAllFilters } = useFilterParams()
 
+  const currentYear = getDisplayYear()
   const search = searchParams.get("search") || ""
-  const year = searchParams.get("year") || "2024"
+  const year = searchParams.get("year") || currentYear.toString()
   const gender = (searchParams.get("gender") as Gender | "all") || "all"
   const tour = (searchParams.get("tour") as Tour | "all") || "all"
   const sortColumn = searchParams.get("sort") || "total"
@@ -116,11 +136,23 @@ function PlayersPageContent() {
   const currentPage = Number.parseInt(searchParams.get("page") || "1")
   const pageSize = Number.parseInt(searchParams.get("pageSize") || "25")
 
+  const selectedYear = Number.parseInt(year)
+
+  useEffect(() => {
+    console.log("[v0] PlayersPageContent - Component rendered")
+    console.log("[v0] PlayersPageContent - Current URL:", window.location.href)
+    console.log("[v0] PlayersPageContent - gender from searchParams:", gender)
+    console.log("[v0] PlayersPageContent - year from searchParams:", year)
+    console.log("[v0] PlayersPageContent - tour from searchParams:", tour)
+  }, [gender, year, tour])
+
   function setFilter(updates: Record<string, string | undefined | null>) {
+    console.log("[v0] setFilter - called with updates:", updates)
     const merged = mergeSearchParams(searchParams, updates)
     const cleaned = stripEmpty(merged)
     const qs = cleaned.toString()
     const href = qs ? `${pathname}?${qs}` : pathname
+    console.log("[v0] setFilter - new URL will be:", href)
 
     startTransition(() => {
       router.replace(href, { scroll: false })
@@ -168,10 +200,16 @@ function PlayersPageContent() {
     })
   }, [])
 
+  const yearFilteredPlayerRows = useMemo(() => {
+    return getYearFilteredPlayers(playerRows, selectedYear)
+  }, [playerRows, selectedYear])
+
   const filteredAndSortedPlayers = useMemo(() => {
     const tourParam = tour.toUpperCase() as Tour | "ALL"
     const filteredByTour =
-      tourParam === "ALL" ? playerRows : playerRows.filter((p) => (p.earningsByTour?.[tourParam] ?? 0) > 0)
+      tourParam === "ALL"
+        ? yearFilteredPlayerRows
+        : yearFilteredPlayerRows.filter((p) => (p.earningsByTour?.[tourParam] ?? 0) > 0)
 
     const filtered = filteredByTour.filter((player) => {
       if (gender !== "all" && player.gender !== gender) return false
@@ -208,7 +246,7 @@ function PlayersPageContent() {
     })
 
     return rankize(filtered)
-  }, [playerRows, gender, search, tour, sortColumn, sortDirection])
+  }, [yearFilteredPlayerRows, gender, search, tour, sortColumn, sortDirection])
 
   const totalPages = Math.ceil(filteredAndSortedPlayers.length / pageSize)
   const paginatedPlayers = filteredAndSortedPlayers.slice((currentPage - 1) * pageSize, currentPage * pageSize)
@@ -238,11 +276,19 @@ function PlayersPageContent() {
   }
 
   const handleGenderChange = (newGender: Gender | "all") => {
-    setFilter({ gender: newGender === "all" ? null : newGender, page: "1" })
+    console.log("[v0] handleGenderChange - called with:", newGender)
+    console.log("[v0] handleGenderChange - current gender:", gender)
+    console.log("[v0] handleGenderChange - current year:", year)
+
+    // Apply both gender and year in a single setFilter call to avoid race conditions
+    setFilter({
+      gender: newGender === "all" ? null : newGender,
+      year: year !== currentYear.toString() ? year : null,
+      page: "1",
+    })
   }
 
   const handleTourChange = (newTour: Tour | "all") => {
-    // If the same tour is clicked again, toggle it off (set to "all")
     if (tour.toLowerCase() === newTour.toLowerCase() && newTour !== "all") {
       setFilter({ tour: null, page: "1" })
     } else {
@@ -264,21 +310,59 @@ function PlayersPageContent() {
   }
 
   const handleYearChange = (newYear: string) => {
-    setFilter({ year: newYear, page: "1" })
+    console.log("[v0] handleYearChange - called with:", newYear)
+    console.log("[v0] handleYearChange - current gender:", gender)
+    console.log("[v0] handleYearChange - current year:", year)
+
+    // Apply both year and gender in a single setFilter call to avoid race conditions
+    setFilter({
+      year: newYear,
+      gender: gender !== "all" ? gender : null,
+      page: "1",
+    })
   }
 
-  const selectedYear = Number.parseInt(year)
-  const { totalPrizeMoney, eventsTracked, reportedContracts } = computeGlobalTotalsForYear(playerRows, selectedYear)
+  const kpiFilters = useMemo(() => {
+    let filteredPlayers = yearFilteredPlayerRows
+
+    if (gender !== "all") {
+      filteredPlayers = filteredPlayers.filter((p) => p.gender === gender)
+    }
+
+    if (tour !== "all") {
+      const tourParam = tour.toUpperCase() as Tour
+      filteredPlayers = filteredPlayers.filter((p) => (p.earningsByTour?.[tourParam] ?? 0) > 0)
+    }
+
+    return filteredPlayers
+  }, [yearFilteredPlayerRows, gender, tour])
+
+  const { totalPrizeMoney, eventsTracked, reportedContracts } = useMemo(() => {
+    const totalPrizeMoney = kpiFilters.reduce((sum, p) => sum + (p.total - p.contract), 0)
+    const reportedContracts = kpiFilters.reduce((sum, p) => sum + p.contract, 0)
+    const eventsTracked = events?.filter((e) => new Date(e.date).getFullYear() === selectedYear).length || 42
+
+    return { totalPrizeMoney, eventsTracked, reportedContracts }
+  }, [kpiFilters, selectedYear])
+
+  const kpiPrefix = useMemo(() => {
+    const prefix = composePrefix({ gender, tour })
+    return prefix ? `${prefix} ` : ""
+  }, [gender, tour])
+
+  const tableHeading = useMemo(() => {
+    return composeHeading({ year: selectedYear, gender, tour })
+  }, [selectedYear, gender, tour])
 
   const activeFiltersLegacy = useMemo(() => {
     const filters = []
     if (search) filters.push({ key: "search", label: `Search: "${search}"`, value: search })
     if (gender !== "all")
       filters.push({ key: "gender", label: `Gender: ${gender === "M" ? "Men" : "Women"}`, value: gender })
-    if (year !== "2024") filters.push({ key: "year", label: `Year: ${year}`, value: year })
+    if (year !== currentYear.toString()) filters.push({ key: "year", label: `Year: ${year}`, value: year })
     if (tour !== "all") filters.push({ key: "tour", label: `Tour: ${tour.toUpperCase()}`, value: tour })
     return filters
-  }, [search, gender, year, tour])
+  }, [search, gender, year, tour, currentYear])
 
   const clearFilterLegacy = (key: string) => {
     if (key === "search") {
@@ -286,7 +370,7 @@ function PlayersPageContent() {
     } else if (key === "gender") {
       setFilter({ gender: null, page: "1" })
     } else if (key === "year") {
-      setFilter({ year: null, page: "1" })
+      setFilter({ year: currentYear.toString(), page: "1" })
     } else if (key === "tour") {
       setFilter({ tour: null, page: "1" })
     }
@@ -296,7 +380,7 @@ function PlayersPageContent() {
     setFilter({
       search: null,
       gender: null,
-      year: null,
+      year: currentYear.toString(),
       tour: null,
       page: "1",
       sort: null,
@@ -319,6 +403,16 @@ function PlayersPageContent() {
 
   const showEmptyState = filteredAndSortedPlayers.length === 0 && tour !== "all"
 
+  const handleApplyBothFilters = (newGender: Gender | "all", newYear: string) => {
+    console.log("[v0] handleApplyBothFilters - called with gender:", newGender, "year:", newYear)
+
+    setFilter({
+      gender: newGender === "all" ? null : newGender,
+      year: newYear !== currentYear.toString() ? newYear : null,
+      page: "1",
+    })
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <MobileFilterBar
@@ -337,47 +431,48 @@ function PlayersPageContent() {
         year={year}
         onGenderChange={handleGenderChange}
         onYearChange={handleYearChange}
-        onApplyFilters={() => {}}
-        onResetFilters={() => {
-          setFilter({
-            gender: null,
-            year: null,
-            page: "1",
-          })
-        }}
+        onApplyBothFilters={handleApplyBothFilters}
+        onApplyFilters={() => setIsFilterSheetOpen(false)}
+        onResetFilters={clearAllFiltersLegacy}
       />
 
       <main className="container py-6">
         <h1 className="text-3xl font-bold mb-6">Pro Pickleball Player Earnings</h1>
 
-        <div className="mb-6 pb-4">
-          <PlayersFiltersClean
-            search={search}
-            gender={gender}
-            year={year}
-            onSearchChange={handleSearchChange}
-            onGenderChange={handleGenderChange}
-            onYearChange={handleYearChange}
-            onClearAll={clearAllFiltersLegacy}
-            activeFilters={activeFiltersLegacy}
-            onClearFilter={clearFilterLegacy}
-          />
-        </div>
+        <PlayersFiltersClean
+          search={search}
+          gender={gender}
+          year={year}
+          onSearchChange={handleSearchChange}
+          onGenderChange={handleGenderChange}
+          onYearChange={handleYearChange}
+          onClearAll={clearAllFiltersLegacy}
+          activeFilters={activeFiltersLegacy}
+          onClearFilter={clearFilterLegacy}
+        />
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-6">
-          <KpiCard title={`Total Prize Money (${selectedYear})`} value={formatUSD(totalPrizeMoney)} />
-          <KpiCard title={`Events Tracked (${selectedYear})`} value={eventsTracked.toString()} />
           <KpiCard
-            title="Reported Contracts"
+            title={`${kpiPrefix}Prize Money`}
+            value={formatUSD(totalPrizeMoney)}
+            badge={`${selectedYear} Season`}
+          />
+          <KpiCard
+            title={`${kpiPrefix}Events Tracked`}
+            value={eventsTracked.toString()}
+            badge={`${selectedYear} Season`}
+          />
+          <KpiCard
+            title={`${kpiPrefix}Reported Contracts`}
             value={formatUSD(reportedContracts)}
-            tooltip="Reported player contracts and sponsorships, based on available sources"
+            badge={`${selectedYear} Season`}
           />
         </div>
 
         <Card className="p-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4">
             <div>
-              <h2 className="text-lg font-semibold">{getTitle()}</h2>
+              <h2 className="text-lg font-semibold">{tableHeading}</h2>
               <p className="text-sm text-muted-foreground">{getSubtitle()}</p>
             </div>
             <div className="text-xs text-muted-foreground md:text-right">
@@ -478,7 +573,7 @@ function PlayersPageContent() {
                             Majors <SortIcon column="major" />
                           </div>
                         </th>
-                        <th className="text-right p-3">
+                        <th className="bg-muted/30 font-semibold tabular-nums text-right p-3">
                           <TooltipProvider delayDuration={150}>
                             <Tooltip>
                               <TooltipTrigger asChild>
@@ -497,12 +592,14 @@ function PlayersPageContent() {
                                 </div>
                               </TooltipTrigger>
                               <TooltipContent side="bottom" align="end" className="max-w-xs text-sm">
-                                <p>Reported player contracts and sponsorships, based on available sources</p>
+                                <p>
+                                  Contracts exclude endorsements. Numbers reflect guaranteed retainers/salaries only.
+                                </p>
                               </TooltipContent>
                             </Tooltip>
                           </TooltipProvider>
                         </th>
-                        <th className="text-right p-3 bg-muted/30">
+                        <th className="bg-muted/30 font-semibold tabular-nums text-right p-3">
                           <div
                             onClick={() => handleSort("total")}
                             className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer flex items-center justify-end gap-1 ${sortColumn === "total" ? "bg-muted/60" : ""}`}
@@ -578,23 +675,38 @@ function PlayersPageContent() {
               <div className="md:hidden space-y-4">
                 {paginatedPlayers.map((player) => {
                   return (
-                    <div key={player.id} className="bg-muted/30 rounded-lg p-4 shadow-sm border space-y-2">
-                      <div className="flex items-center justify-between">
-                        <PlayerProfileLink
-                          href={`/players/${player.slug}`}
-                          name={`#${player.rank} ${player.name}`}
-                          headshotUrl={player.headshotUrl}
-                          avatarSize="large"
-                          className="flex-1"
-                        />
-                        <Button variant="outline" size="sm" asChild>
-                          <Link href={`/players/${player.slug}`}>View</Link>
-                        </Button>
+                    <div
+                      key={player.id}
+                      className="relative bg-muted/30 rounded-2xl p-4 shadow-sm border overflow-hidden space-y-2"
+                    >
+                      <div className="flex items-start gap-3">
+                        <Avatar className="size-14 rounded-full object-cover shrink-0 border border-gray-300">
+                          <AvatarImage src={player.headshotUrl || "/placeholder.svg"} alt={player.name} />
+                          <AvatarFallback className="text-sm font-semibold">
+                            {player.name
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")
+                              .slice(0, 2)
+                              .toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+
+                        <div className="min-w-0 flex-1">
+                          <div className="text-sm text-muted-foreground font-medium">#{player.rank}</div>
+                          <Link
+                            href={`/players/${player.slug}`}
+                            className="text-lg sm:text-xl font-semibold leading-tight truncate block hover:underline"
+                          >
+                            {player.name}
+                          </Link>
+                          <div className="mt-1 text-2xl sm:text-3xl font-extrabold tabular-nums break-words">
+                            {formatUSD(player.total)}
+                          </div>
+                        </div>
                       </div>
 
-                      <div className="text-2xl font-bold tabular-nums">{formatUSD(player.total)}</div>
-
-                      <div className="flex items-center gap-2 flex-wrap">
+                      <div className="mt-3 flex flex-wrap gap-2">
                         {player.tours.map((tourCode) => (
                           <TourBadge
                             key={tourCode}
@@ -604,35 +716,45 @@ function PlayersPageContent() {
                             onClick={(selectedTour) => handleTourChange(selectedTour as Tour)}
                             className={
                               tour.toUpperCase() === tourCode
-                                ? "ring-2 ring-blue-500"
+                                ? "ring-2 ring-blue-500 text-xs px-2 py-1"
                                 : tour !== "all"
-                                  ? "opacity-50"
-                                  : ""
+                                  ? "opacity-50 text-xs px-2 py-1"
+                                  : "text-xs px-2 py-1"
                             }
                           />
                         ))}
                       </div>
 
-                      <div className="grid grid-cols-2 gap-1 text-xs">
-                        <div className="flex justify-between">
+                      <div className="mt-2 grid grid-cols-1 gap-y-1 text-sm">
+                        <div className="flex items-baseline justify-between gap-3">
                           <span className="text-muted-foreground">PPA:</span>
-                          <span className="tabular-nums">{player.ppa > 0 ? formatUSD(player.ppa) : "—"}</span>
+                          <span className="font-medium tabular-nums">
+                            {player.ppa > 0 ? formatUSD(player.ppa) : "—"}
+                          </span>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex items-baseline justify-between gap-3">
                           <span className="text-muted-foreground">APP:</span>
-                          <span className="tabular-nums">{player.app > 0 ? formatUSD(player.app) : "—"}</span>
+                          <span className="font-medium tabular-nums">
+                            {player.app > 0 ? formatUSD(player.app) : "—"}
+                          </span>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex items-baseline justify-between gap-3">
                           <span className="text-muted-foreground">MLP:</span>
-                          <span className="tabular-nums">{player.mlp > 0 ? formatUSD(player.mlp) : "—"}</span>
+                          <span className="font-medium tabular-nums">
+                            {player.mlp > 0 ? formatUSD(player.mlp) : "—"}
+                          </span>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex items-baseline justify-between gap-3">
                           <span className="text-muted-foreground">Majors:</span>
-                          <span className="tabular-nums">{player.major > 0 ? formatUSD(player.major) : "—"}</span>
+                          <span className="font-medium tabular-nums">
+                            {player.major > 0 ? formatUSD(player.major) : "—"}
+                          </span>
                         </div>
-                        <div className="flex justify-between col-span-2">
+                        <div className="flex items-baseline justify-between gap-3">
                           <span className="text-muted-foreground">Contract:</span>
-                          <span className="tabular-nums">{player.contract > 0 ? formatUSD(player.contract) : "—"}</span>
+                          <span className="font-medium tabular-nums">
+                            {player.contract > 0 ? formatUSD(player.contract) : "—"}
+                          </span>
                         </div>
                       </div>
                     </div>

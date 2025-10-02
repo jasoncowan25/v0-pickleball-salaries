@@ -3,6 +3,7 @@
 import { useCallback, useMemo } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import type { Gender } from "@/lib/mock-data"
+import { getDisplayYear } from "@/lib/displayYear"
 
 interface FilterState {
   search: string
@@ -25,23 +26,22 @@ export function useFilterParams() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const currentYear = getDisplayYear()
 
-  // Extract current filter state from URL params
   const filterState: FilterState = useMemo(
     () => ({
       search: searchParams.get("search") || "",
       gender: (searchParams.get("gender") as Gender | "all") || "all",
-      year: searchParams.get("year") || "2024",
+      year: searchParams.get("year") || currentYear.toString(),
       tour: searchParams.get("tour") || "all",
       sortColumn: searchParams.get("sort") || "total",
       sortDirection: (searchParams.get("dir") as "asc" | "desc") || "desc",
       currentPage: Number.parseInt(searchParams.get("page") || "1"),
       pageSize: Number.parseInt(searchParams.get("pageSize") || "25"),
     }),
-    [searchParams],
+    [searchParams, currentYear],
   )
 
-  // Generate active filters array for display
   const activeFilters: ActiveFilter[] = useMemo(() => {
     const filters: ActiveFilter[] = []
 
@@ -61,7 +61,7 @@ export function useFilterParams() {
       })
     }
 
-    if (filterState.year !== "2024") {
+    if (filterState.year !== currentYear.toString()) {
       filters.push({
         key: "year",
         label: `Year: ${filterState.year}`,
@@ -78,21 +78,19 @@ export function useFilterParams() {
     }
 
     return filters
-  }, [filterState])
+  }, [filterState, currentYear])
 
-  // Update URL with new filter values
   const updateFilters = useCallback(
     (updates: Partial<FilterState>) => {
       const newParams = new URLSearchParams(searchParams.toString())
 
-      // Apply updates
       Object.entries(updates).forEach(([key, value]) => {
         if (
           value === null ||
           value === undefined ||
           value === "" ||
           (key === "gender" && value === "all") ||
-          (key === "year" && value === "2024") ||
+          (key === "year" && value === currentYear.toString()) ||
           (key === "tour" && value === "all") ||
           (key === "sort" && value === "total") ||
           (key === "dir" && value === "desc") ||
@@ -105,7 +103,6 @@ export function useFilterParams() {
         }
       })
 
-      // Reset page to 1 when filters change (except when explicitly setting page)
       if (
         !updates.hasOwnProperty("page") &&
         Object.keys(updates).some((key) =>
@@ -120,10 +117,9 @@ export function useFilterParams() {
 
       router.replace(href, { scroll: false })
     },
-    [router, pathname, searchParams],
+    [router, pathname, searchParams, currentYear],
   )
 
-  // Clear a specific filter
   const clearFilter = useCallback(
     (key: string) => {
       const updates: Partial<FilterState> = {}
@@ -133,29 +129,28 @@ export function useFilterParams() {
       } else if (key === "gender") {
         updates.gender = "all"
       } else if (key === "year") {
-        updates.year = "2024"
+        updates.year = currentYear.toString()
       } else if (key === "tour") {
         updates.tour = "all"
       }
 
       updateFilters(updates)
     },
-    [updateFilters],
+    [updateFilters, currentYear],
   )
 
-  // Clear all filters
   const clearAllFilters = useCallback(() => {
     updateFilters({
       search: "",
       gender: "all",
-      year: "2024",
+      year: currentYear.toString(),
       tour: "all",
       sortColumn: "total",
       sortDirection: "desc",
       currentPage: 1,
       pageSize: 25,
     })
-  }, [updateFilters])
+  }, [updateFilters, currentYear])
 
   return {
     filterState,

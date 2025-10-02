@@ -29,7 +29,7 @@ export default function PlayerProfileLink({
   const avatarClasses = avatarSize === "large" ? "h-10 w-10" : "h-8 w-8"
 
   return (
-    <Link href={href} className={`group inline-flex items-center gap-3 focus-visible:outline-none ${className}`}>
+    <Link href={href} className={`group flex items-center gap-3 min-w-0 focus-visible:outline-none ${className}`}>
       <Avatar
         className={`
           ${avatarClasses} border border-gray-300 shrink-0
@@ -43,19 +43,22 @@ export default function PlayerProfileLink({
       </Avatar>
 
       <div className="min-w-0 flex-1">
-        <div className="font-medium flex items-center gap-2">
-          <span className="truncate underline decoration-transparent group-hover:decoration-current transition-[text-decoration-color]">
+        <div className="font-medium flex items-center gap-1 min-w-0">
+          <span
+            className="flex-1 basis-0 min-w-0 truncate sm:overflow-visible sm:whitespace-normal underline decoration-transparent group-hover:decoration-current transition-[text-decoration-color]"
+            title={name}
+          >
             {name}
           </span>
           <span
             aria-hidden="true"
-            className="opacity-0 translate-x-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-focus-visible:opacity-100 group-focus-visible:translate-x-0.5 text-gray-400 transition"
+            className="opacity-0 translate-x-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-focus-visible:opacity-100 group-focus-visible:translate-x-0.5 text-gray-400 transition shrink-0"
           >
             →
           </span>
         </div>
         {(gender || location) && (
-          <div className="text-sm text-muted-foreground">
+          <div className="text-sm text-muted-foreground truncate">
             {gender && location ? `${gender} • ${location}` : gender || location}
           </div>
         )}

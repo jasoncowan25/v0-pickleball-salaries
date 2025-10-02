@@ -93,9 +93,9 @@ export default function EventsPage() {
             className="w-full sm:w-80"
           />
 
-          <div className="flex items-center gap-4">
-            <span className="text-sm font-medium text-muted-foreground">Tours:</span>
-            <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
+            <span className="text-sm font-medium text-muted-foreground whitespace-nowrap">Tours:</span>
+            <div className="flex flex-wrap gap-2">
               {["PPA", "MLP", "APP"].map((tour) => (
                 <Button
                   key={tour}
@@ -119,17 +119,16 @@ export default function EventsPage() {
                   {tour}
                 </Button>
               ))}
+              <Select value={selectedYear} onValueChange={setSelectedYear}>
+                <SelectTrigger className="w-24 sm:w-20">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="2024">2024</SelectItem>
+                  <SelectItem value="2023">2023</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-
-            <Select value={selectedYear} onValueChange={setSelectedYear}>
-              <SelectTrigger className="w-20">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="2024">2024</SelectItem>
-                <SelectItem value="2023">2023</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
         </div>
 

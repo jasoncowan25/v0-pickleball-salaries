@@ -229,55 +229,98 @@ export function DataTable<T extends Record<string, any>>({
               className="block"
             >
               <div className="p-4 border rounded-lg hover:bg-muted/50 transition-colors min-h-[44px] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-lg">
-                      {formatRank(item.rank, index)} • {item.name}
-                      {variant === "money-list" && (
-                        <span className="text-xs text-muted-foreground ml-1">
-                          {item.country ?? "—"}
-                          {item.gender ? ` • ${item.gender}` : ""}
+                {variant === "events" ? (
+                  // Events card layout
+                  <>
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <div className="font-bold text-base mb-1">{item.eventName}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {item.city}, {item.stateCountry}
+                        </div>
+                      </div>
+                      <ChevronRightIcon className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-1" />
+                    </div>
+                    <div className="flex flex-wrap gap-2 text-sm">
+                      <Badge
+                        className={
+                          item.tour === "PPA"
+                            ? "bg-blue-100 text-blue-800 hover:bg-blue-100"
+                            : item.tour === "MLP"
+                              ? "bg-green-100 text-green-800 hover:bg-green-100"
+                              : item.tour === "APP"
+                                ? "bg-purple-100 text-purple-800 hover:bg-purple-100"
+                                : ""
+                        }
+                      >
+                        {item.tour}
+                      </Badge>
+                      <Badge variant="secondary" className="tabular-nums">
+                        {new Date(item.startDate).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
+                      </Badge>
+                      <Badge variant="secondary" className="tabular-nums">
+                        {item.prizePoolAmount ? formatCurrencyUSD(item.prizePoolAmount) : "TBD"}
+                      </Badge>
+                    </div>
+                  </>
+                ) : (
+                  // Players card layout (existing)
+                  <>
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-lg">
+                          {formatRank(item.rank, index)} • {item.name}
+                          {variant === "money-list" && (
+                            <span className="text-xs text-muted-foreground ml-1">
+                              {item.country ?? "—"}
+                              {item.gender ? ` • ${item.gender}` : ""}
+                            </span>
+                          )}
                         </span>
-                      )}
-                    </span>
-                  </div>
-                  <ChevronRightIcon className="h-4 w-4 text-muted-foreground" />
-                </div>
+                      </div>
+                      <ChevronRightIcon className="h-4 w-4 text-muted-foreground" />
+                    </div>
 
-                <div className="flex flex-wrap gap-2 text-sm">
-                  <Badge variant="secondary" className="tabular-nums">
-                    Prize: {formatCurrencyUSD(item.rankValue || item.totals?.ytdPrize)}
-                  </Badge>
-                  <Badge variant="secondary" className="tabular-nums">
-                    Contracts: {formatCurrencyUSD(item.totals?.reportedContracts)}
-                  </Badge>
-                  <Badge variant="secondary" className="tabular-nums">
-                    Endorsements: {formatCurrencyUSD(item.totals?.endorsementsEstimate)}
-                  </Badge>
-                  {variant === "money-list"
-                    ? item.primaryTour && (
-                        <Badge
-                          variant="secondary"
-                          className={`text-xs font-medium ${
-                            item.primaryTour === "PPA"
-                              ? "bg-blue-100 text-blue-800"
-                              : item.primaryTour === "MLP"
-                                ? "bg-green-100 text-green-800"
-                                : item.primaryTour === "APP"
-                                  ? "bg-purple-100 text-purple-800"
-                                  : ""
-                          }`}
-                        >
-                          {item.primaryTour}
-                        </Badge>
-                      )
-                    : item.sponsors &&
-                      item.sponsors.length > 0 && (
-                        <Badge variant="outline" className="text-xs" title={item.sponsors.join(", ")}>
-                          {compactSponsorList(item.sponsors)}
-                        </Badge>
-                      )}
-                </div>
+                    <div className="flex flex-wrap gap-2 text-sm">
+                      <Badge variant="secondary" className="tabular-nums">
+                        Prize: {formatCurrencyUSD(item.rankValue || item.totals?.ytdPrize)}
+                      </Badge>
+                      <Badge variant="secondary" className="tabular-nums">
+                        Contracts: {formatCurrencyUSD(item.totals?.reportedContracts)}
+                      </Badge>
+                      <Badge variant="secondary" className="tabular-nums">
+                        Endorsements: {formatCurrencyUSD(item.totals?.endorsementsEstimate)}
+                      </Badge>
+                      {variant === "money-list"
+                        ? item.primaryTour && (
+                            <Badge
+                              variant="secondary"
+                              className={`text-xs font-medium ${
+                                item.primaryTour === "PPA"
+                                  ? "bg-blue-100 text-blue-800"
+                                  : item.primaryTour === "MLP"
+                                    ? "bg-green-100 text-green-800"
+                                    : item.primaryTour === "APP"
+                                      ? "bg-purple-100 text-purple-800"
+                                      : ""
+                              }`}
+                            >
+                              {item.primaryTour}
+                            </Badge>
+                          )
+                        : item.sponsors &&
+                          item.sponsors.length > 0 && (
+                            <Badge variant="outline" className="text-xs" title={item.sponsors.join(", ")}>
+                              {compactSponsorList(item.sponsors)}
+                            </Badge>
+                          )}
+                    </div>
+                  </>
+                )}
               </div>
             </Link>
           ))

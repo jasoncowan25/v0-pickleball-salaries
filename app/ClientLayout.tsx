@@ -46,7 +46,7 @@ export default function ClientLayout({
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 border-b bg-background backdrop-blur-sm md:bg-background/95 md:backdrop-blur supports-[backdrop-filter]:md:bg-background/60">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex h-14 items-center gap-0">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Image src="/dinkbank_logo.png" alt="DinkBank Logo" width={160} height={40} className="w-auto h-7" />

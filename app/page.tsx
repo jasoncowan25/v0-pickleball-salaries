@@ -14,10 +14,14 @@ import { TourBadge } from "@/components/TourBadges"
 import { computePrimaryTour, visibleTours } from "@/lib/tours"
 import { TOUR_META } from "@/lib/tours"
 import PlayerProfileLink from "@/components/PlayerProfileLink"
+import { getDisplayYear } from "@/lib/displayYear"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 
 export default function Page() {
   const [activeTab, setActiveTab] = useState<"thisyear" | "alltime">("thisyear")
   const [mobileDisplayCount, setMobileDisplayCount] = useState<5 | 10>(5)
+
+  const YEAR = getDisplayYear()
 
   const rankedPlayers = getRankedPlayers(activeTab === "thisyear" ? "ytd" : "alltime")
 
@@ -87,18 +91,16 @@ export default function Page() {
     },
     {
       key: "rankValue" as keyof (Player & { rank: number; rankValue: number }),
-      header: activeTab === "thisyear" ? "Prize (2024)" : "Prize (All-Time)",
+      header: "Prize",
       cell: (player: Player & { rank: number; rankValue: number }) => (
-        <div className="font-semibold tabular-nums text-right">{formatCurrencyUSD(player.rankValue)}</div>
+        <div className="tabular-nums text-right font-normal">{formatCurrencyUSD(player.rankValue)}</div>
       ),
     },
     {
       key: "totals" as keyof (Player & { rank: number; rankValue: number }),
       header: "Contract",
       cell: (player: Player & { rank: number }) => (
-        <div className="text-muted-foreground tabular-nums text-right">
-          {formatCurrencyUSD(player.totals.reportedContracts || 0)}
-        </div>
+        <div className="tabular-nums text-right">{formatCurrencyUSD(player.totals.reportedContracts || 0)}</div>
       ),
     },
     {
@@ -123,7 +125,7 @@ export default function Page() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-3 mb-6">
-        <KpiCard title="Total Prize Money This Year" value={formatCurrencyUSD(totalPrizeThisYear)} />
+        <KpiCard title="Total Prize Money" value={formatCurrencyUSD(totalPrizeThisYear)} />
         <KpiCard title="Events Tracked" value={eventsTracked.toString()} />
         <KpiCard title="Reported Contracts" value={formatCurrencyUSD(totalContracts)} />
       </div>
@@ -138,7 +140,7 @@ export default function Page() {
           <Card className="p-6">
             <div className="mb-4">
               <h2 className="text-lg font-semibold">
-                {activeTab === "thisyear" ? "This Year's Top Earners" : "All-Time Top Earners"}
+                {activeTab === "thisyear" ? `${YEAR} Top Earners` : "All-Time Top Earners"}
               </h2>
               <p className="text-sm text-muted-foreground">
                 <span className="hidden md:inline">Showing Top 10 of {rankedPlayers.length} players</span>
@@ -158,10 +160,7 @@ export default function Page() {
                         className={`text-left py-2 px-3 font-medium text-muted-foreground ${
                           column.header === "Total" ? "bg-muted/30" : ""
                         } ${
-                          column.header === "Prize (2024)" ||
-                          column.header === "Prize (All-Time)" ||
-                          column.header === "Contract" ||
-                          column.header === "Total"
+                          column.header === "Prize" || column.header === "Contract" || column.header === "Total"
                             ? "text-right"
                             : ""
                         }`}
@@ -198,22 +197,43 @@ export default function Page() {
                 return (
                   <div key={player.id} className="bg-muted/30 rounded-lg p-3 shadow-sm border">
                     <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-3">
-                        <PlayerProfileLink
-                          href={`/players/${player.slug}`}
-                          name={`#${player.rank} ${player.name}`}
-                          gender={player.gender}
-                          location={player.country}
-                          headshotUrl={player.headshotUrl}
-                          avatarSize="large"
-                        />
+                      <div className="flex items-start gap-3 min-w-0 flex-1">
+                        <Avatar className="size-14 rounded-full object-cover shrink-0 border border-gray-300">
+                          <AvatarImage src={player.headshotUrl || "/placeholder.svg"} alt={player.name} />
+                          <AvatarFallback className="text-sm font-semibold">
+                            {player.name
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")
+                              .slice(0, 2)
+                              .toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+
+                        <div className="min-w-0 flex-1">
+                          <div className="text-sm text-muted-foreground font-medium">#{player.rank}</div>
+                          <Link
+                            href={`/players/${player.slug}`}
+                            className="text-lg sm:text-xl font-semibold leading-tight truncate block hover:underline"
+                            title={player.name}
+                          >
+                            {player.name}
+                          </Link>
+                          {(player.gender || player.country) && (
+                            <div className="text-sm text-muted-foreground truncate">
+                              {player.gender && player.country
+                                ? `${player.gender} • ${player.country}`
+                                : player.gender || player.country}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
 
                     <div className="mb-3">
                       <div className="text-xl font-bold tabular-nums">{formatCurrencyUSD(totalEarnings)}</div>
                       <div className="text-sm text-muted-foreground">
-                        {activeTab === "thisyear" ? "2025 Earnings" : "All-Time Earnings"}
+                        {activeTab === "thisyear" ? `${YEAR} Earnings` : "All-Time Earnings"}
                       </div>
                     </div>
 

@@ -38,7 +38,7 @@ export function MobileFilterBar({
     }, 250)
 
     return () => clearTimeout(timer)
-  }, [searchValue, onSearchChange])
+  }, [searchValue])
 
   // Sync with external search changes
   useEffect(() => {
