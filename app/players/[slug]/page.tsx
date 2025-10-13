@@ -149,7 +149,7 @@ export default function PlayerPage({ params }: PlayerPageProps) {
     <div className="min-h-screen bg-background">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <main className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
+      <main className="max-w-7xl mx-auto lg:px-8 py-6 px-[0]">
         <Breadcrumb className="mb-6">
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -168,31 +168,33 @@ export default function PlayerPage({ params }: PlayerPageProps) {
 
         {/* Player Header */}
         <Card className="p-6 mb-6">
-          <div className="flex items-start gap-6">
-            <Avatar className="h-24 w-24">
+          <div className="flex flex-col sm:flex-row items-start sm:items-start gap-6">
+            <Avatar className="h-32 w-32 sm:h-40 sm:w-40 mx-auto sm:mx-0">
               <AvatarImage src={player.headshotUrl || "/placeholder.svg"} alt={player.name} />
-              <AvatarFallback className="text-2xl">
+              <AvatarFallback className="text-3xl sm:text-4xl">
                 {player.name
                   .split(" ")
                   .map((n) => n[0])
                   .join("")}
               </AvatarFallback>
             </Avatar>
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-3xl font-bold">{player.name}</h1>
+            <div className="flex-1 text-center sm:text-left w-full">
+              <div className="flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3 mb-3">
+                <h1 className="text-4xl sm:text-5xl font-bold">{player.name}</h1>
                 {player.country && (
-                  <span className="text-2xl">
+                  <span className="text-3xl sm:text-4xl">
                     {player.country === "US" ? "🇺🇸" : player.country === "CA" ? "🇨🇦" : "🌍"}
                   </span>
                 )}
               </div>
-              <div className="flex items-center gap-4 text-muted-foreground mb-4">
-                <div>Plays: {player.handedness === "R" ? "Right-handed" : "Left-handed"}</div>
+              <div className="flex items-center justify-center sm:justify-start gap-4 text-muted-foreground mb-4">
+                <div className="text-base sm:text-lg">
+                  Plays: {player.handedness === "R" ? "Right-handed" : "Left-handed"}
+                </div>
               </div>
-              <div className="flex gap-2 flex-wrap">
+              <div className="flex gap-2 flex-wrap justify-center sm:justify-start">
                 {player.sponsors?.map((sponsor) => (
-                  <Badge key={sponsor} variant="secondary">
+                  <Badge key={sponsor} variant="secondary" className="text-sm px-3 py-1">
                     {sponsor}
                   </Badge>
                 ))}
@@ -466,7 +468,7 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                 <div className="lg:hidden space-y-4">
                   {filteredPayouts.map((payout) => (
                     <Card key={`${payout.eventSlug}-${payout.bracket}`} className="p-4 shadow-sm">
-                      <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-start justify-between mb-2 gap-2">
                         <Link
                           href={`/events/${payout.eventSlug}`}
                           className="hover:text-primary transition-colors flex-1 mr-3"
