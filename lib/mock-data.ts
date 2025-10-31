@@ -1597,6 +1597,22 @@ export const mockEvents: Event[] = [
     prizePoolStatus: "Reported",
     sourceUrl: "https://www.theapp.global/news/app-announces-2024-event-calendar",
   },
+  {
+    id: "PPA19",
+    slug: "ppa-spring-championship-2026",
+    tour: "PPA",
+    eventId: "PPA19",
+    eventName: "PPA Spring Championship 2026",
+    startDate: "2026-03-15",
+    endDate: "2026-03-19",
+    city: "Miami",
+    stateCountry: "FL, USA",
+    eventType: "Championship",
+    prizePoolAmount: 250000,
+    prizePoolStatus: "Reported",
+    sourceUrl: "https://www.ppatour.com/tournament/spring-championship-2026",
+    notes: "Future event for testing scheduled badge",
+  },
 ]
 
 export const events = mockEvents

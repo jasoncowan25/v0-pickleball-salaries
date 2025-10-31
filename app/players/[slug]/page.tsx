@@ -16,13 +16,13 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { KpiCard } from "@/components/kpi-card"
 import { ConfidenceBadge } from "@/components/confidence-badge"
 import { formatCurrency, formatShortDate } from "@/lib/format"
 import { mockPlayers } from "@/lib/mock-data"
 import { getPlayerPayouts } from "@/lib/rank"
 import { generatePlayerJsonLd } from "@/lib/jsonld"
 import { FileText } from "lucide-react"
+import PlayerKpis from "@/components/player/PlayerKpis"
 
 interface PlayerPageProps {
   params: {
@@ -143,6 +143,8 @@ export default function PlayerPage({ params }: PlayerPageProps) {
     }))
     .sort((a, b) => b.year - a.year)
 
+  const careerTotal = careerEarningsWithTotals.reduce((sum, yearData) => sum + yearData.yearTotal, 0)
+
   const jsonLd = generatePlayerJsonLd(player)
 
   return (
@@ -203,11 +205,15 @@ export default function PlayerPage({ params }: PlayerPageProps) {
           </div>
         </Card>
 
-        {/* KPI Cards */}
-        <div className="grid gap-4 md:grid-cols-3 mb-6">
-          <KpiCard title="This Year Prize Money" value={formatCurrency(player.totals.ytdPrize)} />
-          <KpiCard title="All-Time Prize Money" value={formatCurrency(player.totals.allTimePrize)} />
-          <KpiCard title="Reported Contracts" value={formatCurrency(player.totals.reportedContracts || 0)} />
+        {/* New PlayerKpis component */}
+        <div className="mb-6">
+          <PlayerKpis
+            prizeYTD={player.totals.ytdPrize}
+            prizeAllTime={player.totals.allTimePrize}
+            reportedContractsCurrentYear={player.totals.reportedContracts}
+            rankAllTime={1}
+            careerEstimated={careerTotal}
+          />
         </div>
 
         <div className="w-full mb-6">
@@ -310,7 +316,7 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                       Major
                     </th>
                     <th scope="col" className="text-right py-3 px-4 font-medium text-muted-foreground">
-                      Contracts
+                      Contracts †<br />
                     </th>
                     <th scope="col" className="text-right py-3 px-4 font-medium text-muted-foreground">
                       Year Total
@@ -381,6 +387,16 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                   </dl>
                 </Card>
               ))}
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-border">
+              <p className="text-xs text-muted-foreground">
+                † Note: Contract figures are DinkBank estimates based on internal modeling and publicly available data.
+                These values are unofficial and subject to revision.{" "}
+                <Link href="/methodology" className="hover:underline">
+                  See Methodology →
+                </Link>
+              </p>
             </div>
           </Card>
         )}

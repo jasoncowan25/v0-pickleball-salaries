@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 const categories = ["general", "data-correction", "press", "partnership"] as const
@@ -24,7 +23,6 @@ export default function ContactPage() {
     category: "general",
     subject: "",
     message: "",
-    consent: false,
   })
   const [status, setStatus] = React.useState<"idle" | "success" | "error">("idle")
   const [formError, setFormError] = React.useState<string>("")
@@ -57,11 +55,6 @@ export default function ContactPage() {
       setIsSubmitting(false)
       return
     }
-    if (!formData.consent) {
-      setFormError("You must agree to the Terms and Privacy Policy")
-      setIsSubmitting(false)
-      return
-    }
 
     try {
       // Simulate API call for now
@@ -73,7 +66,6 @@ export default function ContactPage() {
         category: "general",
         subject: "",
         message: "",
-        consent: false,
       })
     } catch {
       setStatus("error")
@@ -170,32 +162,22 @@ export default function ContactPage() {
                 onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))}
               />
             </div>
-
-            <div className="flex items-start gap-3">
-              <Checkbox
-                id="consent"
-                checked={formData.consent}
-                onCheckedChange={(checked) => setFormData((prev) => ({ ...prev, consent: !!checked }))}
-              />
-              <div className="space-y-1">
-                <Label htmlFor="consent" className="font-normal">
-                  I agree to the Terms and Privacy Policy.
-                </Label>
-                <p className="text-xs text-muted-foreground">
-                  By submitting, you agree to our{" "}
-                  <a className="underline" href="/terms">
-                    Terms
-                  </a>{" "}
-                  and{" "}
-                  <a className="underline" href="/privacy">
-                    Privacy Policy
-                  </a>
-                  .
-                </p>
-              </div>
-            </div>
           </CardContent>
-          <CardFooter className="flex items-center justify-between">
+          <CardFooter className="flex-col items-start gap-4">
+            <div className="flex w-full items-center justify-end gap-4">
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Sending..." : "Send message"}
+              </Button>
+            </div>
+
+            <p className="text-xs text-muted-foreground">
+              By submitting, you consent to us using your information to respond to your inquiry. See our{" "}
+              <a className="underline" href="/privacy">
+                Privacy Policy
+              </a>{" "}
+              for details.
+            </p>
+
             <div className="text-xs text-muted-foreground">
               Need to fix an earnings line? See{" "}
               <a className="underline" href="/submit-correction">
@@ -207,9 +189,6 @@ export default function ContactPage() {
               </a>
               .
             </div>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Sending..." : "Send message"}
-            </Button>
           </CardFooter>
         </form>
       </Card>

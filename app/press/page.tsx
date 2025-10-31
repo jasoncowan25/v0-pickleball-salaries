@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ExternalLink, Download, Mail } from "lucide-react"
+import { Download, Mail, ArrowRight } from "lucide-react"
 import Link from "next/link"
 
 export default function PressPage() {
@@ -69,104 +69,28 @@ export default function PressPage() {
         </Card>
       </div>
 
-      {/* Featured Coverage */}
-      <div className="mt-12">
-        <h2 className="text-2xl font-bold mb-6">Featured Coverage</h2>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <Card>
-            <CardHeader>
-              <Badge variant="secondary" className="w-fit mb-2">
-                Pickleball Magazine
-              </Badge>
-              <CardTitle className="text-lg">The Rise of Pickleball Prize Money</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground mb-4">
-                An in-depth look at how professional pickleball earnings have grown 300% in the past two years,
-                featuring exclusive data from DinkBank...
-              </p>
-              <Button variant="outline" size="sm">
-                <ExternalLink className="h-4 w-4 mr-2" />
-                Read Article
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <Badge variant="secondary" className="w-fit mb-2">
-                Sports Business Journal
-              </Badge>
-              <CardTitle className="text-lg">Transparency in Professional Pickleball</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground mb-4">
-                How DinkBank is bringing much-needed financial transparency to the fastest-growing sport in America...
-              </p>
-              <Button variant="outline" size="sm">
-                <ExternalLink className="h-4 w-4 mr-2" />
-                Read Article
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <Badge variant="secondary" className="w-fit mb-2">
-                ESPN
-              </Badge>
-              <CardTitle className="text-lg">Following the Money in Pro Pickleball</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground mb-4">
-                ESPN's analysis of professional pickleball's financial landscape, powered by comprehensive earnings data
-                from DinkBank...
-              </p>
-              <Button variant="outline" size="sm">
-                <ExternalLink className="h-4 w-4 mr-2" />
-                Read Article
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-
       {/* Press Releases */}
       <div className="mt-12">
         <h2 className="text-2xl font-bold mb-6">Press Releases</h2>
         <div className="space-y-4">
           <Card>
             <CardContent className="pt-6">
-              <div className="flex justify-between items-start mb-2">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-4">
                 <h3 className="text-lg font-semibold">DinkBank Launches Comprehensive Pickleball Earnings Database</h3>
-                <Badge variant="outline">March 15, 2024</Badge>
+                <Badge variant="outline" className="w-fit">
+                  November 12, 2025
+                </Badge>
               </div>
               <p className="text-muted-foreground mb-4">
                 DinkBank today announced the launch of the most comprehensive database of professional pickleball
-                earnings, tracking prize money across all major tours including PPA, MLP, and APP.
+                earnings, tracking prize money and contract estimates across all major tours including PPA, MLP, and
+                APP.
               </p>
-              <Button variant="outline" size="sm">
-                <ExternalLink className="h-4 w-4 mr-2" />
-                Read Full Release
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="text-lg font-semibold">
-                  DinkBank Reports Record Prize Money Growth in Professional Pickleball
-                </h3>
-                <Badge variant="outline">February 8, 2024</Badge>
-              </div>
-              <p className="text-muted-foreground mb-4">
-                New data from DinkBank reveals that total prize money in professional pickleball has increased by 275%
-                year-over-year, with total payouts exceeding $12 million in 2023.
-              </p>
-              <Button variant="outline" size="sm">
-                <ExternalLink className="h-4 w-4 mr-2" />
-                Read Full Release
+              <Button asChild variant="outline" className="w-full sm:w-auto bg-transparent">
+                <Link href="/press/dinkbank-launches-comprehensive-pickleball-earnings-database">
+                  Read Full Release
+                  <ArrowRight className="h-4 w-4 ml-2" />
+                </Link>
               </Button>
             </CardContent>
           </Card>

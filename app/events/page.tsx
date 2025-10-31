@@ -29,18 +29,40 @@ export default function EventsPage() {
     setSelectedTours((prev) => (prev.includes(tour) ? prev.filter((t) => t !== tour) : [...prev, tour]))
   }
 
+  const getEventStatus = (eventDate: string): "Past" | "Scheduled" => {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const eventDateObj = new Date(eventDate)
+    eventDateObj.setHours(0, 0, 0, 0)
+    return eventDateObj < today ? "Past" : "Scheduled"
+  }
+
   const columns = [
     {
       key: "eventName" as keyof (typeof events)[0],
       header: "Event",
-      cell: (event: (typeof events)[0]) => (
-        <Link href={`/events/${event.slug}`} className="hover:text-primary transition-colors">
-          <div className="font-medium">{event.eventName}</div>
-          <div className="text-sm text-muted-foreground">
-            {event.city}, {event.stateCountry}
-          </div>
-        </Link>
-      ),
+      cell: (event: (typeof events)[0]) => {
+        const status = getEventStatus(event.startDate)
+        return (
+          <Link href={`/events/${event.slug}`} className="hover:text-primary transition-colors">
+            <div className="flex items-center gap-2">
+              <span className="font-medium">{event.eventName}</span>
+              <Badge
+                className={
+                  status === "Past"
+                    ? "bg-neutral-100 text-neutral-600 border border-neutral-200 hover:bg-neutral-100 text-xs font-medium px-2 py-0.5 rounded-full"
+                    : "bg-amber-100 text-black border border-amber-200 hover:bg-amber-100 text-xs font-medium px-2 py-0.5 rounded-full"
+                }
+              >
+                {status}
+              </Badge>
+            </div>
+            <div className="text-sm text-muted-foreground">
+              {event.city}, {event.stateCountry}
+            </div>
+          </Link>
+        )
+      },
     },
     {
       key: "tour" as keyof (typeof events)[0],
@@ -124,6 +146,8 @@ export default function EventsPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="2026">2026</SelectItem>
+                  <SelectItem value="2025">2025</SelectItem>
                   <SelectItem value="2024">2024</SelectItem>
                   <SelectItem value="2023">2023</SelectItem>
                 </SelectContent>
@@ -135,14 +159,73 @@ export default function EventsPage() {
         <div>
           <Card className="p-6">
             <h2 className="text-2xl font-bold mb-4">{selectedYear} Pro Pickleball Events</h2>
-            <DataTable
-              data={filteredEvents}
-              columns={columns}
-              pageSize={10}
-              variant="events"
-              hideSearch={true}
-              searchQuery={searchQuery}
-            />
+
+            {selectedYear === "2025" && (
+              <div className="mb-6 border rounded-lg overflow-hidden">
+                <div className="bg-muted/50 px-4 py-3 border-b">
+                  <div className="grid grid-cols-4 gap-4 text-sm font-medium text-muted-foreground">
+                    <div>Event</div>
+                    <div>Tours</div>
+                    <div>Date</div>
+                    <div>Prize Pool</div>
+                  </div>
+                </div>
+                <div className="px-4 py-4 hover:bg-muted/50 cursor-pointer transition-colors">
+                  <div className="grid grid-cols-4 gap-4 items-center">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-medium">MLP Summer Championship 2025</span>
+                        <Badge
+                          className="text-xs font-medium px-2 py-0.5 rounded-full"
+                          style={{ backgroundColor: "#22C55E", color: "white", border: "1px solid #16a34a" }}
+                        >
+                          Ongoing
+                        </Badge>
+                      </div>
+                      <div className="text-sm text-muted-foreground">Austin, TX, USA</div>
+                    </div>
+                    <div>
+                      <Badge className="bg-green-100 text-green-800 hover:bg-green-100">MLP</Badge>
+                    </div>
+                    <div className="font-medium">Oct 28-31, 2025</div>
+                    <div className="font-semibold">$500,000</div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {selectedYear === "2026" && (
+              <div className="mb-6 border rounded-lg overflow-hidden">
+                <div className="bg-muted/50 px-4 py-3 border-b">
+                  <div className="grid grid-cols-4 gap-4 text-sm font-medium text-muted-foreground">
+                    <div>Event</div>
+                    <div>Tours</div>
+                    <div>Date</div>
+                    <div>Prize Pool</div>
+                  </div>
+                </div>
+                <div className="px-4 py-4 hover:bg-muted/50 cursor-pointer transition-colors">
+                  <div className="grid grid-cols-4 gap-4 items-center">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-medium">PPA Spring Championship 2026</span>
+                        <Badge className="bg-amber-100 text-black border border-amber-200 hover:bg-amber-100 text-xs font-medium px-2 py-0.5 rounded-full">
+                          Scheduled
+                        </Badge>
+                      </div>
+                      <div className="text-sm text-muted-foreground">Miami, FL, USA</div>
+                    </div>
+                    <div>
+                      <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-100">PPA</Badge>
+                    </div>
+                    <div className="font-medium">Mar 15-19, 2026</div>
+                    <div className="font-semibold">$250,000</div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <DataTable data={filteredEvents} columns={columns} pageSize={10} variant="events" />
           </Card>
         </div>
       </main>

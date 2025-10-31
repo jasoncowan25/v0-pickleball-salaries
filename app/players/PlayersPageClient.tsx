@@ -675,89 +675,91 @@ function PlayersPageContent() {
               <div className="md:hidden space-y-4">
                 {paginatedPlayers.map((player) => {
                   return (
-                    <div
+                    <Link
                       key={player.id}
-                      className="relative bg-muted/30 rounded-2xl p-4 shadow-sm border overflow-hidden space-y-2"
+                      href={`/players/${player.slug}`}
+                      className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-2xl"
                     >
-                      <div className="flex items-start gap-3">
-                        <Avatar className="size-14 rounded-full object-cover shrink-0 border border-gray-300">
-                          <AvatarImage src={player.headshotUrl || "/placeholder.svg"} alt={player.name} />
-                          <AvatarFallback className="text-sm font-semibold">
-                            {player.name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")
-                              .slice(0, 2)
-                              .toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
+                      <div className="relative bg-muted/30 rounded-2xl p-4 shadow-sm border overflow-hidden space-y-2 hover:bg-muted/50 active:scale-[0.98] transition-all min-h-[44px]">
+                        <div className="flex items-start gap-3">
+                          <Avatar className="size-14 rounded-full object-cover shrink-0 border border-gray-300">
+                            <AvatarImage src={player.headshotUrl || "/placeholder.svg"} alt={player.name} />
+                            <AvatarFallback className="text-sm font-semibold">
+                              {player.name
+                                .split(" ")
+                                .map((n) => n[0])
+                                .join("")
+                                .slice(0, 2)
+                                .toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
 
-                        <div className="min-w-0 flex-1">
-                          <div className="text-sm text-muted-foreground font-medium">#{player.rank}</div>
-                          <Link
-                            href={`/players/${player.slug}`}
-                            className="text-lg sm:text-xl font-semibold leading-tight truncate block hover:underline"
-                          >
-                            {player.name}
-                          </Link>
-                          <div className="mt-1 text-2xl sm:text-3xl font-extrabold tabular-nums break-words">
-                            {formatUSD(player.total)}
+                          <div className="min-w-0 flex-1">
+                            <div className="text-sm text-muted-foreground font-medium">#{player.rank}</div>
+                            <div className="text-lg sm:text-xl font-semibold leading-tight truncate">{player.name}</div>
+                            <div className="text-xs text-muted-foreground mt-0.5">
+                              {player.gender === "M" ? "Men" : "Women"} • {player.nation || "—"}
+                            </div>
+                            <div className="mt-1 text-2xl sm:text-3xl font-extrabold tabular-nums break-words">
+                              {formatUSD(player.total)}
+                            </div>
+                          </div>
+
+                          <ChevronRight className="h-5 w-5 text-muted-foreground shrink-0 mt-1" />
+                        </div>
+
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {player.tours.map((tourCode) => (
+                            <TourBadge
+                              key={tourCode}
+                              code={tourCode}
+                              primary={player.primaryTour === tourCode}
+                              clickable={false}
+                              className={
+                                tour.toUpperCase() === tourCode
+                                  ? "ring-2 ring-blue-500 text-xs px-2 py-1 pointer-events-none"
+                                  : tour !== "all"
+                                    ? "opacity-50 text-xs px-2 py-1 pointer-events-none"
+                                    : "text-xs px-2 py-1 pointer-events-none"
+                              }
+                            />
+                          ))}
+                        </div>
+
+                        <div className="mt-2 grid grid-cols-1 gap-y-1 text-sm">
+                          <div className="flex items-baseline justify-between gap-3">
+                            <span className="text-muted-foreground">PPA:</span>
+                            <span className="font-medium tabular-nums">
+                              {player.ppa > 0 ? formatUSD(player.ppa) : "—"}
+                            </span>
+                          </div>
+                          <div className="flex items-baseline justify-between gap-3">
+                            <span className="text-muted-foreground">APP:</span>
+                            <span className="font-medium tabular-nums">
+                              {player.app > 0 ? formatUSD(player.app) : "—"}
+                            </span>
+                          </div>
+                          <div className="flex items-baseline justify-between gap-3">
+                            <span className="text-muted-foreground">MLP:</span>
+                            <span className="font-medium tabular-nums">
+                              {player.mlp > 0 ? formatUSD(player.mlp) : "—"}
+                            </span>
+                          </div>
+                          <div className="flex items-baseline justify-between gap-3">
+                            <span className="text-muted-foreground">Majors:</span>
+                            <span className="font-medium tabular-nums">
+                              {player.major > 0 ? formatUSD(player.major) : "—"}
+                            </span>
+                          </div>
+                          <div className="flex items-baseline justify-between gap-3">
+                            <span className="text-muted-foreground">Contract:</span>
+                            <span className="font-medium tabular-nums">
+                              {player.contract > 0 ? formatUSD(player.contract) : "—"}
+                            </span>
                           </div>
                         </div>
                       </div>
-
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        {player.tours.map((tourCode) => (
-                          <TourBadge
-                            key={tourCode}
-                            code={tourCode}
-                            primary={player.primaryTour === tourCode}
-                            clickable={true}
-                            onClick={(selectedTour) => handleTourChange(selectedTour as Tour)}
-                            className={
-                              tour.toUpperCase() === tourCode
-                                ? "ring-2 ring-blue-500 text-xs px-2 py-1"
-                                : tour !== "all"
-                                  ? "opacity-50 text-xs px-2 py-1"
-                                  : "text-xs px-2 py-1"
-                            }
-                          />
-                        ))}
-                      </div>
-
-                      <div className="mt-2 grid grid-cols-1 gap-y-1 text-sm">
-                        <div className="flex items-baseline justify-between gap-3">
-                          <span className="text-muted-foreground">PPA:</span>
-                          <span className="font-medium tabular-nums">
-                            {player.ppa > 0 ? formatUSD(player.ppa) : "—"}
-                          </span>
-                        </div>
-                        <div className="flex items-baseline justify-between gap-3">
-                          <span className="text-muted-foreground">APP:</span>
-                          <span className="font-medium tabular-nums">
-                            {player.app > 0 ? formatUSD(player.app) : "—"}
-                          </span>
-                        </div>
-                        <div className="flex items-baseline justify-between gap-3">
-                          <span className="text-muted-foreground">MLP:</span>
-                          <span className="font-medium tabular-nums">
-                            {player.mlp > 0 ? formatUSD(player.mlp) : "—"}
-                          </span>
-                        </div>
-                        <div className="flex items-baseline justify-between gap-3">
-                          <span className="text-muted-foreground">Majors:</span>
-                          <span className="font-medium tabular-nums">
-                            {player.major > 0 ? formatUSD(player.major) : "—"}
-                          </span>
-                        </div>
-                        <div className="flex items-baseline justify-between gap-3">
-                          <span className="text-muted-foreground">Contract:</span>
-                          <span className="font-medium tabular-nums">
-                            {player.contract > 0 ? formatUSD(player.contract) : "—"}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
+                    </Link>
                   )
                 })}
               </div>
