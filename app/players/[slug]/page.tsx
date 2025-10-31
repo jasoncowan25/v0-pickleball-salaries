@@ -316,7 +316,7 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                       Major
                     </th>
                     <th scope="col" className="text-right py-3 px-4 font-medium text-muted-foreground">
-                      Contracts †<br />
+                      Contracts †
                     </th>
                     <th scope="col" className="text-right py-3 px-4 font-medium text-muted-foreground">
                       Year Total
@@ -391,8 +391,9 @@ export default function PlayerPage({ params }: PlayerPageProps) {
 
             <div className="mt-6 pt-4 border-t border-border">
               <p className="text-xs text-muted-foreground">
-                † Note: Contract figures are DinkBank estimates based on internal modeling and publicly available data.
-                These values are unofficial and subject to revision.{" "}
+                † "Current Annual Earnings" combines each player's estimated current-year contract value with prize
+                money from the past 12 months. Contract figures are DinkBank estimates based on internal modeling and
+                public data. Unofficial and subject to revision.{" "}
                 <Link href="/methodology" className="hover:underline">
                   See Methodology →
                 </Link>

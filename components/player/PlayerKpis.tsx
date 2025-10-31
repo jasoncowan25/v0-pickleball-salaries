@@ -41,7 +41,7 @@ export default function PlayerKpis({
         {/* 2. Annual Earnings (Estimated) */}
         <Card className="h-full border border-border shadow-sm">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base font-medium">Annual Earnings †</CardTitle>
+            <CardTitle className="text-base font-medium">Current Annual Earnings †</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-semibold tracking-tight">{formatCurrency(annualEstimated)}</div>
@@ -51,7 +51,7 @@ export default function PlayerKpis({
         {/* 3. Career Earnings (Estimated) */}
         <Card className="h-full border border-border shadow-sm">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base font-medium">Career Earnings †</CardTitle>
+            <CardTitle className="text-base font-medium">Career Earnings</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-semibold tracking-tight">{formatCurrency(careerTotal)}</div>
