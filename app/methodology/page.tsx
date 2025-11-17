@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
-import { CheckCircle, AlertTriangle, HelpCircle, Eye } from "lucide-react"
+import { CheckCircle, AlertTriangle, HelpCircle, Eye } from 'lucide-react'
 
 export default function MethodologyPage() {
   return (
@@ -29,7 +29,7 @@ export default function MethodologyPage() {
                     <Badge variant="default">High Confidence</Badge>
                   </div>
                   <p className="text-muted-foreground">
-                    Verified via official tour results, purse breakdowns, or direct organizer confirmation.
+                    Verified via publicly available announcements, credible third-party reporting, or direct organizer confirmation.
                   </p>
                 </div>
               </div>
