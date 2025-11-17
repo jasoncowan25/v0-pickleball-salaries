@@ -53,6 +53,16 @@ export default function SiteFooter() {
                 X (Twitter)
               </a>
             </li>
+            <li>
+              <a
+                href="https://instagram.com/DinkBankHQ"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline"
+              >
+                Instagram
+              </a>
+            </li>
           </ul>
           <div className="mt-4">
             <LanguageSwitcher />
@@ -114,6 +124,16 @@ export default function SiteFooter() {
                     className="hover:underline"
                   >
                     X (Twitter)
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://instagram.com/DinkBankHQ"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:underline"
+                  >
+                    Instagram
                   </a>
                 </li>
               </ul>

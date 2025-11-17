@@ -6,8 +6,7 @@ import Link from "next/link"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { ChevronLeft, ChevronRight, ArrowUp, ArrowDown, Info } from "lucide-react"
+import { ChevronLeft, ChevronRight, ArrowUp, ArrowDown } from "lucide-react"
 import { mockPlayers, events } from "@/lib/mock-data"
 import type { Gender } from "@/lib/mock-data"
 import { computePrimaryTour, visibleTours, type TourCode } from "@/lib/tours"
@@ -463,7 +462,7 @@ function PlayersPageContent() {
             badge={`${selectedYear} Season`}
           />
           <KpiCard
-            title={`${kpiPrefix}Reported Contracts`}
+            title={`${kpiPrefix}Contract Earnings †`}
             value={formatUSD(reportedContracts)}
             badge={`${selectedYear} Season`}
           />
@@ -574,30 +573,19 @@ function PlayersPageContent() {
                           </div>
                         </th>
                         <th className="bg-muted/30 font-semibold tabular-nums text-right p-3">
-                          <TooltipProvider delayDuration={150}>
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <div
-                                  onClick={() => handleSort("contract")}
-                                  className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer flex items-center justify-end gap-1 ${sortColumn === "contract" ? "bg-muted/40" : ""}`}
-                                  aria-sort={
-                                    sortColumn === "contract"
-                                      ? sortDirection === "asc"
-                                        ? "ascending"
-                                        : "descending"
-                                      : "none"
-                                  }
-                                >
-                                  Contract <Info className="h-3 w-3 ml-1" /> <SortIcon column="contract" />
-                                </div>
-                              </TooltipTrigger>
-                              <TooltipContent side="bottom" align="end" className="max-w-xs text-sm">
-                                <p>
-                                  Contracts exclude endorsements. Numbers reflect guaranteed retainers/salaries only.
-                                </p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
+                          <div
+                            onClick={() => handleSort("contract")}
+                            className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer flex items-center justify-end gap-1 ${sortColumn === "contract" ? "bg-muted/40" : ""}`}
+                            aria-sort={
+                              sortColumn === "contract"
+                                ? sortDirection === "asc"
+                                  ? "ascending"
+                                  : "descending"
+                                : "none"
+                            }
+                          >
+                            Contracts † <SortIcon column="contract" />
+                          </div>
                         </th>
                         <th className="bg-muted/30 font-semibold tabular-nums text-right p-3">
                           <div
@@ -845,14 +833,15 @@ function PlayersPageContent() {
                 </div>
               </div>
 
-              <div className="pt-3 border-t mt-3 text-xs text-muted-foreground">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                  <span>All amounts in USD.</span>
-                  <Link href="/methodology" className="underline hover:no-underline whitespace-nowrap">
-                    See Methodology →
-                  </Link>
-                </div>
-              </div>
+              <hr className="mt-4 mb-2 border-[#EAEAEA]" />
+              <p className="text-xs text-[#6B6B6B] max-w-full md:max-w-[80%] leading-[1.4] mt-3 mb-4">
+                † Contract figures represent base retainers/salaries only and exclude endorsements or appearance fees.
+                Where exact terms are not publicly reported, amounts are DinkBank estimates based on internal modeling
+                and public data and are subject to revision. All amounts in USD.{" "}
+                <Link href="/methodology" className="underline hover:text-[#1F1F1F]">
+                  See Methodology →
+                </Link>
+              </p>
             </>
           )}
         </Card>

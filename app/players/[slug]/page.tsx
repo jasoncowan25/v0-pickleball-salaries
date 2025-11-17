@@ -389,16 +389,15 @@ export default function PlayerPage({ params }: PlayerPageProps) {
               ))}
             </div>
 
-            <div className="mt-6 pt-4 border-t border-border">
-              <p className="text-xs text-muted-foreground">
-                † "Current Annual Earnings" combines each player's estimated current-year contract value with prize
-                money from the past 12 months. Contract figures are DinkBank estimates based on internal modeling and
-                public data. Unofficial and subject to revision.{" "}
-                <Link href="/methodology" className="hover:underline">
-                  See Methodology →
-                </Link>
-              </p>
-            </div>
+            <hr className="mt-4 mb-2 border-[#EAEAEA]" />
+            <p className="text-xs text-[#6B6B6B] max-w-full md:max-w-[80%] leading-[1.4] mt-3 mb-4">
+              † Earnings include estimated contract values modeled by DinkBank in addition to verified prize money.
+              Contract figures are estimates based on internal analysis and public data. Unofficial and subject to
+              revision.{" "}
+              <Link href="/methodology" className="underline hover:text-[#1F1F1F]">
+                See Methodology →
+              </Link>
+            </p>
           </Card>
         )}
 

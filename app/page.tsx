@@ -98,7 +98,7 @@ export default function Page() {
     },
     {
       key: "totals" as keyof (Player & { rank: number; rankValue: number }),
-      header: "Contract",
+      header: "Contract †",
       cell: (player: Player & { rank: number }) => (
         <div className="tabular-nums text-right">{formatCurrencyUSD(player.totals.reportedContracts || 0)}</div>
       ),
@@ -127,7 +127,7 @@ export default function Page() {
       <div className="grid gap-4 md:grid-cols-3 mb-6">
         <KpiCard title="Total Prize Money" value={formatCurrencyUSD(totalPrizeThisYear)} />
         <KpiCard title="Events Tracked" value={eventsTracked.toString()} />
-        <KpiCard title="Reported Contracts" value={formatCurrencyUSD(totalContracts)} />
+        <KpiCard title="Contract Earnings †" value={formatCurrencyUSD(totalContracts)} />
       </div>
 
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "thisyear" | "alltime")} className="mb-6">
@@ -142,12 +142,7 @@ export default function Page() {
               <h2 className="text-lg font-semibold">
                 {activeTab === "thisyear" ? `${YEAR} Top Earners` : "All-Time Top Earners"}
               </h2>
-              <p className="text-sm text-muted-foreground">
-                <span className="hidden md:inline">Showing Top 10 of {rankedPlayers.length} players</span>
-                <span className="md:hidden">
-                  Showing Top {mobileDisplayCount} of {rankedPlayers.length} players
-                </span>
-              </p>
+              <p className="text-sm text-muted-foreground">Listing the top pro pickleball players by total earnings</p>
             </div>
 
             <div className="hidden md:block overflow-x-auto">
@@ -160,7 +155,7 @@ export default function Page() {
                         className={`text-left py-2 px-3 font-medium text-muted-foreground ${
                           column.header === "Total" ? "bg-muted/30" : ""
                         } ${
-                          column.header === "Prize" || column.header === "Contract" || column.header === "Total"
+                          column.header === "Prize" || column.header === "Contract †" || column.header === "Total"
                             ? "text-right"
                             : ""
                         }`}
@@ -263,6 +258,16 @@ export default function Page() {
                 )
               })}
             </div>
+
+            <hr className="mt-4 mb-2 border-[#EAEAEA]" />
+            <p className="text-xs text-[#6B6B6B] leading-[1.4] max-w-full md:max-w-[80%] mt-3 mb-4">
+              † Contract figures represent base retainers/salaries only and exclude endorsements or appearance fees.
+              Where exact terms are not publicly reported, amounts are DinkBank estimates based on internal modeling and
+              public data and are subject to revision. All amounts in USD.{" "}
+              <Link href="/methodology" className="underline hover:text-[#1F1F1F]">
+                See Methodology →
+              </Link>
+            </p>
 
             <div className="mt-4">
               <div className="hidden md:block text-center">

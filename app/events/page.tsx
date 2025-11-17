@@ -175,10 +175,7 @@ export default function EventsPage() {
                     <div>
                       <div className="flex items-center gap-2 mb-1">
                         <span className="font-medium">MLP Summer Championship 2025</span>
-                        <Badge
-                          className="text-xs font-medium px-2 py-0.5 rounded-full"
-                          style={{ backgroundColor: "#22C55E", color: "white", border: "1px solid #16a34a" }}
-                        >
+                        <Badge className="bg-[#E6F4EA] text-[#2E7D32] border border-[#D8EFD9] hover:bg-[#E6F4EA] text-xs font-medium px-2 py-0.5 rounded-full">
                           Ongoing
                         </Badge>
                       </div>
