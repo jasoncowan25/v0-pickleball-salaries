@@ -1,2 +1,37 @@
+# DinkBank Robots.txt
+# Updated to control search engine indexing
+
 User-agent: *
-Disallow: /
+
+# Allow indexing of main content pages
+Allow: /$
+Allow: /players
+Allow: /players/
+Allow: /events
+Allow: /events/
+Allow: /press
+Allow: /press/
+Allow: /about
+Allow: /methodology
+Allow: /contact
+
+# Disallow admin and utility pages
+Disallow: /admin
+Disallow: /submit-correction
+
+# Disallow legal/policy pages (low SEO value)
+Disallow: /privacy
+Disallow: /terms
+Disallow: /disclaimer
+Disallow: /cookies
+Disallow: /accessibility
+Disallow: /sources
+Disallow: /careers
+
+# Block common non-content paths
+Disallow: /api/
+Disallow: /_next/
+Disallow: /scripts/
+
+# Sitemap location
+Sitemap: https://dinkbank.com/sitemap.xml

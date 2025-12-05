@@ -14,6 +14,7 @@ export interface Player {
   name: string
   country?: string
   gender?: Gender
+  dob?: string // Added date of birth field (YYYY-MM-DD format)
   primaryTour?: Tour
   headshotUrl?: string
   sponsors?: string[]
@@ -71,6 +72,7 @@ export const mockPlayers: Player[] = [
     name: "Ben Johns",
     country: "US",
     gender: "M",
+    dob: "1999-03-18", // Added DOB for Ben Johns
     primaryTour: "PPA",
     headshotUrl: "/ben-johns-pickleball.png",
     sponsors: ["JOOLA", "Vulcan"],
@@ -93,6 +95,7 @@ export const mockPlayers: Player[] = [
     name: "Anna Leigh Waters",
     country: "US",
     gender: "F",
+    dob: "2007-01-26", // Added DOB for Anna Leigh Waters
     primaryTour: "PPA",
     headshotUrl: "/anna-leigh-waters-pickleball.png",
     sponsors: ["HEAD", "Fila"],

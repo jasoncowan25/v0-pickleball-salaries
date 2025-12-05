@@ -8,8 +8,8 @@ export default function AboutPage() {
       <div className="text-center space-y-4">
         <h1 className="text-4xl font-bold tracking-tight">About DinkBank</h1>
         <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-          The first authoritative, cross-tour earnings database for professional pickleball. Every dollar. Every event.
-          Every player.
+          The first authoritative, cross-tour earnings database for professional pickleball. Every dollar. Every pro
+          event. Every player.
         </p>
       </div>
 
@@ -19,14 +19,15 @@ export default function AboutPage() {
           <CardTitle>Our Mission</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-lg">
-            DinkBank is building the definitive source for professional pickleball earnings data, bringing transparency
-            and accessibility to the fastest-growing sport in America.
+          <p className="text-base">
+            DinkBank is building the most complete and accessible source for professional pickleball earnings data. We
+            believe that clear, structured information helps elevate the sport—giving fans, media, and brands a deeper
+            understanding of how players are compensated across tours.
           </p>
           <p>
-            Just as Spotrac revolutionized how fans and industry professionals track athlete salaries in traditional
-            sports, DinkBank is creating the same comprehensive resource for professional pickleball across all major
-            tours.
+            Professional pickleball pay can be fragmented, inconsistent, and sometimes inflated or misunderstood.
+            DinkBank breaks earnings down into a transparent structure of <strong>prize money</strong> and{" "}
+            <strong>contract earnings</strong>, giving the sport a fair and accurate financial picture.
           </p>
         </CardContent>
       </Card>
@@ -43,9 +44,9 @@ export default function AboutPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p>
-                Complete earnings data from every professional pickleball event, updated in real-time as tournaments
-                conclude.
+              <p className="text-base">
+                Earnings from <strong>every major pro event</strong>, updated within <strong>24–72 hours</strong> after
+                tournaments conclude.
               </p>
             </CardContent>
           </Card>
@@ -58,7 +59,7 @@ export default function AboutPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p>Comprehensive coverage across PPA Tour, Major League Pickleball (MLP), and APP Tour events.</p>
+              <p className="text-base">Coverage across PPA Tour, Major League Pickleball (MLP), and APP Tour events.</p>
             </CardContent>
           </Card>
 
@@ -66,12 +67,13 @@ export default function AboutPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 Player Profiles
-                <Badge variant="secondary">500+ Players</Badge>
+                <Badge variant="secondary">1,000+ Players</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p>
-                Detailed earnings breakdowns, tournament history, and career statistics for every professional player.
+              <p className="text-base">
+                Detailed earnings breakdowns, tournament history, and career milestones for every professional player we
+                track.
               </p>
             </CardContent>
           </Card>
@@ -86,14 +88,20 @@ export default function AboutPage() {
           </CardHeader>
           <CardContent className="space-y-3">
             <p>
-              We believe in complete transparency in our data collection and methodology. Every figure is sourced,
-              verified, and traceable.
+              We believe transparency strengthens the sport. While our internal methodology and source logs are
+              maintained on the backend, every public number on DinkBank comes from:
             </p>
-            <ul className="space-y-2 text-sm">
-              <li>• Open methodology documentation</li>
-              <li>• Source attribution for all data</li>
-              <li>• Community correction system</li>
-              <li>• Regular data audits</li>
+            <ul className="space-y-2 text-base">
+              <li>• Official tour results</li>
+              <li>• Official payout structures</li>
+              <li>• Clearly classified estimates for reported contract figures</li>
+            </ul>
+            <p className="pt-2">Our transparency approach includes:</p>
+            <ul className="space-y-2 text-base">
+              <li>• Clear separation of prize earnings vs. contract earnings</li>
+              <li>• Consistent rules for doubles payout splits</li>
+              <li>• Labels for confirmed vs. estimated contract data</li>
+              <li>• A correction channel for players, agents, and fans</li>
             </ul>
           </CardContent>
         </Card>
@@ -104,29 +112,52 @@ export default function AboutPage() {
           </CardHeader>
           <CardContent className="space-y-3">
             <p>
-              Our data is meticulously verified through multiple sources and continuously updated to ensure the highest
-              level of accuracy.
+              We aim to provide the most reliable earnings data in pickleball through a structured verification
+              workflow. While not every value uses multiple sources—and we do not employ professional fact-checkers—our
+              process includes:
             </p>
-            <ul className="space-y-2 text-sm">
-              <li>• Multi-source verification</li>
-              <li>• Real-time tournament updates</li>
-              <li>• Professional fact-checking</li>
-              <li>• Community-driven corrections</li>
+            <ul className="space-y-2 text-base">
+              <li>
+                • Verification against <strong>official tour results</strong>
+              </li>
+              <li>• Standardized payout mapping for each tour</li>
+              <li>• Manual review for anomalies</li>
+              <li>
+                • Updates within <strong>24–72 hours</strong> after each event
+              </li>
             </ul>
+            <p className="pt-2">
+              Our goal is continuous improvement and clear documentation of how every number is produced.
+            </p>
           </CardContent>
         </Card>
       </div>
 
+      {/* Why Transparency Matters */}
+      <Card className="bg-muted/50">
+        <CardHeader>
+          <CardTitle className="text-center">Why Transparency Matters</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p>
+            Transparent earnings data helps players, fans, and partners understand the true economics of professional
+            pickleball. By breaking numbers down into prize earnings and contract earnings—without inflating, grouping,
+            or oversimplifying—DinkBank helps ensure the sport moves toward fairer compensation and a clearer financial
+            landscape.
+          </p>
+        </CardContent>
+      </Card>
+
       {/* Who We Serve */}
       <div className="space-y-6">
-        <h2 className="text-3xl font-bold text-center">Who We Serve</h2>
+        <h2 className="font-bold text-center text-2xl">Who We Serve</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card className="text-center">
             <CardHeader>
               <CardTitle className="text-lg">Fans</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm">Track your favorite players' earnings and career progression</p>
+              <p className="text-base">Track your favorite players' earnings and career progression</p>
             </CardContent>
           </Card>
 
@@ -135,7 +166,7 @@ export default function AboutPage() {
               <CardTitle className="text-lg">Media</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm">Reliable data for articles, broadcasts, and analysis</p>
+              <p className="text-base">Reliable data for articles, broadcasts, and analysis</p>
             </CardContent>
           </Card>
 
@@ -144,7 +175,7 @@ export default function AboutPage() {
               <CardTitle className="text-lg">Sponsors</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm">Market insights and player performance metrics</p>
+              <p className="text-base">Market insights and player performance metrics</p>
             </CardContent>
           </Card>
 
@@ -153,7 +184,7 @@ export default function AboutPage() {
               <CardTitle className="text-lg">Industry</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm">Agents, tours, and organizations making data-driven decisions</p>
+              <p className="text-base">Agents, tours, and organizations making data-driven decisions</p>
             </CardContent>
           </Card>
         </div>
@@ -165,11 +196,11 @@ export default function AboutPage() {
           <CardTitle className="text-center">Our Vision</CardTitle>
         </CardHeader>
         <CardContent className="text-center space-y-4">
-          <p className="text-lg">
+          <p className="text-base">
             To become the definitive resource for professional pickleball data, supporting the growth and
             professionalization of the sport.
           </p>
-          <p>
+          <p className="text-base">
             As pickleball continues its explosive growth, we're committed to providing the infrastructure and
             transparency that will help elevate the sport to new heights.
           </p>

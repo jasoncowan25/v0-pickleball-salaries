@@ -263,10 +263,7 @@ export default function Page() {
             <p className="text-xs text-[#6B6B6B] leading-[1.4] max-w-full md:max-w-[80%] mt-3 mb-4">
               † Contract figures represent base retainers/salaries only and exclude endorsements or appearance fees.
               Where exact terms are not publicly reported, amounts are DinkBank estimates based on internal modeling and
-              public data and are subject to revision. All amounts in USD.{" "}
-              <Link href="/methodology" className="underline hover:text-[#1F1F1F]">
-                See Methodology →
-              </Link>
+              public data and are subject to revision. All amounts in USD.
             </p>
 
             <div className="mt-4">
@@ -291,6 +288,24 @@ export default function Page() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      <Card className="mt-6 mb-6">
+        <div className="p-6">
+          <div className="flex items-center gap-2 mb-3">
+            <img src="/dinkbank-icon.svg" alt="DinkBank" className="w-6 h-6" />
+            <h2 className="text-lg font-semibold">DinkBank Data</h2>
+          </div>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            DinkBank provides a structured view of professional pickleball earnings, including prize money, contracts,
+            and season-long performance across major tours. Player totals and rankings reflect ongoing updates
+            throughout the season and are designed to help fans, players, brands, and media understand the financial
+            landscape of the sport.{" "}
+            <Link href="/about" className="underline hover:text-[#1F1F1F]">
+              Learn More →
+            </Link>
+          </p>
+        </div>
+      </Card>
     </div>
   )
 }

@@ -1,12 +1,12 @@
 "use client"
 
 import { Suspense, useMemo, useTransition, useState, useEffect } from "react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import Link from "next/link"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ChevronLeft, ChevronRight, ArrowUp, ArrowDown } from "lucide-react"
+import { ChevronLeft, ChevronRight, ArrowUp, ArrowDown } from 'lucide-react'
 import { mockPlayers, events } from "@/lib/mock-data"
 import type { Gender } from "@/lib/mock-data"
 import { computePrimaryTour, visibleTours, type TourCode } from "@/lib/tours"
@@ -344,6 +344,45 @@ function PlayersPageContent() {
     return { totalPrizeMoney, eventsTracked, reportedContracts }
   }, [kpiFilters, selectedYear])
 
+  const lastSeasonData = useMemo(() => {
+    const lastYear = selectedYear - 1
+    const lastYearPlayers = getYearFilteredPlayers(playerRows, lastYear)
+    
+    let filteredLastYear = lastYearPlayers
+    if (gender !== "all") {
+      filteredLastYear = filteredLastYear.filter((p) => p.gender === gender)
+    }
+    if (tour !== "all") {
+      const tourParam = tour.toUpperCase() as Tour
+      filteredLastYear = filteredLastYear.filter((p) => (p.earningsByTour?.[tourParam] ?? 0) > 0)
+    }
+
+    const lastYearPrizeMoney = filteredLastYear.reduce((sum, p) => sum + (p.total - p.contract), 0)
+    const lastYearContracts = filteredLastYear.reduce((sum, p) => sum + p.contract, 0)
+    const lastYearEvents = events?.filter((e) => new Date(e.date).getFullYear() === lastYear).length || 38
+
+    return {
+      prizeMoney: lastYearPrizeMoney,
+      contracts: lastYearContracts,
+      events: lastYearEvents,
+    }
+  }, [playerRows, selectedYear, gender, tour])
+
+  const prizeChangeAmount = totalPrizeMoney - lastSeasonData.prizeMoney
+  const prizeChangePercent = lastSeasonData.prizeMoney > 0 
+    ? ((totalPrizeMoney - lastSeasonData.prizeMoney) / lastSeasonData.prizeMoney) * 100 
+    : 0
+  
+  const contractsChangeAmount = reportedContracts - lastSeasonData.contracts
+  const contractsChangePercent = lastSeasonData.contracts > 0
+    ? ((reportedContracts - lastSeasonData.contracts) / lastSeasonData.contracts) * 100
+    : 0
+  
+  const eventsChangeAmount = eventsTracked - lastSeasonData.events
+  const eventsChangePercent = lastSeasonData.events > 0
+    ? ((eventsTracked - lastSeasonData.events) / lastSeasonData.events) * 100
+    : 0
+
   const kpiPrefix = useMemo(() => {
     const prefix = composePrefix({ gender, tour })
     return prefix ? `${prefix} ` : ""
@@ -455,16 +494,31 @@ function PlayersPageContent() {
             title={`${kpiPrefix}Prize Money`}
             value={formatUSD(totalPrizeMoney)}
             badge={`${selectedYear} Season`}
+            comparison={{
+              changeAmount: `${prizeChangeAmount > 0 ? '+' : ''}${formatUSD(prizeChangeAmount)}`,
+              changePercent: prizeChangePercent,
+              isPositive: prizeChangeAmount > 0
+            }}
           />
           <KpiCard
             title={`${kpiPrefix}Events Tracked`}
             value={eventsTracked.toString()}
             badge={`${selectedYear} Season`}
+            comparison={{
+              changeAmount: eventsChangeAmount > 0 ? `+${eventsChangeAmount}` : eventsChangeAmount.toString(),
+              changePercent: eventsChangePercent,
+              isPositive: eventsChangeAmount > 0
+            }}
           />
           <KpiCard
             title={`${kpiPrefix}Contract Earnings †`}
             value={formatUSD(reportedContracts)}
             badge={`${selectedYear} Season`}
+            comparison={{
+              changeAmount: `${contractsChangeAmount > 0 ? '+' : ''}${formatUSD(contractsChangeAmount)}`,
+              changePercent: contractsChangePercent,
+              isPositive: contractsChangeAmount > 0
+            }}
           />
         </div>
 

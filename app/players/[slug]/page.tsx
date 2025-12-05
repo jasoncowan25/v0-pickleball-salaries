@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/breadcrumb"
 import { ConfidenceBadge } from "@/components/confidence-badge"
 import { formatCurrency, formatShortDate } from "@/lib/format"
+import { format } from "date-fns" // Added date-fns import for DOB formatting
 import { mockPlayers } from "@/lib/mock-data"
 import { getPlayerPayouts } from "@/lib/rank"
 import { generatePlayerJsonLd } from "@/lib/jsonld"
@@ -30,77 +31,22 @@ interface PlayerPageProps {
   }
 }
 
-const mockCareerEarnings = [
-  {
-    year: 2024,
-    ppa: 45000,
-    app: 35000,
-    mlp: 25000,
-    major: 20000,
-    contracts: 500000,
-    confidence: { contracts: "confirmed" },
-  },
-  {
-    year: 2023,
-    ppa: 38000,
-    app: 28000,
-    mlp: 22000,
-    major: 10000,
-    contracts: 450000,
-    confidence: { contracts: "confirmed" },
-  },
-  {
-    year: 2022,
-    ppa: 32000,
-    app: 25000,
-    mlp: 18000,
-    major: 12000,
-    contracts: 400000,
-    confidence: { contracts: "reported" },
-  },
-  {
-    year: 2021,
-    ppa: 28000,
-    app: 20000,
-    mlp: 12000,
-    major: 5000,
-    contracts: 300000,
-    confidence: { contracts: "reported" },
-  },
-]
+function displayGender(g: string | null | undefined) {
+  if (!g) return null
+  const val = g.toLowerCase()
+  if (val === "w" || val === "woman" || val === "f") return "Female"
+  if (val === "m" || val === "man") return "Male"
+  return g
+}
 
-const mockTransactions = [
-  {
-    date: "2024-01-15",
-    type: "Endorsement",
-    title: "JOOLA Multi-Year Partnership Extension",
-    amount: 150000,
-    counterparty: "JOOLA",
-    notes: "Three-year extension with performance bonuses and signature paddle line.",
-    confidence: "confirmed",
-    attachments: 2,
-  },
-  {
-    date: "2023-12-01",
-    type: "Contract",
-    title: "PPA Tour Player Agreement Renewal",
-    amount: 75000,
-    counterparty: "PPA Tour",
-    notes: "Annual player agreement with appearance requirements and media obligations.",
-    confidence: "confirmed",
-    attachments: 1,
-  },
-  {
-    date: "2023-08-20",
-    type: "Bonus",
-    title: "Championship Performance Bonus",
-    amount: 25000,
-    counterparty: "JOOLA",
-    notes: "Performance bonus for winning three consecutive PPA tournaments.",
-    confidence: "reported",
-    attachments: 0,
-  },
-]
+function calculateAge(dob: string) {
+  const birth = new Date(dob)
+  const today = new Date()
+  let age = today.getFullYear() - birth.getFullYear()
+  const m = today.getMonth() - birth.getMonth()
+  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--
+  return age
+}
 
 export default function PlayerPage({ params }: PlayerPageProps) {
   const [activeTab, setActiveTab] = useState("career")
@@ -135,6 +81,78 @@ export default function PlayerPage({ params }: PlayerPageProps) {
 
   const totalFor = (r: (typeof mockCareerEarnings)[0]) =>
     (r.ppa ?? 0) + (r.app ?? 0) + (r.mlp ?? 0) + (r.major ?? 0) + (r.contracts ?? 0)
+
+  const mockCareerEarnings = [
+    {
+      year: 2024,
+      ppa: 45000,
+      app: 35000,
+      mlp: 25000,
+      major: 20000,
+      contracts: 500000,
+      confidence: { contracts: "confirmed" },
+    },
+    {
+      year: 2023,
+      ppa: 38000,
+      app: 28000,
+      mlp: 22000,
+      major: 10000,
+      contracts: 450000,
+      confidence: { contracts: "confirmed" },
+    },
+    {
+      year: 2022,
+      ppa: 32000,
+      app: 25000,
+      mlp: 18000,
+      major: 12000,
+      contracts: 400000,
+      confidence: { contracts: "reported" },
+    },
+    {
+      year: 2021,
+      ppa: 28000,
+      app: 20000,
+      mlp: 12000,
+      major: 5000,
+      contracts: 300000,
+      confidence: { contracts: "reported" },
+    },
+  ]
+
+  const mockTransactions = [
+    {
+      date: "2024-01-15",
+      type: "Endorsement",
+      title: "JOOLA Multi-Year Partnership Extension",
+      amount: 150000,
+      counterparty: "JOOLA",
+      notes: "Three-year extension with performance bonuses and signature paddle line.",
+      confidence: "confirmed",
+      attachments: 2,
+    },
+    {
+      date: "2023-12-01",
+      type: "Contract",
+      title: "PPA Tour Player Agreement Renewal",
+      amount: 75000,
+      counterparty: "PPA Tour",
+      notes: "Annual player agreement with appearance requirements and media obligations.",
+      confidence: "confirmed",
+      attachments: 1,
+    },
+    {
+      date: "2023-08-20",
+      type: "Bonus",
+      title: "Championship Performance Bonus",
+      amount: 25000,
+      counterparty: "JOOLA",
+      notes: "Performance bonus for winning three consecutive PPA tournaments.",
+      confidence: "reported",
+      attachments: 0,
+    },
+  ]
 
   const careerEarningsWithTotals = mockCareerEarnings
     .map((yearData) => ({
@@ -181,15 +199,26 @@ export default function PlayerPage({ params }: PlayerPageProps) {
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 text-center sm:text-left w-full">
-              <div className="flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3 mb-3">
-                <h1 className="text-4xl sm:text-5xl font-bold">{player.name}</h1>
-                {player.country && (
-                  <span className="text-3xl sm:text-4xl">
-                    {player.country === "US" ? "🇺🇸" : player.country === "CA" ? "🇨🇦" : "🌍"}
-                  </span>
-                )}
+              <div className="flex flex-col">
+                <h1 className="text-3xl sm:text-4xl font-bold flex items-center justify-center sm:justify-start gap-2">
+                  {player.name}
+                  {player.country && (
+                    <span className="text-2xl sm:text-3xl">
+                      {player.country === "US" ? "🇺🇸" : player.country === "CA" ? "🇨🇦" : "🌍"}
+                    </span>
+                  )}
+                </h1>
+
+                {/* Metadata line with gender, country, age, and DOB */}
+                <p className="text-sm text-muted-foreground mt-1">
+                  {displayGender(player.gender)}
+                  {player.country && ` • ${player.country}`}
+                  {player.dob && ` • Age ${calculateAge(player.dob)}`}
+                  {player.dob && ` • Born ${format(new Date(player.dob), "MMMM d, yyyy")}`}
+                </p>
               </div>
-              <div className="flex items-center justify-center sm:justify-start gap-4 text-muted-foreground mb-4">
+
+              <div className="flex items-center justify-center sm:justify-start gap-4 text-muted-foreground mb-4 mt-3">
                 <div className="text-base sm:text-lg">
                   Plays: {player.handedness === "R" ? "Right-handed" : "Left-handed"}
                 </div>
@@ -525,39 +554,37 @@ export default function PlayerPage({ params }: PlayerPageProps) {
         {/* Transactions Tab */}
         {activeTab === "transactions" && (
           <Card className="p-6">
-            <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
-              <div>
-                <h2 className="text-lg font-semibold">Contracts & Endorsements</h2>
-                <p className="text-sm text-muted-foreground">
-                  Endorsements, contracts, bonuses, and other transactions
-                </p>
-              </div>
+            <div className="mb-4">
+              <h2 className="text-lg font-semibold">Contracts & Endorsements</h2>
+              <p className="text-sm text-muted-foreground">
+                Known deals, endorsements, and other non-prize income reported by DinkBank. Some values estimated.
+              </p>
             </div>
 
             <div className="space-y-4">
-              {mockTransactions.map((transaction, index) => (
-                <Card key={index} className="p-4 shadow-sm">
-                  <div className="flex flex-col md:flex-row md:items-start justify-between mb-2 gap-2">
-                    <h3 className="font-semibold text-base flex-1" aria-labelledby={`transaction-${index}`}>
-                      {transaction.title}
-                    </h3>
-                    <span className="font-semibold text-black text-right md:whitespace-nowrap">
-                      {currency(transaction.amount)}
-                    </span>
-                  </div>
-                  <div className="flex flex-col md:flex-row md:items-center gap-2 text-sm text-muted-foreground mb-3">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span>{formatShortDate(transaction.date)}</span>
-                      <span>•</span>
-                      <span>{transaction.type}</span>
-                      <span>•</span>
-                      <span className="truncate">{transaction.counterparty}</span>
+              {mockTransactions.map((transaction) => (
+                <Card key={transaction.date} className="p-4 shadow-sm">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Badge variant="outline" className="text-xs">
+                          {transaction.type}
+                        </Badge>
+                        <ConfidenceBadge
+                          confidence={transaction.confidence as "confirmed" | "reported" | "estimated"}
+                        />
+                      </div>
+                      <h3 className="font-semibold text-base sm:text-lg">{transaction.title}</h3>
+                      <p className="text-sm text-muted-foreground">with {transaction.counterparty}</p>
                     </div>
-                    <div className="md:ml-auto">
-                      <ConfidenceBadge status={transaction.confidence as any} />
+                    <div className="text-left sm:text-right">
+                      <div className="font-bold text-xl">{currency(transaction.amount)}</div>
+                      <div className="text-sm text-muted-foreground">{formatShortDate(transaction.date)}</div>
                     </div>
                   </div>
-                  <p className="text-sm text-muted-foreground mb-3 line-clamp-3">{transaction.notes}</p>
+
+                  {transaction.notes && <p className="text-sm text-muted-foreground mb-2">{transaction.notes}</p>}
+
                   {transaction.attachments > 0 && (
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <FileText className="h-4 w-4" />
@@ -571,6 +598,25 @@ export default function PlayerPage({ params }: PlayerPageProps) {
             </div>
           </Card>
         )}
+
+        {/* DinkBank Player Data banner */}
+        <Card className="mt-6 mb-6">
+          <div className="p-6">
+            <div className="flex items-center gap-2 mb-3">
+              <img src="/dinkbank-icon.svg" alt="DinkBank" className="w-6 h-6" />
+              <h2 className="text-lg font-semibold">DinkBank Player Data</h2>
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              DinkBank provides a consolidated view of each player's professional earnings, including prize money,
+              contracts, and season-long results across major tours. Earnings totals and rankings reflect ongoing
+              updates throughout the season to help fans, media, and partners understand each athlete's financial
+              footprint in the sport.{" "}
+              <Link href="/about" className="underline hover:text-[#1F1F1F]">
+                Learn More →
+              </Link>
+            </p>
+          </div>
+        </Card>
       </main>
     </div>
   )
