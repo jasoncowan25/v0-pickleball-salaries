@@ -26,15 +26,15 @@ export default function AboutPage() {
           </p>
           <p>
             Professional pickleball pay can be fragmented, inconsistent, and sometimes inflated or misunderstood.
-            DinkBank breaks earnings down into a transparent structure of <strong>prize money</strong> and{" "}
-            <strong>contract earnings</strong>, giving the sport a fair and accurate financial picture.
+            DinkBank breaks earnings down into a transparent structure of <strong className="text-base">prize money</strong> and{" "}
+            <strong className="text-base">contract earnings</strong>, giving the sport a fair and accurate financial picture.
           </p>
         </CardContent>
       </Card>
 
       {/* What We Track */}
       <div className="space-y-6">
-        <h2 className="text-3xl font-bold text-center">What We Track</h2>
+        <h2 className="font-bold text-center text-2xl">What We Track</h2>
         <div className="grid md:grid-cols-3 gap-6">
           <Card>
             <CardHeader>
@@ -45,7 +45,7 @@ export default function AboutPage() {
             </CardHeader>
             <CardContent>
               <p className="text-base">
-                Earnings from <strong>every major pro event</strong>, updated within <strong>24–72 hours</strong> after
+                Earnings from <strong className="text-base">every major pro event</strong>, updated within <strong className="text-base">24–72 hours</strong> after
                 tournaments conclude.
               </p>
             </CardContent>
@@ -118,12 +118,12 @@ export default function AboutPage() {
             </p>
             <ul className="space-y-2 text-base">
               <li>
-                • Verification against <strong>official tour results</strong>
+                • Verification against <strong className="text-base">official tour results</strong>
               </li>
               <li>• Standardized payout mapping for each tour</li>
               <li>• Manual review for anomalies</li>
               <li>
-                • Updates within <strong>24–72 hours</strong> after each event
+                • Updates within <strong className="text-base">24–72 hours</strong> after each event
               </li>
             </ul>
             <p className="pt-2">
