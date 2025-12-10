@@ -104,7 +104,13 @@ export default function EventsPage() {
       <main className="container py-6">
         <div className="mb-6">
           <h1 className="text-3xl font-bold mb-2">Events</h1>
-          <p className="text-muted-foreground">Browse professional pickleball tournaments across all tours</p>
+          <div className="text-base leading-relaxed mb-4 space-y-2">
+            <p className="font-semibold">Explore prize money results from every tracked pro pickleball event.</p>
+            <p className="text-muted-foreground">
+              View payouts, placements, and earnings breakdowns across PPA, MLP, and APP tours.  
+            </p>
+            <p className="text-muted-foreground">{""}</p>
+          </div>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between mb-6">

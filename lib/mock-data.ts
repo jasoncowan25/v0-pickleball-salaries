@@ -15,6 +15,7 @@ export interface Player {
   country?: string
   gender?: Gender
   dob?: string // Added date of birth field (YYYY-MM-DD format)
+  bio?: string // Added bio field for player descriptions
   primaryTour?: Tour
   headshotUrl?: string
   sponsors?: string[]
@@ -72,7 +73,8 @@ export const mockPlayers: Player[] = [
     name: "Ben Johns",
     country: "US",
     gender: "M",
-    dob: "1999-03-18", // Added DOB for Ben Johns
+    dob: "1999-03-18",
+    bio: "Ben Johns (born 1999) is an American professional pickleball player who has held the world number one ranking for much of the sport's modern era, amassing over 100 PPA Tour titles since 2016. He holds records for the most triple crowns in history and is well-known for his long-standing doubles partnership with his brother, Collin Johns. As the PPA Tour's most decorated male athlete, he has been central to defining the strategic evolution of the game.",
     primaryTour: "PPA",
     headshotUrl: "/ben-johns-pickleball.png",
     sponsors: ["JOOLA", "Vulcan"],
@@ -95,7 +97,8 @@ export const mockPlayers: Player[] = [
     name: "Anna Leigh Waters",
     country: "US",
     gender: "F",
-    dob: "2007-01-26", // Added DOB for Anna Leigh Waters
+    dob: "2007-01-26",
+    bio: "Anna Leigh Waters (born 2007) is an American pickleball player. She has been ranked #1 and is a multiple-time major champion. As of 2025, she is the second-highest earner in pro pickleball with over $5M in career earnings",
     primaryTour: "PPA",
     headshotUrl: "/anna-leigh-waters-pickleball.png",
     sponsors: ["HEAD", "Fila"],

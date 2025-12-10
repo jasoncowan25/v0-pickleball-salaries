@@ -1,12 +1,12 @@
 "use client"
 
 import { Suspense, useMemo, useTransition, useState, useEffect } from "react"
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ChevronLeft, ChevronRight, ArrowUp, ArrowDown } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ArrowUp, ArrowDown } from "lucide-react"
 import { mockPlayers, events } from "@/lib/mock-data"
 import type { Gender } from "@/lib/mock-data"
 import { computePrimaryTour, visibleTours, type TourCode } from "@/lib/tours"
@@ -94,7 +94,7 @@ const tourBadgeClass: Record<TourCode, string> = {
 
 const primaryEmphasis = "ring-1 ring-foreground/20 ring-offset-1 ring-offset-background shadow-sm"
 
-const formatUSD = (amount: number): string => {
+const formatCurrencyUSD = (amount: number): string => {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -347,7 +347,7 @@ function PlayersPageContent() {
   const lastSeasonData = useMemo(() => {
     const lastYear = selectedYear - 1
     const lastYearPlayers = getYearFilteredPlayers(playerRows, lastYear)
-    
+
     let filteredLastYear = lastYearPlayers
     if (gender !== "all") {
       filteredLastYear = filteredLastYear.filter((p) => p.gender === gender)
@@ -369,19 +369,18 @@ function PlayersPageContent() {
   }, [playerRows, selectedYear, gender, tour])
 
   const prizeChangeAmount = totalPrizeMoney - lastSeasonData.prizeMoney
-  const prizeChangePercent = lastSeasonData.prizeMoney > 0 
-    ? ((totalPrizeMoney - lastSeasonData.prizeMoney) / lastSeasonData.prizeMoney) * 100 
-    : 0
-  
+  const prizeChangePercent =
+    lastSeasonData.prizeMoney > 0
+      ? ((totalPrizeMoney - lastSeasonData.prizeMoney) / lastSeasonData.prizeMoney) * 100
+      : 0
+
   const contractsChangeAmount = reportedContracts - lastSeasonData.contracts
-  const contractsChangePercent = lastSeasonData.contracts > 0
-    ? ((reportedContracts - lastSeasonData.contracts) / lastSeasonData.contracts) * 100
-    : 0
-  
+  const contractsChangePercent =
+    lastSeasonData.contracts > 0 ? ((reportedContracts - lastSeasonData.contracts) / lastSeasonData.contracts) * 100 : 0
+
   const eventsChangeAmount = eventsTracked - lastSeasonData.events
-  const eventsChangePercent = lastSeasonData.events > 0
-    ? ((eventsTracked - lastSeasonData.events) / lastSeasonData.events) * 100
-    : 0
+  const eventsChangePercent =
+    lastSeasonData.events > 0 ? ((eventsTracked - lastSeasonData.events) / lastSeasonData.events) * 100 : 0
 
   const kpiPrefix = useMemo(() => {
     const prefix = composePrefix({ gender, tour })
@@ -474,8 +473,15 @@ function PlayersPageContent() {
         onResetFilters={clearAllFiltersLegacy}
       />
 
-      <main className="container py-6">
-        <h1 className="text-3xl font-bold mb-6">Pro Pickleball Player Earnings</h1>
+      <main className="container py-12">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2">Pro Pickleball Player Earnings</h1>
+          <p className="text-muted-foreground mb-2">
+            View all tracked pro pickleball players ranked by earnings, with filters to explore by tour, gender, or
+            year.
+          </p>
+          <p className="text-sm text-muted-foreground">Last updated: 12/10/2025</p>
+        </div>
 
         <PlayersFiltersClean
           search={search}
@@ -489,44 +495,17 @@ function PlayersPageContent() {
           onClearFilter={clearFilterLegacy}
         />
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-6">
-          <KpiCard
-            title={`${kpiPrefix}Prize Money`}
-            value={formatUSD(totalPrizeMoney)}
-            badge={`${selectedYear} Season`}
-            comparison={{
-              changeAmount: `${prizeChangeAmount > 0 ? '+' : ''}${formatUSD(prizeChangeAmount)}`,
-              changePercent: prizeChangePercent,
-              isPositive: prizeChangeAmount > 0
-            }}
-          />
-          <KpiCard
-            title={`${kpiPrefix}Events Tracked`}
-            value={eventsTracked.toString()}
-            badge={`${selectedYear} Season`}
-            comparison={{
-              changeAmount: eventsChangeAmount > 0 ? `+${eventsChangeAmount}` : eventsChangeAmount.toString(),
-              changePercent: eventsChangePercent,
-              isPositive: eventsChangeAmount > 0
-            }}
-          />
-          <KpiCard
-            title={`${kpiPrefix}Contract Earnings †`}
-            value={formatUSD(reportedContracts)}
-            badge={`${selectedYear} Season`}
-            comparison={{
-              changeAmount: `${contractsChangeAmount > 0 ? '+' : ''}${formatUSD(contractsChangeAmount)}`,
-              changePercent: contractsChangePercent,
-              isPositive: contractsChangeAmount > 0
-            }}
-          />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-6">
+          <KpiCard title={`${kpiPrefix}Prize Money`} value={formatCurrencyUSD(totalPrizeMoney)} />
+          <KpiCard title="Events Tracked" value={eventsTracked.toString()} />
+          <KpiCard title={`${kpiPrefix}Contract Earnings`} value={formatCurrencyUSD(reportedContracts)} />
         </div>
 
         <Card className="p-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4">
             <div>
               <h2 className="text-lg font-semibold">{tableHeading}</h2>
-              <p className="text-sm text-muted-foreground">{getSubtitle()}</p>
+              <p className="text-muted-foreground">{getSubtitle()}</p>
             </div>
             <div className="text-xs text-muted-foreground md:text-right">
               Last updated: {new Date().toLocaleDateString()}
@@ -615,21 +594,10 @@ function PlayersPageContent() {
                             MLP <SortIcon column="mlp" />
                           </div>
                         </th>
-                        <th className="text-right p-3">
-                          <div
-                            onClick={() => handleSort("major")}
-                            className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer flex items-center justify-end gap-1 ${sortColumn === "major" ? "bg-muted/40" : ""}`}
-                            aria-sort={
-                              sortColumn === "major" ? (sortDirection === "asc" ? "ascending" : "descending") : "none"
-                            }
-                          >
-                            Majors <SortIcon column="major" />
-                          </div>
-                        </th>
-                        <th className="bg-muted/30 font-semibold tabular-nums text-right p-3">
+                        <th className="bg-muted/30 font-semibold tabular-nums text-right p-3 min-w-[100px]">
                           <div
                             onClick={() => handleSort("contract")}
-                            className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer flex items-center justify-end gap-1 ${sortColumn === "contract" ? "bg-muted/40" : ""}`}
+                            className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer flex items-center justify-end gap-1 ${sortColumn === "contract" ? "bg-muted/60" : ""}`}
                             aria-sort={
                               sortColumn === "contract"
                                 ? sortDirection === "asc"
@@ -638,10 +606,10 @@ function PlayersPageContent() {
                                 : "none"
                             }
                           >
-                            Contracts † <SortIcon column="contract" />
+                            Contracts <SortIcon column="contract" />
                           </div>
                         </th>
-                        <th className="bg-muted/30 font-semibold tabular-nums text-right p-3">
+                        <th className="bg-muted/30 font-semibold tabular-nums text-right p-3 min-w-[100px]">
                           <div
                             onClick={() => handleSort("total")}
                             className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer flex items-center justify-end gap-1 ${sortColumn === "total" ? "bg-muted/60" : ""}`}
@@ -688,23 +656,53 @@ function PlayersPageContent() {
                                 ))}
                               </div>
                             </td>
-                            <td className="text-right p-3 tabular-nums text-base text-secondary-foreground">
-                              {player.ppa > 0 ? formatUSD(player.ppa) : "—"}
+                            <td className="text-right p-3 tabular-nums text-secondary-foreground relative px-4">
+                              {player.ppa > 0 ? (
+                                <>
+                                  {formatCurrencyUSD(player.ppa)}
+                                  <img
+                                    src="/check-icon.svg"
+                                    alt=""
+                                    className="w-4 h-4 absolute top-1/2 -translate-y-1/2 -right-2"
+                                  />
+                                </>
+                              ) : (
+                                "—"
+                              )}
                             </td>
-                            <td className="text-right p-3 tabular-nums text-secondary-foreground">
-                              {player.app > 0 ? formatUSD(player.app) : "—"}
+                            <td className="text-right p-3 tabular-nums text-secondary-foreground relative px-4">
+                              {player.app > 0 ? (
+                                <>
+                                  {formatCurrencyUSD(player.app)}
+                                  <img
+                                    src="/check-icon.svg"
+                                    alt=""
+                                    className="w-4 h-4 absolute top-1/2 -translate-y-1/2 -right-2"
+                                  />
+                                </>
+                              ) : (
+                                "—"
+                              )}
                             </td>
-                            <td className="text-right p-3 tabular-nums text-secondary-foreground">
-                              {player.mlp > 0 ? formatUSD(player.mlp) : "—"}
-                            </td>
-                            <td className="text-right p-3 tabular-nums text-secondary-foreground">
-                              {player.major > 0 ? formatUSD(player.major) : "—"}
+                            <td className="text-right p-3 tabular-nums text-secondary-foreground relative px-4">
+                              {player.mlp > 0 ? (
+                                <>
+                                  {formatCurrencyUSD(player.mlp)}
+                                  <img
+                                    src="/check-icon.svg"
+                                    alt=""
+                                    className="w-4 h-4 absolute top-1/2 -translate-y-1/2 -right-2"
+                                  />
+                                </>
+                              ) : (
+                                "—"
+                              )}
                             </td>
                             <td className="text-right p-3 tabular-nums">
-                              {player.contract > 0 ? formatUSD(player.contract) : "—"}
+                              {player.contract > 0 ? formatCurrencyUSD(player.contract) : "—"}
                             </td>
                             <td className="bg-muted/30 font-semibold tabular-nums text-right p-3">
-                              {formatUSD(player.total)}
+                              {formatCurrencyUSD(player.total)}
                             </td>
                           </tr>
                         )
@@ -742,8 +740,8 @@ function PlayersPageContent() {
                             <div className="text-xs text-muted-foreground mt-0.5">
                               {player.gender === "M" ? "Men" : "Women"} • {player.nation || "—"}
                             </div>
-                            <div className="mt-1 text-2xl sm:text-3xl font-extrabold tabular-nums break-words">
-                              {formatUSD(player.total)}
+                            <div className="mt-2 text-2xl sm:text-3xl font-extrabold tabular-nums break-words">
+                              {formatCurrencyUSD(player.total)}
                             </div>
                           </div>
 
@@ -772,31 +770,61 @@ function PlayersPageContent() {
                           <div className="flex items-baseline justify-between gap-3">
                             <span className="text-muted-foreground">PPA:</span>
                             <span className="font-medium tabular-nums">
-                              {player.ppa > 0 ? formatUSD(player.ppa) : "—"}
+                              {player.ppa > 0 ? (
+                                <div className="relative inline-block text-right">
+                                  {formatCurrencyUSD(player.ppa)}
+                                  <img
+                                    src="/check-icon.svg"
+                                    alt=""
+                                    className="w-4 h-4 absolute top-1/2 -translate-y-1/2"
+                                    style={{ left: "calc(100% + 4px)" }}
+                                  />
+                                </div>
+                              ) : (
+                                "—"
+                              )}
                             </span>
                           </div>
                           <div className="flex items-baseline justify-between gap-3">
                             <span className="text-muted-foreground">APP:</span>
                             <span className="font-medium tabular-nums">
-                              {player.app > 0 ? formatUSD(player.app) : "—"}
+                              {player.app > 0 ? (
+                                <div className="relative inline-block text-right">
+                                  {formatCurrencyUSD(player.app)}
+                                  <img
+                                    src="/check-icon.svg"
+                                    alt=""
+                                    className="w-4 h-4 absolute top-1/2 -translate-y-1/2"
+                                    style={{ left: "calc(100% + 4px)" }}
+                                  />
+                                </div>
+                              ) : (
+                                "—"
+                              )}
                             </span>
                           </div>
                           <div className="flex items-baseline justify-between gap-3">
                             <span className="text-muted-foreground">MLP:</span>
                             <span className="font-medium tabular-nums">
-                              {player.mlp > 0 ? formatUSD(player.mlp) : "—"}
-                            </span>
-                          </div>
-                          <div className="flex items-baseline justify-between gap-3">
-                            <span className="text-muted-foreground">Majors:</span>
-                            <span className="font-medium tabular-nums">
-                              {player.major > 0 ? formatUSD(player.major) : "—"}
+                              {player.mlp > 0 ? (
+                                <div className="relative inline-block text-right">
+                                  {formatCurrencyUSD(player.mlp)}
+                                  <img
+                                    src="/check-icon.svg"
+                                    alt=""
+                                    className="w-4 h-4 absolute top-1/2 -translate-y-1/2"
+                                    style={{ left: "calc(100% + 4px)" }}
+                                  />
+                                </div>
+                              ) : (
+                                "—"
+                              )}
                             </span>
                           </div>
                           <div className="flex items-baseline justify-between gap-3">
                             <span className="text-muted-foreground">Contract:</span>
                             <span className="font-medium tabular-nums">
-                              {player.contract > 0 ? formatUSD(player.contract) : "—"}
+                              {player.contract > 0 ? formatCurrencyUSD(player.contract) : "—"}
                             </span>
                           </div>
                         </div>
@@ -887,17 +915,40 @@ function PlayersPageContent() {
                 </div>
               </div>
 
-              <hr className="mt-4 mb-2 border-[#EAEAEA]" />
-              <p className="text-xs text-[#6B6B6B] max-w-full md:max-w-[80%] leading-[1.4] mt-3 mb-4">
-                † Contract figures represent base retainers/salaries only and exclude endorsements or appearance fees.
-                Where exact terms are not publicly reported, amounts are DinkBank estimates based on internal modeling
-                and public data and are subject to revision. All amounts in USD.{" "}
-                <Link href="/methodology" className="underline hover:text-[#1F1F1F]">
-                  See Methodology →
-                </Link>
-              </p>
+              {(filteredAndSortedPlayers.length > 0 || gender !== "all" || tour !== "all") && (
+                <>
+                  <hr className="mt-4 mb-2 border-[#EAEAEA]" />
+                  <p className="text-xs text-[#6B6B6B] leading-[1.4] max-w-full md:max-w-[80%] mt-3 mb-4 flex items-start gap-1">
+                    <img src="/check-icon.svg" alt="" className="w-3.5 h-3.5 inline-block mt-0.5 shrink-0" />
+                    <span>
+                      <strong>Confirmed:</strong> Verified amounts from public reporting or official tour sources.
+                      Figures without a checkmark are estimates based on public data and DinkBank modeling and may be
+                      updated as new information becomes available. Contract amounts reflect base retainers only and
+                      exclude endorsements or appearance fees. All amounts in USD.
+                    </span>
+                  </p>
+                </>
+              )}
             </>
           )}
+        </Card>
+
+        <Card className="mt-6 mb-6">
+          <div className="p-6">
+            <div className="flex items-center gap-2 mb-3">
+              <img src="/images/dinkbank-favicon.png" alt="DinkBank" className="w-6 h-6" />
+              <h2 className="text-lg font-semibold">DinkBank Data</h2>
+            </div>
+            <p className="text-muted-foreground leading-relaxed">
+              DinkBank provides structured earnings data for professional pickleball, including prize money, contracts,
+              and season-long performance across major tours. Some figures shown are estimates based on public
+              information and internal modeling and are refined as new data becomes available. Our goal is to offer a
+              clear, transparent view of how players are compensated throughout the season.{" "}
+              <Link href="/about" className="underline hover:text-[#1F1F1F]">
+                Learn More →
+              </Link>
+            </p>
+          </div>
         </Card>
       </main>
     </div>

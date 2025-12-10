@@ -16,6 +16,7 @@ import { TOUR_META } from "@/lib/tours"
 import PlayerProfileLink from "@/components/PlayerProfileLink"
 import { getDisplayYear } from "@/lib/displayYear"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
+import { ReportCard } from "@/components/report-card"
 
 export default function Page() {
   const [activeTab, setActiveTab] = useState<"thisyear" | "alltime">("thisyear")
@@ -93,12 +94,15 @@ export default function Page() {
       key: "rankValue" as keyof (Player & { rank: number; rankValue: number }),
       header: "Prize",
       cell: (player: Player & { rank: number; rankValue: number }) => (
-        <div className="tabular-nums text-right font-normal">{formatCurrencyUSD(player.rankValue)}</div>
+        <div className="relative text-right tabular-nums">
+          {formatCurrencyUSD(player.rankValue)}
+          <img src="/check-icon.svg" alt="" className="w-4 h-4 absolute top-1/2 -translate-y-1/2 -right-6" />
+        </div>
       ),
     },
     {
       key: "totals" as keyof (Player & { rank: number; rankValue: number }),
-      header: "Contract †",
+      header: "Contract",
       cell: (player: Player & { rank: number }) => (
         <div className="tabular-nums text-right">{formatCurrencyUSD(player.totals.reportedContracts || 0)}</div>
       ),
@@ -115,19 +119,22 @@ export default function Page() {
   ]
 
   return (
-    <div className="py-6">
+    <div className="py-12">
       <div className="mb-6">
         <h1 className="text-3xl font-bold mb-2">Pickleball Earnings Leaders</h1>
         <p className="text-muted-foreground mb-2">
-          Tracking pro pickleball prize money and contracts across PPA, MLP, and APP tours.
+          Welcome to DinkBank – a single, trusted place to see prize money and player contract figures across PPA, MLP,
+          and APP tours.
         </p>
-        <p className="text-sm text-muted-foreground">Last updated: {new Date().toLocaleDateString()}</p>
+        <p className="text-sm text-muted-foreground">
+          Last updated: {new Date().toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" })}
+        </p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3 mb-6">
         <KpiCard title="Total Prize Money" value={formatCurrencyUSD(totalPrizeThisYear)} />
         <KpiCard title="Events Tracked" value={eventsTracked.toString()} />
-        <KpiCard title="Contract Earnings †" value={formatCurrencyUSD(totalContracts)} />
+        <KpiCard title="Contract Earnings" value={formatCurrencyUSD(totalContracts)} />
       </div>
 
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "thisyear" | "alltime")} className="mb-6">
@@ -142,7 +149,7 @@ export default function Page() {
               <h2 className="text-lg font-semibold">
                 {activeTab === "thisyear" ? `${YEAR} Top Earners` : "All-Time Top Earners"}
               </h2>
-              <p className="text-sm text-muted-foreground">Listing the top pro pickleball players by total earnings</p>
+              <p className="text-muted-foreground">Listing the top pro pickleball players by total earnings</p>
             </div>
 
             <div className="hidden md:block overflow-x-auto">
@@ -155,7 +162,7 @@ export default function Page() {
                         className={`text-left py-2 px-3 font-medium text-muted-foreground ${
                           column.header === "Total" ? "bg-muted/30" : ""
                         } ${
-                          column.header === "Prize" || column.header === "Contract †" || column.header === "Total"
+                          column.header === "Prize" || column.header === "Contract" || column.header === "Total"
                             ? "text-right"
                             : ""
                         }`}
@@ -236,7 +243,14 @@ export default function Page() {
                       <div className="flex justify-between items-center text-sm mb-2">
                         <div>
                           <span className="text-muted-foreground">Prize: </span>
-                          <span className="font-semibold tabular-nums">{formatCurrencyUSD(player.rankValue)}</span>
+                          <span className="font-semibold tabular-nums relative inline-block">
+                            {formatCurrencyUSD(player.rankValue)}
+                            <img
+                              src="/check-icon.svg"
+                              alt=""
+                              className="w-4 h-4 absolute top-1/2 -translate-y-1/2 -right-6"
+                            />
+                          </span>
                         </div>
                         <div>
                           <span className="text-muted-foreground">Contract: </span>
@@ -260,10 +274,14 @@ export default function Page() {
             </div>
 
             <hr className="mt-4 mb-2 border-[#EAEAEA]" />
-            <p className="text-xs text-[#6B6B6B] leading-[1.4] max-w-full md:max-w-[80%] mt-3 mb-4">
-              † Contract figures represent base retainers/salaries only and exclude endorsements or appearance fees.
-              Where exact terms are not publicly reported, amounts are DinkBank estimates based on internal modeling and
-              public data and are subject to revision. All amounts in USD.
+            <p className="text-xs text-[#6B6B6B] leading-[1.4] max-w-full md:max-w-[80%] mt-3 mb-4 flex items-start gap-1">
+              <img src="/check-icon.svg" alt="" className="w-3.5 h-3.5 inline-block mt-0.5 shrink-0" />
+              <span>
+                <strong>Confirmed:</strong> Verified amounts from public reporting or official tour sources. Figures
+                without a checkmark are estimates based on public data and DinkBank modeling and may be updated as new
+                information becomes available. Contract amounts reflect base retainers only and exclude endorsements or
+                appearance fees. All amounts in USD.
+              </span>
             </p>
 
             <div className="mt-4">
@@ -289,17 +307,25 @@ export default function Page() {
         </TabsContent>
       </Tabs>
 
+      <ReportCard
+        title="2025's Top 10 Prize Money Earners"
+        description="An earnings breakdown of the top-performing pros, drawn from prize money awarded across all major tours in 2025."
+        href="/reports/2025-top-prize-money-earners"
+        publishDate="Published: December 2025"
+        badge="New Report"
+      />
+
       <Card className="mt-6 mb-6">
         <div className="p-6">
           <div className="flex items-center gap-2 mb-3">
-            <img src="/dinkbank-icon.svg" alt="DinkBank" className="w-6 h-6" />
+            <img src="/images/dinkbank-favicon.png" alt="DinkBank" className="w-6 h-6" />
             <h2 className="text-lg font-semibold">DinkBank Data</h2>
           </div>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            DinkBank provides a structured view of professional pickleball earnings, including prize money, contracts,
-            and season-long performance across major tours. Player totals and rankings reflect ongoing updates
-            throughout the season and are designed to help fans, players, brands, and media understand the financial
-            landscape of the sport.{" "}
+          <p className="text-muted-foreground leading-relaxed">
+            DinkBank provides structured earnings data for professional pickleball, including prize money, contracts,
+            and season-long performance across major tours. Some figures shown are estimates based on public information
+            and internal modeling and are refined as new data becomes available. Our goal is to offer a clear,
+            transparent view of how players are compensated throughout the season.{" "}
             <Link href="/about" className="underline hover:text-[#1F1F1F]">
               Learn More →
             </Link>

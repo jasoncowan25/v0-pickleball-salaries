@@ -48,6 +48,12 @@ function calculateAge(dob: string) {
   return age
 }
 
+function formatCurrencyUSD(n?: number) {
+  return n == null
+    ? "—"
+    : n.toLocaleString(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 0 }).replace("US$", "$")
+}
+
 export default function PlayerPage({ params }: PlayerPageProps) {
   const [activeTab, setActiveTab] = useState("career")
   const [selectedYear, setSelectedYear] = useState("2024")
@@ -71,13 +77,6 @@ export default function PlayerPage({ params }: PlayerPageProps) {
     }
     return variants[tour as keyof typeof variants] || "bg-gray-100 text-gray-800"
   }
-
-  const currency = (n?: number) =>
-    n == null
-      ? "—"
-      : n
-          .toLocaleString(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 0 })
-          .replace("US$", "$")
 
   const totalFor = (r: (typeof mockCareerEarnings)[0]) =>
     (r.ppa ?? 0) + (r.app ?? 0) + (r.mlp ?? 0) + (r.major ?? 0) + (r.contracts ?? 0)
@@ -219,9 +218,13 @@ export default function PlayerPage({ params }: PlayerPageProps) {
               </div>
 
               <div className="flex items-center justify-center sm:justify-start gap-4 text-muted-foreground mb-4 mt-3">
-                <div className="text-base sm:text-lg">
-                  Plays: {player.handedness === "R" ? "Right-handed" : "Left-handed"}
-                </div>
+                {player.bio ? (
+                  <p className="text-base text-foreground leading-relaxed max-w-3xl">{player.bio}</p>
+                ) : (
+                  <div className="text-base sm:text-lg">
+                    Plays: {player.handedness === "R" ? "Right-handed" : "Left-handed"}
+                  </div>
+                )}
               </div>
               <div className="flex gap-2 flex-wrap justify-center sm:justify-start">
                 {player.sponsors?.map((sponsor) => (
@@ -329,26 +332,23 @@ export default function PlayerPage({ params }: PlayerPageProps) {
               <table className="w-full" aria-label="Career earnings by year">
                 <thead className="sticky top-0 bg-background">
                   <tr className="border-b">
-                    <th scope="col" className="text-left py-3 px-4 font-medium text-muted-foreground">
+                    <th scope="col" className="p-3 text-left text-sm font-medium text-muted-foreground">
                       Year
                     </th>
-                    <th scope="col" className="text-right py-3 px-4 font-medium text-muted-foreground">
+                    <th scope="col" className="p-3 text-sm font-medium text-muted-foreground text-right">
                       PPA
                     </th>
-                    <th scope="col" className="text-right py-3 px-4 font-medium text-muted-foreground">
+                    <th scope="col" className="p-3 text-sm font-medium text-muted-foreground text-right">
                       APP
                     </th>
-                    <th scope="col" className="text-right py-3 px-4 font-medium text-muted-foreground">
+                    <th scope="col" className="p-3 text-sm font-medium text-muted-foreground text-right">
                       MLP
                     </th>
-                    <th scope="col" className="text-right py-3 px-4 font-medium text-muted-foreground">
-                      Major
+                    <th scope="col" className="p-3 text-sm font-medium text-muted-foreground text-right">
+                      Contracts
                     </th>
-                    <th scope="col" className="text-right py-3 px-4 font-medium text-muted-foreground">
-                      Contracts †
-                    </th>
-                    <th scope="col" className="text-right py-3 px-4 font-medium text-muted-foreground">
-                      Year Total
+                    <th scope="col" className="p-3 bg-muted/30 text-sm font-medium text-muted-foreground text-right">
+                      Total
                     </th>
                   </tr>
                 </thead>
@@ -359,24 +359,66 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                       className={`border-b hover:bg-muted/50 focus-within:bg-muted/50 ${index % 2 === 0 ? "bg-muted/25" : ""}`}
                       tabIndex={0}
                     >
-                      <td className="py-3 px-4 font-semibold">{yearData.year}</td>
-                      <td className="py-3 px-4 text-right tabular-nums text-secondary-foreground">
-                        {currency(yearData.ppa)}
+                      <td className="p-3 font-semibold">{yearData.year}</td>
+                      <td className="p-3 text-right tabular-nums relative">
+                        {yearData.ppa > 0 ? (
+                          <>
+                            {formatCurrencyUSD(yearData.ppa)}
+                            <img
+                              src="/check-icon.svg"
+                              alt=""
+                              className="w-4 h-4 absolute top-1/2 -translate-y-1/2 -right-3"
+                            />
+                          </>
+                        ) : (
+                          <span className="text-muted-foreground">—</span>
+                        )}
                       </td>
-                      <td className="py-3 px-4 text-right tabular-nums text-secondary-foreground">
-                        {currency(yearData.app)}
+                      <td className="p-3 text-right tabular-nums relative">
+                        {yearData.app > 0 ? (
+                          <>
+                            {formatCurrencyUSD(yearData.app)}
+                            <img
+                              src="/check-icon.svg"
+                              alt=""
+                              className="w-4 h-4 absolute top-1/2 -translate-y-1/2 -right-3"
+                            />
+                          </>
+                        ) : (
+                          <span className="text-muted-foreground">—</span>
+                        )}
                       </td>
-                      <td className="py-3 px-4 text-right tabular-nums text-secondary-foreground">
-                        {currency(yearData.mlp)}
+                      <td className="p-3 text-right tabular-nums relative">
+                        {yearData.mlp > 0 ? (
+                          <>
+                            {formatCurrencyUSD(yearData.mlp)}
+                            <img
+                              src="/check-icon.svg"
+                              alt=""
+                              className="w-4 h-4 absolute top-1/2 -translate-y-1/2 -right-3"
+                            />
+                          </>
+                        ) : (
+                          <span className="text-muted-foreground">—</span>
+                        )}
                       </td>
-                      <td className="py-3 px-4 text-right tabular-nums text-secondary-foreground">
-                        {currency(yearData.major)}
+                      <td className="p-3 text-right tabular-nums relative">
+                        {yearData.major > 0 ? (
+                          <>
+                            {formatCurrencyUSD(yearData.major)}
+                            <img
+                              src="/check-icon.svg"
+                              alt=""
+                              className="w-4 h-4 absolute top-1/2 -translate-y-1/2 -right-3"
+                            />
+                          </>
+                        ) : (
+                          <span className="text-muted-foreground">—</span>
+                        )}
                       </td>
-                      <td className="py-3 px-4 text-right tabular-nums text-secondary-foreground">
-                        {currency(yearData.contracts)}
-                      </td>
-                      <td className="py-3 px-4 text-right font-semibold tabular-nums bg-gray-50">
-                        {currency(yearData.yearTotal)}
+                      <td className="p-3 text-right tabular-nums">{formatCurrencyUSD(yearData.contracts)}</td>
+                      <td className="p-3 text-right font-semibold tabular-nums bg-gray-50">
+                        {formatCurrencyUSD(yearData.yearTotal)}
                       </td>
                     </tr>
                   ))}
@@ -390,43 +432,81 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                 <Card key={yearData.year} className="p-4 shadow-sm">
                   <div className="flex items-center justify-between mb-3">
                     <span className="font-bold text-lg">{yearData.year}</span>
-                    <span className="font-bold text-lg">{currency(yearData.yearTotal)}</span>
+                    <span className="font-bold text-lg">{formatCurrencyUSD(yearData.yearTotal)}</span>
                   </div>
                   <dl className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <dt>PPA</dt>
-                      <dd className="font-semibold">{currency(yearData.ppa)}</dd>
+                      <dd className="font-semibold inline-flex items-center gap-1.5">
+                        {formatCurrencyUSD(yearData.ppa)}
+                        {yearData.ppa > 0 && (
+                          <img
+                            src="/check-icon.svg"
+                            alt=""
+                            className="w-4 h-4 inline-block flex-shrink-0 align-middle"
+                          />
+                        )}
+                      </dd>
                     </div>
                     <div className="flex justify-between">
                       <dt>APP</dt>
-                      <dd className="font-semibold">{currency(yearData.app)}</dd>
+                      <dd className="font-semibold inline-flex items-center gap-1.5">
+                        {formatCurrencyUSD(yearData.app)}
+                        {yearData.app > 0 && (
+                          <img
+                            src="/check-icon.svg"
+                            alt=""
+                            className="w-4 h-4 inline-block flex-shrink-0 align-middle"
+                          />
+                        )}
+                      </dd>
                     </div>
                     <div className="flex justify-between">
                       <dt>MLP</dt>
-                      <dd className="font-semibold">{currency(yearData.mlp)}</dd>
+                      <dd className="font-semibold inline-flex items-center gap-1.5">
+                        {formatCurrencyUSD(yearData.mlp)}
+                        {yearData.mlp > 0 && (
+                          <img
+                            src="/check-icon.svg"
+                            alt=""
+                            className="w-4 h-4 inline-block flex-shrink-0 align-middle"
+                          />
+                        )}
+                      </dd>
                     </div>
                     <div className="flex justify-between">
                       <dt>Major</dt>
-                      <dd className="font-semibold">{currency(yearData.major)}</dd>
+                      <dd className="font-semibold inline-flex items-center gap-1.5">
+                        {formatCurrencyUSD(yearData.major)}
+                        {yearData.major > 0 && (
+                          <img
+                            src="/check-icon.svg"
+                            alt=""
+                            className="w-4 h-4 inline-block flex-shrink-0 align-middle"
+                          />
+                        )}
+                      </dd>
                     </div>
                     <div className="flex justify-between">
                       <dt>Contracts</dt>
-                      <dd className="font-semibold">{currency(yearData.contracts)}</dd>
+                      <dd className="font-semibold">{formatCurrencyUSD(yearData.contracts)}</dd>
                     </div>
                   </dl>
                 </Card>
               ))}
             </div>
 
-            <hr className="mt-4 mb-2 border-[#EAEAEA]" />
-            <p className="text-xs text-[#6B6B6B] max-w-full md:max-w-[80%] leading-[1.4] mt-3 mb-4">
-              † Earnings include estimated contract values modeled by DinkBank in addition to verified prize money.
-              Contract figures are estimates based on internal analysis and public data. Unofficial and subject to
-              revision.{" "}
-              <Link href="/methodology" className="underline hover:text-[#1F1F1F]">
-                See Methodology →
-              </Link>
-            </p>
+            <div className="mt-4 border-t border-[#EAEAEA] pt-4">
+              <p className="text-xs text-[#6B6B6B] leading-[1.4] max-w-full md:max-w-[80%] mb-4 flex items-start gap-1">
+                <img src="/check-icon.svg" alt="" className="w-3.5 h-3.5 inline-block mt-0.5 shrink-0" />
+                <span>
+                  <strong>Confirmed:</strong> Verified amounts from public reporting or official tour sources. Figures
+                  without a checkmark are estimates based on public data and DinkBank modeling and may be updated as new
+                  information becomes available. Contract amounts reflect base retainers only and exclude endorsements
+                  or appearance fees. All amounts in USD.
+                </span>
+              </p>
+            </div>
           </Card>
         )}
 
@@ -471,13 +551,13 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                   <table className="w-full">
                     <thead className="sticky top-0 bg-background">
                       <tr className="border-b">
-                        <th className="text-left py-3 px-4 font-medium text-muted-foreground">Date</th>
-                        <th className="text-left py-3 px-4 font-medium text-muted-foreground">Event</th>
-                        <th className="text-left py-3 px-4 font-medium text-muted-foreground">Tour</th>
-                        <th className="text-left py-3 px-4 font-medium text-muted-foreground">Bracket</th>
-                        <th className="text-left py-3 px-4 font-medium text-muted-foreground">Placement</th>
-                        <th className="text-right py-3 px-4 font-medium text-muted-foreground">Prize</th>
-                        <th className="text-right py-3 px-4 font-medium text-muted-foreground">Source</th>
+                        <th className="p-3 text-left text-sm font-medium text-muted-foreground">Date</th>
+                        <th className="p-3 text-left text-sm font-medium text-muted-foreground">Event</th>
+                        <th className="p-3 text-left text-sm font-medium text-muted-foreground">Tour</th>
+                        <th className="p-3 text-left text-sm font-medium text-muted-foreground">Bracket</th>
+                        <th className="p-3 text-left text-sm font-medium text-muted-foreground">Placement</th>
+                        <th className="p-3 text-right text-sm font-medium text-muted-foreground">Prize</th>
+                        <th className="p-3 text-right text-sm font-medium text-muted-foreground">Source</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -486,22 +566,20 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                           key={`${payout.eventSlug}-${payout.bracket}`}
                           className={`border-b hover:bg-muted/50 ${index % 2 === 0 ? "bg-muted/25" : ""}`}
                         >
-                          <td className="py-3 px-4 font-medium">{formatShortDate(payout.date)}</td>
-                          <td className="py-3 px-4">
+                          <td className="p-3 font-medium">{formatShortDate(payout.date)}</td>
+                          <td className="p-3">
                             <Link href={`/events/${payout.eventSlug}`} className="hover:text-primary transition-colors">
                               <div className="font-medium">{payout.eventName}</div>
                               <div className="text-sm text-muted-foreground">{payout.city}</div>
                             </Link>
                           </td>
-                          <td className="py-3 px-4">
+                          <td className="p-3">
                             <Badge className={`${getTourBadge(payout.tour)}`}>{payout.tour}</Badge>
                           </td>
-                          <td className="py-3 px-4 text-muted-foreground">{payout.bracket}</td>
-                          <td className="py-3 px-4 font-medium">{payout.result}</td>
-                          <td className="py-3 px-4 text-right font-semibold tabular-nums">
-                            {formatCurrency(payout.prize)}
-                          </td>
-                          <td className="py-3 px-4 text-right">
+                          <td className="p-3 text-muted-foreground">{payout.bracket}</td>
+                          <td className="p-3 font-medium">{payout.result}</td>
+                          <td className="p-3 text-right font-semibold tabular-nums">{formatCurrency(payout.prize)}</td>
+                          <td className="p-3 text-right">
                             <ConfidenceBadge status={payout.sources[0]?.confidence as any} />
                           </td>
                         </tr>
@@ -578,7 +656,7 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                       <p className="text-sm text-muted-foreground">with {transaction.counterparty}</p>
                     </div>
                     <div className="text-left sm:text-right">
-                      <div className="font-bold text-xl">{currency(transaction.amount)}</div>
+                      <div className="font-bold text-xl">{formatCurrencyUSD(transaction.amount)}</div>
                       <div className="text-sm text-muted-foreground">{formatShortDate(transaction.date)}</div>
                     </div>
                   </div>
@@ -603,14 +681,14 @@ export default function PlayerPage({ params }: PlayerPageProps) {
         <Card className="mt-6 mb-6">
           <div className="p-6">
             <div className="flex items-center gap-2 mb-3">
-              <img src="/dinkbank-icon.svg" alt="DinkBank" className="w-6 h-6" />
-              <h2 className="text-lg font-semibold">DinkBank Player Data</h2>
+              <img src="/images/dinkbank-favicon.png" alt="DinkBank" className="w-6 h-6" />
+              <h2 className="text-lg font-semibold">DinkBank Data</h2>
             </div>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              DinkBank provides a consolidated view of each player's professional earnings, including prize money,
-              contracts, and season-long results across major tours. Earnings totals and rankings reflect ongoing
-              updates throughout the season to help fans, media, and partners understand each athlete's financial
-              footprint in the sport.{" "}
+            <p className="text-muted-foreground leading-relaxed">
+              DinkBank provides structured earnings data for professional pickleball, including prize money, contracts,
+              and season-long performance across major tours. Some figures shown are estimates based on public
+              information and internal modeling and are refined as new data becomes available. Our goal is to offer a
+              clear, transparent view of how players are compensated throughout the season.{" "}
               <Link href="/about" className="underline hover:text-[#1F1F1F]">
                 Learn More →
               </Link>

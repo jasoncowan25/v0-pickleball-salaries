@@ -41,7 +41,7 @@ export default function ClientLayout({
     { name: "Players", href: "/players" },
     { name: "Events", href: "/events" },
     { name: "Methodology", href: "/methodology" },
-    { name: "Sources", href: "/sources" },
+    { name: "Reports", href: "/reports" },
   ]
 
   return (
