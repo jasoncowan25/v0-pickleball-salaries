@@ -122,12 +122,9 @@ export default function Page() {
     <div className="py-12">
       <div className="mb-6">
         <h1 className="text-3xl font-bold mb-2">Pickleball Earnings Leaders</h1>
-        <p className="text-muted-foreground mb-2">
+        <p className="text-muted-foreground mb-2 text-lg">
           Welcome to DinkBank – a single, trusted place to see prize money and player contract figures across PPA, MLP,
           and APP tours.
-        </p>
-        <p className="text-sm text-muted-foreground">
-          Last updated: {new Date().toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" })}
         </p>
       </div>
 
@@ -138,10 +135,16 @@ export default function Page() {
       </div>
 
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "thisyear" | "alltime")} className="mb-6">
-        <TabsList>
-          <TabsTrigger value="thisyear">This Year</TabsTrigger>
-          <TabsTrigger value="alltime">All-Time</TabsTrigger>
-        </TabsList>
+        <div className="flex justify-between mb-4 items-end">
+          <TabsList>
+            <TabsTrigger value="thisyear">This Year</TabsTrigger>
+            <TabsTrigger value="alltime">All-Time</TabsTrigger>
+          </TabsList>
+          <p className="text-sm text-muted-foreground">
+            Last updated:{" "}
+            {new Date().toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" })}
+          </p>
+        </div>
 
         <TabsContent value={activeTab} className="space-y-6">
           <Card className="p-6">

@@ -1,12 +1,13 @@
 import { Card } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
-import { CheckCircle, AlertTriangle, HelpCircle, Eye } from 'lucide-react'
+import { AlertTriangle, HelpCircle, Eye } from "lucide-react"
+import Image from "next/image"
 
 export default function MethodologyPage() {
   return (
     <div className="min-h-screen bg-background">
-      <main className="container py-6 max-w-4xl">
+      <main className="container max-w-4xl py-12">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Methodology</h1>
           <p className="text-muted-foreground text-lg">
@@ -15,27 +16,26 @@ export default function MethodologyPage() {
         </div>
 
         <div className="space-y-8">
-
-
           {/* Confidence Levels */}
           <Card className="p-6">
             <h2 className="text-2xl font-semibold mb-4">Data Confidence Levels</h2>
             <div className="space-y-4">
               <div className="flex items-start gap-4">
-                <CheckCircle className="h-6 w-6 text-[hsl(var(--success))] mt-1" />
+                <Image src="/check-icon.svg" alt="Confirmed" width={24} height={24} className="mt-1 flex-shrink-0" />
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <h3 className="font-semibold">Confirmed</h3>
                     <Badge variant="default">High Confidence</Badge>
                   </div>
                   <p className="text-muted-foreground">
-                    Verified via publicly available announcements, credible third-party reporting, or direct organizer confirmation.
+                    Verified via publicly available announcements, credible third-party reporting, or direct organizer
+                    confirmation.
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start gap-4">
-                <AlertTriangle className="h-6 w-6 text-yellow-500 mt-1" />
+                <AlertTriangle className="h-6 w-6 text-gray-500 mt-1" />
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <h3 className="font-semibold">Reported</h3>
@@ -62,7 +62,7 @@ export default function MethodologyPage() {
               </div>
             </div>
           </Card>
-          
+
           {/* Display Cutoffs */}
           <Card className="p-6">
             <h2 className="text-2xl font-semibold mb-4">Display Cutoffs & Leaderboard Rules</h2>
@@ -95,7 +95,7 @@ export default function MethodologyPage() {
               </div>
             </div>
           </Card>
-          
+
           {/* Data Sources */}
           <Card className="p-6">
             <h2 className="text-2xl font-semibold mb-4">Data Sources</h2>

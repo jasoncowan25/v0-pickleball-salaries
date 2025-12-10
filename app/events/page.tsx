@@ -104,12 +104,8 @@ export default function EventsPage() {
       <main className="container py-12">
         <div className="mb-6">
           <h1 className="text-3xl font-bold mb-2">Pro Pickleball Events</h1>
-          <p className="text-muted-foreground mb-2">
+          <p className="text-muted-foreground mb-2 text-lg">
             View prize pools, placements, and earnings breakdowns across every major pro pickleball event we track.
-          </p>
-          <p className="text-sm text-muted-foreground">
-            Last updated:{" "}
-            {new Date().toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" })}
           </p>
         </div>
 
@@ -164,7 +160,13 @@ export default function EventsPage() {
 
         <div>
           <Card className="p-6">
-            <h2 className="text-2xl font-bold mb-4">{selectedYear} Pro Pickleball Events</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-2xl font-bold">{selectedYear} Pro Pickleball Events</h2>
+              <p className="text-sm text-muted-foreground">
+                Last updated:{" "}
+                {new Date().toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" })}
+              </p>
+            </div>
 
             {selectedYear === "2025" && (
               <div className="mb-6 border rounded-lg overflow-hidden">
