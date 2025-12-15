@@ -22,7 +22,7 @@ import { format } from "date-fns" // Added date-fns import for DOB formatting
 import { mockPlayers } from "@/lib/mock-data"
 import { getPlayerPayouts } from "@/lib/rank"
 import { generatePlayerJsonLd } from "@/lib/jsonld"
-import { FileText } from "lucide-react"
+import { FileText, Star, Check, TrendingUp } from "lucide-react"
 import PlayerKpis from "@/components/player/PlayerKpis"
 
 interface PlayerPageProps {
@@ -226,13 +226,31 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                   </div>
                 )}
               </div>
-              <div className="flex gap-2 flex-wrap justify-center sm:justify-start">
-                {player.sponsors?.map((sponsor) => (
-                  <Badge key={sponsor} variant="secondary" className="text-sm px-3 py-1">
-                    {sponsor}
-                  </Badge>
-                ))}
-              </div>
+              {player.slug === "ben-johns" && (
+                <div className="flex gap-2 flex-wrap justify-center sm:justify-start mt-3">
+                  <span className="inline-flex items-center gap-1.5 rounded-full text-white text-sm font-medium px-3 py-1 bg-[rgba(11,26,63,1)]">
+                    <Check className="w-4 h-4" />
+                    UPA
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 rounded-full text-[#0B1A40] text-sm font-medium px-3 py-1 bg-gradient-to-r from-[#F4D03F] via-[#D4AF37] to-[#B8860B] shadow-lg">
+                    <Star className="w-4 h-4 fill-[#0B1A40]" />
+                    UPA · Gold
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 rounded-full text-white text-sm font-medium px-3 py-1 bg-[rgba(11,26,63,1)]">
+                    <TrendingUp className="w-4 h-4" />
+                    UPA · Futures
+                  </span>
+                </div>
+              )}
+              {player.sponsors && player.sponsors.length > 0 && (
+                <div className="flex gap-2 flex-wrap justify-center sm:justify-start mt-2">
+                  {player.sponsors.map((sponsor) => (
+                    <Badge key={sponsor} variant="secondary" className="text-sm px-3 py-1">
+                      {sponsor}
+                    </Badge>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </Card>
@@ -500,8 +518,9 @@ export default function PlayerPage({ params }: PlayerPageProps) {
               <p className="text-xs text-[#6B6B6B] leading-[1.4] max-w-full md:max-w-[80%] mb-4 flex items-start gap-1">
                 <img src="/check-icon.svg" alt="" className="w-3.5 h-3.5 inline-block mt-0.5 shrink-0" />
                 <span>
-                  <strong>Confirmed:</strong> Verified amounts from public reporting or official tour sources. Figures
-                  without a checkmark are estimates based on public data and DinkBank modeling and may be updated as new
+                  <strong>DinkBank Confirmed:</strong> Verified amounts from public reporting or official tour sources.
+                  Totals may also be marked as confirmed when all underlying amounts are verified. Figures without a
+                  checkmark are estimates based on public data and DinkBank modeling and may be updated as new
                   information becomes available. Contract amounts reflect base retainers only and exclude endorsements
                   or appearance fees. All amounts in USD.
                 </span>

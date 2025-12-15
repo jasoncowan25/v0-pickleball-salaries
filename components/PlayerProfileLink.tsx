@@ -29,7 +29,7 @@ export default function PlayerProfileLink({
   const avatarClasses = avatarSize === "large" ? "h-10 w-10" : "h-8 w-8"
 
   return (
-    <Link href={href} className={`group flex items-center gap-3 min-w-0 focus-visible:outline-none ${className}`}>
+    <Link href={href} className={`group flex items-start gap-3 min-w-0 focus-visible:outline-none ${className}`}>
       <Avatar
         className={`
           ${avatarClasses} border border-gray-300 shrink-0
@@ -42,7 +42,7 @@ export default function PlayerProfileLink({
         <AvatarFallback className="text-sm font-semibold">{getInitials(name)}</AvatarFallback>
       </Avatar>
 
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 pt-0.5">
         <div className="font-medium flex items-center gap-1 min-w-0">
           <span
             className="flex-1 basis-0 min-w-0 truncate sm:overflow-visible sm:whitespace-normal underline decoration-transparent group-hover:decoration-current transition-[text-decoration-color]"

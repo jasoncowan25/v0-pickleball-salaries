@@ -280,10 +280,11 @@ export default function Page() {
             <p className="text-xs text-[#6B6B6B] leading-[1.4] max-w-full md:max-w-[80%] mt-3 mb-4 flex items-start gap-1">
               <img src="/check-icon.svg" alt="" className="w-3.5 h-3.5 inline-block mt-0.5 shrink-0" />
               <span>
-                <strong>Confirmed:</strong> Verified amounts from public reporting or official tour sources. Figures
-                without a checkmark are estimates based on public data and DinkBank modeling and may be updated as new
-                information becomes available. Contract amounts reflect base retainers only and exclude endorsements or
-                appearance fees. All amounts in USD.
+                <strong>DinkBank Confirmed:</strong> Verified amounts from public reporting or official tour sources.
+                Totals may also be marked as confirmed when all underlying amounts are verified. Figures without a
+                checkmark are estimates based on public data and DinkBank modeling and may be updated as new information
+                becomes available. Contract amounts reflect base retainers only and exclude endorsements or appearance
+                fees. All amounts in USD.
               </span>
             </p>
 
@@ -311,9 +312,9 @@ export default function Page() {
       </Tabs>
 
       <ReportCard
-        title="2025's Top 10 Prize Money Earners"
-        description="An earnings breakdown of the top-performing pros, drawn from prize money awarded across all major tours in 2025."
-        href="/reports/2025-top-prize-money-earners"
+        title="Why 'Appearance Fees' Often Aren't Extra Money"
+        description="Understanding how appearance fees in pro pickleball often function as contract guarantees rather than performance-based prize money."
+        href="/reports/appearance-fees-not-extra-money"
         publishDate="Published: December 2025"
         badge="New Report"
       />

@@ -480,7 +480,6 @@ function PlayersPageContent() {
             View all tracked pro pickleball players ranked by earnings, with filters to explore by tour, gender, or
             year.
           </p>
-          
         </div>
 
         <PlayersFiltersClean
@@ -496,9 +495,36 @@ function PlayersPageContent() {
         />
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-6">
-          <KpiCard title={`${kpiPrefix}Prize Money`} value={formatCurrencyUSD(totalPrizeMoney)} />
-          <KpiCard title="Events Tracked" value={eventsTracked.toString()} />
-          <KpiCard title={`${kpiPrefix}Contract Earnings`} value={formatCurrencyUSD(reportedContracts)} />
+          <KpiCard
+            title={`${kpiPrefix}Prize Money`}
+            value={formatCurrencyUSD(totalPrizeMoney)}
+            badge={`${selectedYear} Season`}
+            comparison={{
+              changeAmount: formatCurrencyUSD(prizeChangeAmount),
+              changePercent: prizeChangePercent,
+              isPositive: prizeChangeAmount >= 0,
+            }}
+          />
+          <KpiCard
+            title="Events Tracked"
+            value={eventsTracked.toString()}
+            badge={`${selectedYear} Season`}
+            comparison={{
+              changeAmount: eventsChangeAmount >= 0 ? `+${eventsChangeAmount}` : eventsChangeAmount.toString(),
+              changePercent: eventsChangePercent,
+              isPositive: eventsChangeAmount >= 0,
+            }}
+          />
+          <KpiCard
+            title={`${kpiPrefix}Contract Earnings`}
+            value={formatCurrencyUSD(reportedContracts)}
+            badge={`${selectedYear} Season`}
+            comparison={{
+              changeAmount: formatCurrencyUSD(contractsChangeAmount),
+              changePercent: contractsChangePercent,
+              isPositive: contractsChangeAmount >= 0,
+            }}
+          />
         </div>
 
         <Card className="p-6">
@@ -921,10 +947,11 @@ function PlayersPageContent() {
                   <p className="text-xs text-[#6B6B6B] leading-[1.4] max-w-full md:max-w-[80%] mt-3 mb-4 flex items-start gap-1">
                     <img src="/check-icon.svg" alt="" className="w-3.5 h-3.5 inline-block mt-0.5 shrink-0" />
                     <span>
-                      <strong>Confirmed:</strong> Verified amounts from public reporting or official tour sources.
-                      Figures without a checkmark are estimates based on public data and DinkBank modeling and may be
-                      updated as new information becomes available. Contract amounts reflect base retainers only and
-                      exclude endorsements or appearance fees. All amounts in USD.
+                      <strong>DinkBank Confirmed:</strong> Verified amounts from public reporting or official tour
+                      sources. Totals may also be marked as confirmed when all underlying amounts are verified. Figures
+                      without a checkmark are estimates based on public data and DinkBank modeling and may be updated as
+                      new information becomes available. Contract amounts reflect base retainers only and exclude
+                      endorsements or appearance fees. All amounts in USD.
                     </span>
                   </p>
                 </>

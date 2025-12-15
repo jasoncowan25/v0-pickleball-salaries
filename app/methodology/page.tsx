@@ -1,6 +1,5 @@
 import { Card } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Badge } from "@/components/ui/badge"
 import { AlertTriangle, HelpCircle, Eye } from "lucide-react"
 import Image from "next/image"
 
@@ -23,40 +22,19 @@ export default function MethodologyPage() {
               <div className="flex items-start gap-4">
                 <Image src="/check-icon.svg" alt="Confirmed" width={24} height={24} className="mt-1 flex-shrink-0" />
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h3 className="font-semibold">Confirmed</h3>
-                    <Badge variant="default">High Confidence</Badge>
-                  </div>
+                  <h3 className="font-semibold mb-2">DinkBank Confirmed</h3>
                   <p className="text-muted-foreground">
-                    Verified via publicly available announcements, credible third-party reporting, or direct organizer
-                    confirmation.
+                    {"Identified by the yellow checkmark. These amounts are verified through publicly available announcements, credible third-party reporting, or direct organizer confirmation. Totals may also be marked as confirmed when all underlying amounts are verified."}
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start gap-4">
-                <AlertTriangle className="h-6 w-6 text-gray-500 mt-1" />
+                <HelpCircle className="h-6 w-6 mt-1 text-transparent text-transparent" />
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h3 className="font-semibold">Reported</h3>
-                    <Badge variant="secondary">Medium Confidence</Badge>
-                  </div>
+                  <h3 className="font-semibold mb-2">Estimated (No Checkmark Shown)</h3>
                   <p className="text-muted-foreground">
-                    Published by credible media or player/agent statements; reliable but not official.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <HelpCircle className="h-6 w-6 text-muted-foreground mt-1" />
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h3 className="font-semibold">Estimated</h3>
-                    <Badge variant="outline">Lower Confidence</Badge>
-                  </div>
-                  <p className="text-muted-foreground">
-                    Computed from purse announcements and standard distribution tables when exact figures are
-                    unavailable.
+                    Amounts without a checkmark are estimates. These values are derived from publicly reported payout structures, comparable player results, historical prize distributions, and DinkBank’s internal modeling when exact figures have not been published. Estimates may be updated as new information becomes available.
                   </p>
                 </div>
               </div>
@@ -68,7 +46,7 @@ export default function MethodologyPage() {
             <h2 className="text-2xl font-semibold mb-4">Display Cutoffs & Leaderboard Rules</h2>
             <div className="space-y-4">
               <div className="flex items-start gap-4">
-                <Eye className="h-6 w-6 text-primary mt-1" />
+                
                 <div className="flex-1">
                   <ul className="list-disc list-inside space-y-2 text-muted-foreground">
                     <li>
@@ -82,10 +60,7 @@ export default function MethodologyPage() {
                         <li>Money List: Players with ≥ $1,000 in season prize money.</li>
                       </ul>
                     </li>
-                    <li>
-                      <strong>Power-user toggle:</strong> A "Show All Earnings" switch reveals all recorded payouts,
-                      including Round of 16 and smaller checks.
-                    </li>
+                    
                     <li>
                       <strong>Why we do this:</strong> To keep the site clean and useful for fans, media, and sponsors
                       while preserving full historical completeness.
