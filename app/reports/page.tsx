@@ -12,6 +12,14 @@ export default function ReportsPage() {
 
       <div className="space-y-4">
         <ReportCard
+          title="2025's Top 10 Prize Money Earners"
+          description="An earnings breakdown of the top-performing pros, drawn from prize money awarded across all major tours in 2025."
+          href="/reports/2025-top-10-prize-money-earners"
+          publishDate="Published: December 2025"
+          badge="New Report"
+        />
+
+        <ReportCard
           title="Why 'Appearance Fees' Often Aren't Extra Money"
           description="Understanding how appearance fees in pro pickleball often function as contract guarantees rather than performance-based prize money."
           href="/reports/appearance-fees-not-extra-money"
