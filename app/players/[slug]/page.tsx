@@ -266,6 +266,16 @@ export default function PlayerPage({ params }: PlayerPageProps) {
           />
         </div>
 
+        {/* Added 2026 contract figures informational notice */}
+        <Card className="mb-6 bg-amber-50 border-amber-200">
+          <div className="p-3">
+            <p className="text-sm">
+              <span className="font-semibold">Note:</span> 2026 contract figures currently mirror 2025 estimates while
+              DinkBank evaluates recent UPA changes. All amounts shown are estimates and subject to revision.
+            </p>
+          </div>
+        </Card>
+
         <div className="w-full mb-6">
           {/* Mobile Segmented Control */}
           <div className="md:hidden">

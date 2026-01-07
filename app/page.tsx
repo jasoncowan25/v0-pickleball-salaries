@@ -16,7 +16,7 @@ import { TOUR_META } from "@/lib/tours"
 import PlayerProfileLink from "@/components/PlayerProfileLink"
 import { getDisplayYear } from "@/lib/displayYear"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { ReportCard } from "@/components/report-card"
+import { ArrowRight } from "lucide-react"
 
 export default function Page() {
   const [activeTab, setActiveTab] = useState<"thisyear" | "alltime">("thisyear")
@@ -133,6 +133,16 @@ export default function Page() {
         <KpiCard title="Events Tracked" value={eventsTracked.toString()} />
         <KpiCard title="Contract Earnings" value={formatCurrencyUSD(totalContracts)} />
       </div>
+
+      <Card className="mb-6 bg-amber-50 border-amber-200">
+        <div className="p-4">
+          <h3 className="text-sm font-semibold mb-1">2026 Contract Figures — Under Review</h3>
+          <p className="text-sm text-muted-foreground">
+            2026 contract earnings currently reflect the same estimated amounts used for 2025 while DinkBank evaluates
+            the impact of recent UPA changes. All 2026 contract figures are estimates and subject to revision.
+          </p>
+        </div>
+      </Card>
 
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "thisyear" | "alltime")} className="mb-6">
         <div className="flex justify-between mb-4 items-end">
@@ -311,13 +321,64 @@ export default function Page() {
         </TabsContent>
       </Tabs>
 
-      <ReportCard
-        title="2025's Top 10 Prize Money Earners"
-        description="An earnings breakdown of the top-performing pros, drawn from prize money awarded across all major tours in 2025."
-        href="/reports/2025-top-10-prize-money-earners"
-        publishDate="Published: December 2025"
-        badge="New Report"
-      />
+      <div className="grid gap-6 md:grid-cols-2 md:items-start mb-6">
+        <Card>
+          <div className="p-6 my-0">
+            <h2 className="text-lg font-semibold mb-4">Featured Report</h2>
+            <Link href="/reports/2025-top-10-prize-money-earners" className="block group">
+              <div className="my-0 space-y-3 px-3 py-1.5">
+                <h3 className="text-xl font-bold leading-tight group-hover:text-accent transition-colors mt-3">
+                  2025's Top 10 Prize Money Earners
+                </h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  An earnings breakdown of the top-performing pros, drawn from prize money awarded across all major
+                  tours in 2025.
+                </p>
+                <div className="flex items-center justify-between pt-3 border-t border-border/50">
+                  <div className="text-sm text-muted-foreground">Last Updated: December 2025</div>
+                  <Button variant="secondary" className="group/btn gap-2">
+                    View Report
+                    <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                  </Button>
+                </div>
+              </div>
+            </Link>
+          </div>
+        </Card>
+
+        <Card>
+          <div className="p-6">
+            <h2 className="text-lg font-semibold mb-4">Player News</h2>
+            <div className="space-y-3">
+              <Link
+                href="/players/anna-leigh-waters"
+                className="block p-3 rounded-lg hover:bg-muted/50 transition-colors"
+              >
+                <div className="text-xs text-muted-foreground mb-1">Jan 7, 2026</div>
+                <div className="font-semibold mb-1">Anna Leigh Waters</div>
+                <div className="text-sm text-muted-foreground">ALW and Paddletek part ways</div>
+              </Link>
+
+              <Link
+                href="/players/james-ignatowich"
+                className="block p-3 rounded-lg hover:bg-muted/50 transition-colors"
+              >
+                <div className="text-xs text-muted-foreground mb-1">Jan 1, 2026</div>
+                <div className="font-semibold mb-1">James Ignatowich</div>
+                <div className="text-sm text-muted-foreground">UPA suspends Ignatowich</div>
+              </Link>
+
+              <Link href="/players/parris-todd" className="block p-3 rounded-lg hover:bg-muted/50 transition-colors">
+                <div className="text-xs text-muted-foreground mb-1">Jan 1, 2026</div>
+                <div className="font-semibold mb-1">Parris Todd</div>
+                <div className="text-sm text-muted-foreground">
+                  UPA hands Parris Todd two-event suspension, $50,000 fine
+                </div>
+              </Link>
+            </div>
+          </div>
+        </Card>
+      </div>
 
       <Card className="mt-6 mb-6">
         <div className="p-6">

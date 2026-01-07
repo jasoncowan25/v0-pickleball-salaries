@@ -527,6 +527,16 @@ function PlayersPageContent() {
           />
         </div>
 
+        <Card className="mb-6 bg-amber-50 border-amber-200">
+          <div className="p-4">
+            <h3 className="text-sm font-semibold mb-1">2026 Contract Figures — Under Review</h3>
+            <p className="text-sm text-muted-foreground">
+              2026 contract earnings currently reflect the same estimated amounts used for 2025 while DinkBank evaluates
+              the impact of recent UPA changes. All 2026 contract figures are estimates and subject to revision.
+            </p>
+          </div>
+        </Card>
+
         <Card className="p-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4">
             <div>
