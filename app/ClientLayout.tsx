@@ -39,8 +39,8 @@ export default function ClientLayout({
   const mobileNavItems = [
     { name: "Earnings Leaders", href: "/" },
     { name: "Players", href: "/players" },
+    { name: "Prize Money", href: "/prize-money/ppa" },
     { name: "Events", href: "/events" },
-    { name: "Methodology", href: "/methodology" },
     { name: "Reports", href: "/reports" },
   ]
 

@@ -1,5 +1,6 @@
 export type Tour = "PPA" | "MLP" | "APP"
 export type Gender = "M" | "F" | "Mixed"
+export type ContractTier = "gold" | "futures" | "standard" | "unsigned"
 
 export interface PlayerTour {
   code: "PPA" | "MLP" | "APP"
@@ -21,6 +22,7 @@ export interface Player {
   sponsors?: string[]
   handedness?: "R" | "L"
   tours?: PlayerTour[]
+  contractTier?: ContractTier
   totals: {
     ytdPrize: number
     allTimePrize: number
@@ -79,6 +81,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/ben-johns-pickleball.png",
     sponsors: ["JOOLA", "Vulcan"],
     handedness: "R",
+    contractTier: "gold",
     tours: [
       { code: "PPA", appearances: 15, earnings: 75000, active: true },
       { code: "MLP", appearances: 8, earnings: 18750, active: true },
@@ -103,6 +106,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/anna-leigh-waters-pickleball.png",
     sponsors: ["HEAD", "Fila"],
     handedness: "R",
+    contractTier: "gold",
     tours: [
       { code: "PPA", appearances: 12, earnings: 68000, active: true },
       { code: "MLP", appearances: 6, earnings: 17000, active: true },
@@ -124,6 +128,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/jw-johnson-pickleball.png",
     sponsors: ["Franklin", "Adidas"],
     handedness: "R",
+    contractTier: "gold",
     tours: [
       { code: "MLP", appearances: 10, earnings: 50000, active: true },
       { code: "PPA", appearances: 5, earnings: 25000, active: true },
@@ -146,6 +151,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/catherine-parenteau-pickleball.png",
     sponsors: ["Selkirk", "Lululemon"],
     handedness: "R",
+    contractTier: "gold",
     tours: [
       { code: "APP", appearances: 10, earnings: 40000, active: true },
       { code: "PPA", appearances: 3, earnings: 15000, active: true },
@@ -168,6 +174,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/riley-newman-pickleball.png",
     sponsors: ["Paddletek", "Nike"],
     handedness: "L",
+    contractTier: "gold",
     tours: [
       { code: "PPA", appearances: 8, earnings: 20000, active: true },
       { code: "MLP", appearances: 4, earnings: 10000, active: true },
@@ -190,6 +197,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/meghan-dizon-pickleball.png",
     sponsors: ["Engage", "Under Armour"],
     handedness: "R",
+    contractTier: "futures",
     tours: [
       { code: "MLP", appearances: 10, earnings: 50000, active: true },
       { code: "PPA", appearances: 4, earnings: 16000, active: true },
@@ -212,6 +220,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/tyson-mcguffin-pickleball.png",
     sponsors: ["Selkirk", "Nike"],
     handedness: "R",
+    contractTier: "standard",
     tours: [
       { code: "PPA", appearances: 15, earnings: 75000, active: true },
       { code: "MLP", appearances: 8, earnings: 18750, active: true },
@@ -234,6 +243,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/simone-jardim-pickleball.png",
     sponsors: ["HEAD", "Wilson"],
     handedness: "R",
+    contractTier: "unsigned",
     tours: [
       { code: "APP", appearances: 10, earnings: 40000, active: true },
       { code: "PPA", appearances: 3, earnings: 15000, active: true },
@@ -256,6 +266,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/collin-johns-pickleball.png",
     sponsors: ["JOOLA", "Adidas"],
     handedness: "R",
+    contractTier: "standard",
     tours: [
       { code: "MLP", appearances: 10, earnings: 50000, active: true },
       { code: "PPA", appearances: 4, earnings: 16000, active: true },
@@ -278,6 +289,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/lucy-kovalova-pickleball.png",
     sponsors: ["Paddletek", "Fila"],
     handedness: "R",
+    contractTier: "futures",
     tours: [
       { code: "PPA", appearances: 10, earnings: 40000, active: true },
       { code: "MLP", appearances: 4, earnings: 16000, active: true },
@@ -300,6 +312,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/zane-navratil-pickleball.png",
     sponsors: ["Franklin", "Under Armour"],
     handedness: "L",
+    contractTier: "standard",
     tours: [
       { code: "APP", appearances: 10, earnings: 40000, active: true },
       { code: "PPA", appearances: 4, earnings: 16000, active: true },
@@ -322,6 +335,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/lea-jansen-pickleball.png",
     sponsors: ["Engage", "Lululemon"],
     handedness: "R",
+    contractTier: "futures",
     tours: [
       { code: "MLP", appearances: 10, earnings: 50000, active: true },
       { code: "PPA", appearances: 4, earnings: 16000, active: true },
@@ -344,6 +358,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/parker-reed-pickleball.png",
     sponsors: ["Vulcan", "Nike"],
     handedness: "R",
+    contractTier: "standard",
     tours: [
       { code: "PPA", appearances: 10, earnings: 40000, active: true },
       { code: "MLP", appearances: 4, earnings: 16000, active: true },
@@ -366,6 +381,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/jessie-irvine-pickleball.png",
     sponsors: ["HEAD", "Wilson"],
     handedness: "L",
+    contractTier: "futures",
     tours: [
       { code: "APP", appearances: 10, earnings: 40000, active: true },
       { code: "PPA", appearances: 4, earnings: 16000, active: true },
@@ -388,6 +404,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/dylan-frazier-pickleball.png",
     sponsors: ["Selkirk", "Adidas"],
     handedness: "R",
+    contractTier: "standard",
     tours: [
       { code: "MLP", appearances: 10, earnings: 50000, active: true },
       { code: "PPA", appearances: 4, earnings: 16000, active: true },
@@ -410,6 +427,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/callie-smith-pickleball.png",
     sponsors: ["Franklin", "Fila"],
     handedness: "R",
+    contractTier: "futures",
     tours: [
       { code: "PPA", appearances: 10, earnings: 40000, active: true },
       { code: "MLP", appearances: 4, earnings: 16000, active: true },
@@ -432,6 +450,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/federico-staksrud-pickleball.png",
     sponsors: ["JOOLA", "Under Armour"],
     handedness: "L",
+    contractTier: "standard",
     tours: [
       { code: "APP", appearances: 10, earnings: 40000, active: true },
       { code: "PPA", appearances: 4, earnings: 16000, active: true },
@@ -454,6 +473,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/etta-wright-pickleball.png",
     sponsors: ["Paddletek", "Lululemon"],
     handedness: "R",
+    contractTier: "futures",
     tours: [
       { code: "MLP", appearances: 10, earnings: 50000, active: true },
       { code: "PPA", appearances: 4, earnings: 16000, active: true },
@@ -476,6 +496,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/hayden-patriquin-pickleball.png",
     sponsors: ["Engage", "Nike"],
     handedness: "R",
+    contractTier: "standard",
     tours: [
       { code: "PPA", appearances: 10, earnings: 40000, active: true },
       { code: "MLP", appearances: 4, earnings: 16000, active: true },
@@ -498,6 +519,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/anna-bright-pickleball.png",
     sponsors: ["Vulcan", "Wilson"],
     handedness: "R",
+    contractTier: "futures",
     tours: [
       { code: "APP", appearances: 10, earnings: 40000, active: true },
       { code: "PPA", appearances: 4, earnings: 16000, active: true },
@@ -520,6 +542,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/thomas-wilson-pickleball.png",
     sponsors: ["HEAD", "Adidas"],
     handedness: "L",
+    contractTier: "standard",
     tours: [
       { code: "MLP", appearances: 10, earnings: 50000, active: true },
       { code: "PPA", appearances: 4, earnings: 16000, active: true },
@@ -542,6 +565,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/salome-devidze-pickleball.png",
     sponsors: ["Selkirk", "Fila"],
     handedness: "R",
+    contractTier: "futures",
     tours: [
       { code: "PPA", appearances: 10, earnings: 40000, active: true },
       { code: "MLP", appearances: 4, earnings: 16000, active: true },
@@ -564,6 +588,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/jay-devilliers-pickleball.png",
     sponsors: ["Franklin", "Under Armour"],
     handedness: "R",
+    contractTier: "standard",
     tours: [
       { code: "APP", appearances: 10, earnings: 40000, active: true },
       { code: "PPA", appearances: 4, earnings: 16000, active: true },
@@ -586,6 +611,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/jorja-johnson-pickleball.png",
     sponsors: ["JOOLA", "Lululemon"],
     handedness: "R",
+    contractTier: "futures",
     tours: [
       { code: "MLP", appearances: 10, earnings: 50000, active: true },
       { code: "PPA", appearances: 4, earnings: 16000, active: true },
@@ -608,6 +634,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/matt-wright-pickleball.png",
     sponsors: ["Paddletek", "Nike"],
     handedness: "L",
+    contractTier: "standard",
     tours: [
       { code: "PPA", appearances: 10, earnings: 40000, active: true },
       { code: "MLP", appearances: 4, earnings: 16000, active: true },
@@ -630,6 +657,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/irina-tereschenko-pickleball.png",
     sponsors: ["Engage", "Wilson"],
     handedness: "R",
+    contractTier: "futures",
     tours: [
       { code: "APP", appearances: 10, earnings: 40000, active: true },
       { code: "PPA", appearances: 4, earnings: 16000, active: true },
@@ -652,6 +680,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/christian-alshon-pickleball.png",
     sponsors: ["Vulcan", "Adidas"],
     handedness: "R",
+    contractTier: "standard",
     tours: [
       { code: "MLP", appearances: 10, earnings: 50000, active: true },
       { code: "PPA", appearances: 4, earnings: 16000, active: true },
@@ -674,6 +703,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/kate-fahey-pickleball.png",
     sponsors: ["HEAD", "Fila"],
     handedness: "L",
+    contractTier: "futures",
     tours: [
       { code: "PPA", appearances: 10, earnings: 40000, active: true },
       { code: "MLP", appearances: 4, earnings: 16000, active: true },
@@ -696,6 +726,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/andrei-daescu-pickleball.png",
     sponsors: ["Selkirk", "Under Armour"],
     handedness: "R",
+    contractTier: "standard",
     tours: [
       { code: "APP", appearances: 10, earnings: 40000, active: true },
       { code: "PPA", appearances: 4, earnings: 16000, active: true },
@@ -718,6 +749,7 @@ export const mockPlayers: Player[] = [
     headshotUrl: "/lacy-schneemann-pickleball.png",
     sponsors: ["Franklin", "Lululemon"],
     handedness: "R",
+    contractTier: "futures",
     tours: [
       { code: "MLP", appearances: 10, earnings: 50000, active: true },
       { code: "PPA", appearances: 4, earnings: 16000, active: true },

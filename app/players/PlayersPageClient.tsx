@@ -13,6 +13,7 @@ import { computePrimaryTour, visibleTours, type TourCode } from "@/lib/tours"
 import { KpiCard } from "@/components/kpi-card"
 import { mergeSearchParams, stripEmpty } from "@/lib/url"
 import { TourBadge } from "@/components/TourBadge"
+import { ContractTierBadge } from "@/components/contract-tier-badge"
 import PlayerProfileLink from "@/components/PlayerProfileLink"
 import { MobileFilterBar } from "@/components/mobile-filter-bar"
 import { FilterBottomSheet } from "@/components/filter-bottom-sheet"
@@ -20,7 +21,8 @@ import PlayersFiltersClean from "@/components/players-filters-clean"
 import { useFilterParams } from "@/hooks/use-filter-params"
 import { composePrefix, composeHeading, type Tour } from "@/lib/filter-composition"
 import { getDisplayYear } from "@/lib/displayYear"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { VerificationStamp } from "@/components/verification-stamp"
 
 type PlayerRow = {
   id: string
@@ -39,6 +41,7 @@ type PlayerRow = {
   tours: TourCode[]
   primaryTour: TourCode | null
   earningsByTour?: Record<Tour, number>
+  contractTier?: "gold" | "futures" | "standard" | "unsigned"
 }
 
 type Money = number
@@ -195,6 +198,7 @@ function PlayersPageContent() {
         tours: visibleTours(enhancedPlayer),
         primaryTour: computePrimaryTour(enhancedPlayer),
         earningsByTour: { PPA: ppa, MLP: mlp, APP: app },
+        contractTier: player.contractTier,
       }
     })
   }, [])
@@ -563,7 +567,7 @@ function PlayersPageContent() {
             </div>
           ) : (
             <>
-              <div className="hidden md:block">
+              <div className="hidden lg:block">
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
@@ -595,45 +599,60 @@ function PlayersPageContent() {
                           </div>
                         </th>
                         <th className="text-left p-3">
-                          <div className="font-semibold px-2 py-1">Tours</div>
+                          <div className="font-semibold px-2 py-1">Contract Tier</div>
                         </th>
                         <th className="text-right p-3">
                           <div
                             onClick={() => handleSort("ppa")}
-                            className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer flex items-center justify-end gap-1 ${sortColumn === "ppa" ? "bg-muted/40" : ""}`}
+                            className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer ${sortColumn === "ppa" ? "bg-muted/40" : ""}`}
                             aria-sort={
                               sortColumn === "ppa" ? (sortDirection === "asc" ? "ascending" : "descending") : "none"
                             }
                           >
-                            PPA <SortIcon column="ppa" />
+                            <div className="grid grid-cols-[1fr_24px] gap-3 items-center">
+                              <div className="text-right flex items-center justify-end gap-1">
+                                PPA <SortIcon column="ppa" />
+                              </div>
+                              <div></div>
+                            </div>
                           </div>
                         </th>
                         <th className="text-right p-3">
                           <div
                             onClick={() => handleSort("app")}
-                            className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer flex items-center justify-end gap-1 ${sortColumn === "app" ? "bg-muted/40" : ""}`}
+                            className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer ${sortColumn === "app" ? "bg-muted/40" : ""}`}
                             aria-sort={
                               sortColumn === "app" ? (sortDirection === "asc" ? "ascending" : "descending") : "none"
                             }
                           >
-                            APP <SortIcon column="app" />
+                            <div className="grid grid-cols-[1fr_24px] gap-3 items-center">
+                              <div className="text-right flex items-center justify-end gap-1">
+                                APP <SortIcon column="app" />
+                              </div>
+                              <div></div>
+                            </div>
                           </div>
                         </th>
                         <th className="text-right p-3">
                           <div
                             onClick={() => handleSort("mlp")}
-                            className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer flex items-center justify-end gap-1 ${sortColumn === "mlp" ? "bg-muted/40" : ""}`}
+                            className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer ${sortColumn === "mlp" ? "bg-muted/40" : ""}`}
                             aria-sort={
                               sortColumn === "mlp" ? (sortDirection === "asc" ? "ascending" : "descending") : "none"
                             }
                           >
-                            MLP <SortIcon column="mlp" />
+                            <div className="grid grid-cols-[1fr_24px] gap-3 items-center">
+                              <div className="text-right flex items-center justify-end gap-1">
+                                MLP <SortIcon column="mlp" />
+                              </div>
+                              <div></div>
+                            </div>
                           </div>
                         </th>
                         <th className="bg-muted/30 font-semibold tabular-nums text-right p-3 min-w-[100px]">
                           <div
                             onClick={() => handleSort("contract")}
-                            className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer flex items-center justify-end gap-1 ${sortColumn === "contract" ? "bg-muted/60" : ""}`}
+                            className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer ${sortColumn === "contract" ? "bg-muted/60" : ""}`}
                             aria-sort={
                               sortColumn === "contract"
                                 ? sortDirection === "asc"
@@ -642,18 +661,28 @@ function PlayersPageContent() {
                                 : "none"
                             }
                           >
-                            Contracts <SortIcon column="contract" />
+                            <div className="grid grid-cols-[1fr_24px] gap-3 items-center">
+                              <div className="text-right flex items-center justify-end gap-1">
+                                Contracts <SortIcon column="contract" />
+                              </div>
+                              <div></div>
+                            </div>
                           </div>
                         </th>
                         <th className="bg-muted/30 font-semibold tabular-nums text-right p-3 min-w-[100px]">
                           <div
                             onClick={() => handleSort("total")}
-                            className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer flex items-center justify-end gap-1 ${sortColumn === "total" ? "bg-muted/60" : ""}`}
+                            className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer ${sortColumn === "total" ? "bg-muted/60" : ""}`}
                             aria-sort={
                               sortColumn === "total" ? (sortDirection === "asc" ? "ascending" : "descending") : "none"
                             }
                           >
-                            Total <SortIcon column="total" />
+                            <div className="grid grid-cols-[1fr_24px] gap-3 items-center">
+                              <div className="text-right flex items-center justify-end gap-1">
+                                Total <SortIcon column="total" />
+                              </div>
+                              <div></div>
+                            </div>
                           </div>
                         </th>
                       </tr>
@@ -670,75 +699,61 @@ function PlayersPageContent() {
                                 gender={player.gender}
                                 location={player.nation}
                                 headshotUrl={player.headshotUrl}
+                                showImage={false}
                               />
                             </td>
                             <td className="whitespace-nowrap px-3 py-3.5 align-middle">
-                              <div className="flex items-center gap-1 flex-wrap">
-                                {player.tours.map((tourCode) => (
-                                  <TourBadge
-                                    key={tourCode}
-                                    code={tourCode}
-                                    primary={player.primaryTour === tourCode}
-                                    clickable={true}
-                                    onClick={(selectedTour) => handleTourChange(selectedTour as Tour)}
-                                    className={
-                                      tour.toUpperCase() === tourCode
-                                        ? "ring-2 ring-blue-500"
-                                        : tour !== "all"
-                                          ? "opacity-50"
-                                          : ""
-                                    }
-                                  />
-                                ))}
+                              {player.contractTier && <ContractTierBadge tier={player.contractTier} />}
+                            </td>
+                            <td className="text-right p-3">
+                              <div className="grid grid-cols-[1fr_24px] gap-3 items-center">
+                                <div className="text-right tabular-nums">
+                                  {player.ppa > 0 ? formatCurrencyUSD(player.ppa) : "—"}
+                                </div>
+                                <div className="flex items-center justify-center">
+                                  {player.ppa > 0 && <VerificationStamp variant="verified" />}
+                                </div>
                               </div>
                             </td>
-                            <td className="text-right p-3 tabular-nums text-secondary-foreground relative px-4">
-                              {player.ppa > 0 ? (
-                                <>
-                                  {formatCurrencyUSD(player.ppa)}
-                                  <img
-                                    src="/check-icon.svg"
-                                    alt=""
-                                    className="w-4 h-4 absolute top-1/2 -translate-y-1/2 -right-2"
-                                  />
-                                </>
-                              ) : (
-                                "—"
-                              )}
+                            <td className="text-right p-3">
+                              <div className="grid grid-cols-[1fr_24px] gap-3 items-center">
+                                <div className="text-right tabular-nums">
+                                  {player.app > 0 ? formatCurrencyUSD(player.app) : "—"}
+                                </div>
+                                <div className="flex items-center justify-center">
+                                  {player.app > 0 && <VerificationStamp variant="verified" />}
+                                </div>
+                              </div>
                             </td>
-                            <td className="text-right p-3 tabular-nums text-secondary-foreground relative px-4">
-                              {player.app > 0 ? (
-                                <>
-                                  {formatCurrencyUSD(player.app)}
-                                  <img
-                                    src="/check-icon.svg"
-                                    alt=""
-                                    className="w-4 h-4 absolute top-1/2 -translate-y-1/2 -right-2"
-                                  />
-                                </>
-                              ) : (
-                                "—"
-                              )}
+                            <td className="text-right p-3">
+                              <div className="grid grid-cols-[1fr_24px] gap-3 items-center">
+                                <div className="text-right tabular-nums">
+                                  {player.mlp > 0 ? formatCurrencyUSD(player.mlp) : "—"}
+                                </div>
+                                <div className="flex items-center justify-center">
+                                  {player.mlp > 0 && <VerificationStamp variant="verified" />}
+                                </div>
+                              </div>
                             </td>
-                            <td className="text-right p-3 tabular-nums text-secondary-foreground relative px-4">
-                              {player.mlp > 0 ? (
-                                <>
-                                  {formatCurrencyUSD(player.mlp)}
-                                  <img
-                                    src="/check-icon.svg"
-                                    alt=""
-                                    className="w-4 h-4 absolute top-1/2 -translate-y-1/2 -right-2"
-                                  />
-                                </>
-                              ) : (
-                                "—"
-                              )}
-                            </td>
-                            <td className="text-right p-3 tabular-nums">
-                              {player.contract > 0 ? formatCurrencyUSD(player.contract) : "—"}
+                            <td className="text-right p-3">
+                              <div className="grid grid-cols-[1fr_24px] gap-3 items-center">
+                                <div className="text-right tabular-nums text-[#737373]">
+                                  {player.contract > 0 ? formatCurrencyUSD(player.contract) : "—"}
+                                </div>
+                                <div className="flex items-center justify-center">
+                                  {player.contract > 0 && <VerificationStamp variant="estimated" />}
+                                </div>
+                              </div>
                             </td>
                             <td className="bg-muted/30 font-semibold tabular-nums text-right p-3">
-                              {formatCurrencyUSD(player.total)}
+                              <div className="grid grid-cols-[1fr_24px] gap-3 items-center">
+                                <div className="text-right tabular-nums text-[#737373] font-semibold">
+                                  {formatCurrencyUSD(player.total)}
+                                </div>
+                                <div className="flex items-center justify-center">
+                                  <VerificationStamp variant="estimated" />
+                                </div>
+                              </div>
                             </td>
                           </tr>
                         )
@@ -748,7 +763,7 @@ function PlayersPageContent() {
                 </div>
               </div>
 
-              <div className="md:hidden space-y-4">
+              <div className="lg:hidden space-y-4">
                 {paginatedPlayers.map((player) => {
                   return (
                     <Link
@@ -759,7 +774,6 @@ function PlayersPageContent() {
                       <div className="relative bg-muted/30 rounded-2xl p-4 shadow-sm border overflow-hidden space-y-2 hover:bg-muted/50 active:scale-[0.98] transition-all min-h-[44px]">
                         <div className="flex items-start gap-3">
                           <Avatar className="size-14 rounded-full object-cover shrink-0 border border-gray-300">
-                            <AvatarImage src={player.headshotUrl || "/placeholder.svg"} alt={player.name} />
                             <AvatarFallback className="text-sm font-semibold">
                               {player.name
                                 .split(" ")
@@ -776,92 +790,59 @@ function PlayersPageContent() {
                             <div className="text-xs text-muted-foreground mt-0.5">
                               {player.gender === "M" ? "Men" : "Women"} • {player.nation || "—"}
                             </div>
-                            <div className="mt-2 text-2xl sm:text-3xl font-extrabold tabular-nums break-words">
-                              {formatCurrencyUSD(player.total)}
+                            <div className="mt-2 flex items-center gap-2">
+                              <div className="text-2xl sm:text-3xl font-extrabold tabular-nums break-words text-[#737373]">
+                                {formatCurrencyUSD(player.total)}
+                              </div>
+                              <VerificationStamp variant="estimated" />
                             </div>
                           </div>
 
                           <ChevronRight className="h-5 w-5 text-muted-foreground shrink-0 mt-1" />
                         </div>
 
-                        <div className="mt-3 flex flex-wrap gap-2">
-                          {player.tours.map((tourCode) => (
-                            <TourBadge
-                              key={tourCode}
-                              code={tourCode}
-                              primary={player.primaryTour === tourCode}
-                              clickable={false}
-                              className={
-                                tour.toUpperCase() === tourCode
-                                  ? "ring-2 ring-blue-500 text-xs px-2 py-1 pointer-events-none"
-                                  : tour !== "all"
-                                    ? "opacity-50 text-xs px-2 py-1 pointer-events-none"
-                                    : "text-xs px-2 py-1 pointer-events-none"
-                              }
-                            />
-                          ))}
-                        </div>
+                        {player.contractTier && (
+                          <div className="mt-3">
+                            <ContractTierBadge tier={player.contractTier} />
+                          </div>
+                        )}
 
                         <div className="mt-2 grid grid-cols-1 gap-y-1 text-sm">
                           <div className="flex items-baseline justify-between gap-3">
                             <span className="text-muted-foreground">PPA:</span>
-                            <span className="font-medium tabular-nums">
-                              {player.ppa > 0 ? (
-                                <div className="relative inline-block text-right">
-                                  {formatCurrencyUSD(player.ppa)}
-                                  <img
-                                    src="/check-icon.svg"
-                                    alt=""
-                                    className="w-4 h-4 absolute top-1/2 -translate-y-1/2"
-                                    style={{ left: "calc(100% + 4px)" }}
-                                  />
-                                </div>
-                              ) : (
-                                "—"
-                              )}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium tabular-nums">
+                                {player.ppa > 0 ? formatCurrencyUSD(player.ppa) : "—"}
+                              </span>
+                              {player.ppa > 0 && <VerificationStamp variant="verified" />}
+                            </div>
                           </div>
                           <div className="flex items-baseline justify-between gap-3">
                             <span className="text-muted-foreground">APP:</span>
-                            <span className="font-medium tabular-nums">
-                              {player.app > 0 ? (
-                                <div className="relative inline-block text-right">
-                                  {formatCurrencyUSD(player.app)}
-                                  <img
-                                    src="/check-icon.svg"
-                                    alt=""
-                                    className="w-4 h-4 absolute top-1/2 -translate-y-1/2"
-                                    style={{ left: "calc(100% + 4px)" }}
-                                  />
-                                </div>
-                              ) : (
-                                "—"
-                              )}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium tabular-nums">
+                                {player.app > 0 ? formatCurrencyUSD(player.app) : "—"}
+                              </span>
+                              {player.app > 0 && <VerificationStamp variant="verified" />}
+                            </div>
                           </div>
                           <div className="flex items-baseline justify-between gap-3">
                             <span className="text-muted-foreground">MLP:</span>
-                            <span className="font-medium tabular-nums">
-                              {player.mlp > 0 ? (
-                                <div className="relative inline-block text-right">
-                                  {formatCurrencyUSD(player.mlp)}
-                                  <img
-                                    src="/check-icon.svg"
-                                    alt=""
-                                    className="w-4 h-4 absolute top-1/2 -translate-y-1/2"
-                                    style={{ left: "calc(100% + 4px)" }}
-                                  />
-                                </div>
-                              ) : (
-                                "—"
-                              )}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium tabular-nums">
+                                {player.mlp > 0 ? formatCurrencyUSD(player.mlp) : "—"}
+                              </span>
+                              {player.mlp > 0 && <VerificationStamp variant="verified" />}
+                            </div>
                           </div>
                           <div className="flex items-baseline justify-between gap-3">
                             <span className="text-muted-foreground">Contract:</span>
-                            <span className="font-medium tabular-nums">
-                              {player.contract > 0 ? formatCurrencyUSD(player.contract) : "—"}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium tabular-nums text-[#737373]">
+                                {player.contract > 0 ? formatCurrencyUSD(player.contract) : "—"}
+                              </span>
+                              {player.contract > 0 && <VerificationStamp variant="estimated" />}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -871,7 +852,7 @@ function PlayersPageContent() {
               </div>
 
               <div className="flex items-center justify-between mt-6 pt-4 border-t">
-                <div className="hidden md:flex items-center gap-2">
+                <div className="hidden lg:flex items-center gap-2">
                   <span className="text-sm text-muted-foreground">Show:</span>
                   <Select value={pageSize.toString()} onValueChange={(value) => handlePageSizeChange(Number(value))}>
                     <SelectTrigger className="w-20 h-8">
@@ -885,7 +866,7 @@ function PlayersPageContent() {
                   </Select>
                 </div>
 
-                <div className="hidden md:flex items-center gap-2">
+                <div className="hidden lg:flex items-center gap-2">
                   <Button
                     variant="outline"
                     size="sm"
@@ -924,7 +905,7 @@ function PlayersPageContent() {
                   </Button>
                 </div>
 
-                <div className="md:hidden flex items-center justify-center gap-2 w-full">
+                <div className="lg:hidden flex items-center justify-center gap-2 w-full">
                   <Button
                     variant="outline"
                     size="sm"
@@ -955,13 +936,15 @@ function PlayersPageContent() {
                 <>
                   <hr className="mt-4 mb-2 border-[#EAEAEA]" />
                   <p className="text-xs text-[#6B6B6B] leading-[1.4] max-w-full md:max-w-[80%] mt-3 mb-4 flex items-start gap-1">
-                    <img src="/check-icon.svg" alt="" className="w-3.5 h-3.5 inline-block mt-0.5 shrink-0" />
+                    <span className="mt-0.5 shrink-0 mr-1">
+                      <VerificationStamp />
+                    </span>
                     <span>
-                      <strong>DinkBank Confirmed:</strong> Verified amounts from public reporting or official tour
-                      sources. Totals may also be marked as confirmed when all underlying amounts are verified. Figures
-                      without a checkmark are estimates based on public data and DinkBank modeling and may be updated as
-                      new information becomes available. Contract amounts reflect base retainers only and exclude
-                      endorsements or appearance fees. All amounts in USD.
+                      <strong>DinkBank Confirmed:</strong> Verified amounts from public reporting or official tour sources.
+                      Totals may also be marked as confirmed when all underlying amounts are verified. Figures without a
+                      checkmark are estimates based on public data and DinkBank modeling and may be updated as new information
+                      becomes available. Contract amounts reflect base retainers only and exclude endorsements or appearance
+                      fees. All amounts in USD.
                     </span>
                   </p>
                 </>

@@ -10,13 +10,12 @@ import { getRankedPlayers } from "@/lib/rank"
 import { mockPlayers, events } from "@/lib/mock-data"
 import type { Player } from "@/lib/mock-data"
 import Link from "next/link"
-import { TourBadge } from "@/components/TourBadges"
-import { computePrimaryTour, visibleTours } from "@/lib/tours"
-import { TOUR_META } from "@/lib/tours"
 import PlayerProfileLink from "@/components/PlayerProfileLink"
 import { getDisplayYear } from "@/lib/displayYear"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ArrowRight } from "lucide-react"
+import { ContractTierBadge } from "@/components/contract-tier-badge"
+import { VerificationStamp } from "@/components/verification-stamp"
 
 export default function Page() {
   const [activeTab, setActiveTab] = useState<"thisyear" | "alltime">("thisyear")
@@ -44,48 +43,28 @@ export default function Page() {
     {
       key: "name" as keyof (Player & { rank: number; rankValue: number }),
       header: "Player",
-      cell: (player: Player & { rank: number }) => (
-        <PlayerProfileLink
-          href={`/players/${player.slug}`}
-          name={player.name}
-          gender={player.gender}
-          location={player.country}
-          headshotUrl={player.headshotUrl}
-        />
-      ),
+      cell: (player: Player & { rank: number }) => {
+        const isGoldTier = player.name === "Ben Johns" || player.name === "Anna Leigh Waters"
+        return (
+          <PlayerProfileLink
+            href={`/players/${player.slug}`}
+            name={player.name}
+            gender={player.gender}
+            location={player.country}
+            headshotUrl={player.headshotUrl}
+            goldTier={isGoldTier}
+            showImage={false}
+          />
+        )
+      },
     },
     {
-      key: "tours" as keyof (Player & { rank: number; rankValue: number }),
-      header: "Tours",
+      key: "contractTier" as keyof (Player & { rank: number; rankValue: number }),
+      header: "Contract Tier",
       cell: (player: Player & { rank: number }) => {
-        const enhancedPlayer = {
-          ...player,
-          tours: player.tours || [],
-        }
-        const tours = visibleTours(enhancedPlayer)
-        const primaryTour = computePrimaryTour(enhancedPlayer)
-
-        if (tours.length === 0) return <span className="text-gray-400">—</span>
-
-        const visibleToursList = tours.slice(0, 3)
-        const overflowCount = tours.length - 3
-
         return (
-          <div className="flex items-center gap-1 flex-wrap">
-            {visibleToursList.map((tour) => (
-              <TourBadge key={tour} code={tour} primary={tour === primaryTour} />
-            ))}
-            {overflowCount > 0 && (
-              <div
-                className="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600"
-                title={`Also: ${tours
-                  .slice(3)
-                  .map((t) => TOUR_META[t].label)
-                  .join(", ")}`}
-              >
-                +{overflowCount}
-              </div>
-            )}
+          <div className="w-[100px]">
+            <ContractTierBadge tier={player.contractTier} />
           </div>
         )
       },
@@ -94,9 +73,11 @@ export default function Page() {
       key: "rankValue" as keyof (Player & { rank: number; rankValue: number }),
       header: "Prize",
       cell: (player: Player & { rank: number; rankValue: number }) => (
-        <div className="relative text-right tabular-nums">
-          {formatCurrencyUSD(player.rankValue)}
-          <img src="/check-icon.svg" alt="" className="w-4 h-4 absolute top-1/2 -translate-y-1/2 -right-6" />
+        <div className="grid grid-cols-[1fr_24px] gap-3 items-center">
+          <div className="text-right tabular-nums">{formatCurrencyUSD(player.rankValue)}</div>
+          <div className="flex items-center justify-center">
+            <VerificationStamp variant="verified" />
+          </div>
         </div>
       ),
     },
@@ -104,15 +85,27 @@ export default function Page() {
       key: "totals" as keyof (Player & { rank: number; rankValue: number }),
       header: "Contract",
       cell: (player: Player & { rank: number }) => (
-        <div className="tabular-nums text-right">{formatCurrencyUSD(player.totals.reportedContracts || 0)}</div>
+        <div className="grid grid-cols-[1fr_24px] gap-3 items-center">
+          <div className="tabular-nums text-right text-[#737373]">
+            {formatCurrencyUSD(player.totals.reportedContracts || 0)}
+          </div>
+          <div className="flex items-center justify-center">
+            <VerificationStamp variant="estimated" />
+          </div>
+        </div>
       ),
     },
     {
       key: "total" as keyof (Player & { rank: number; rankValue: number }),
       header: "Total",
       cell: (player: Player & { rank: number; rankValue: number }) => (
-        <div className="font-bold tabular-nums text-right">
-          {formatCurrencyUSD(player.rankValue + (player.totals.reportedContracts || 0))}
+        <div className="grid grid-cols-[1fr_24px] gap-3 items-center">
+          <div className="font-bold tabular-nums text-right text-[#737373]">
+            {formatCurrencyUSD(player.rankValue + (player.totals.reportedContracts || 0))}
+          </div>
+          <div className="flex items-center justify-center">
+            <VerificationStamp variant="estimated" />
+          </div>
         </div>
       ),
     },
@@ -162,25 +155,28 @@ export default function Page() {
               <h2 className="text-lg font-semibold">
                 {activeTab === "thisyear" ? `${YEAR} Top Earners` : "All-Time Top Earners"}
               </h2>
-              <p className="text-muted-foreground">Listing the top pro pickleball players by total earnings</p>
+              <p className="text-muted-foreground">UPA contract tiers shown</p>
             </div>
 
-            <div className="hidden md:block overflow-x-auto">
+            <div className="hidden lg:block overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b">
                     {columns.map((column) => (
                       <th
                         key={column.key}
-                        className={`text-left py-2 px-3 font-medium text-muted-foreground ${
+                        className={`text-left py-2 px-3 font-medium text-muted-foreground text-xs uppercase tracking-wider ${
                           column.header === "Total" ? "bg-muted/30" : ""
-                        } ${
-                          column.header === "Prize" || column.header === "Contract" || column.header === "Total"
-                            ? "text-right"
-                            : ""
                         }`}
                       >
-                        {column.header}
+                        {column.header === "Prize" || column.header === "Contract" || column.header === "Total" ? (
+                          <div className="grid grid-cols-[1fr_24px] gap-3 items-center">
+                            <div className="text-right">{column.header}</div>
+                            <div></div>
+                          </div>
+                        ) : (
+                          column.header
+                        )}
                       </th>
                     ))}
                   </tr>
@@ -199,22 +195,22 @@ export default function Page() {
               </table>
             </div>
 
-            <div className="md:hidden space-y-3">
+            <div className="lg:hidden space-y-3">
               {mobilePlayers.map((player, index) => {
-                const enhancedPlayer = {
-                  ...player,
-                  tours: player.tours || [],
-                }
-                const tours = visibleTours(enhancedPlayer)
-                const primaryTour = computePrimaryTour(enhancedPlayer)
                 const totalEarnings = player.rankValue + (player.totals.reportedContracts || 0)
+                const isGoldTier = player.name === "Ben Johns" || player.name === "Anna Leigh Waters"
 
                 return (
                   <div key={player.id} className="bg-muted/30 rounded-lg p-3 shadow-sm border">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-start gap-3 min-w-0 flex-1">
-                        <Avatar className="size-14 rounded-full object-cover shrink-0 border border-gray-300">
-                          <AvatarImage src={player.headshotUrl || "/placeholder.svg"} alt={player.name} />
+                        <Avatar
+                          className={`size-14 object-cover shrink-0 ${
+                            isGoldTier
+                              ? "border-2 border-[#C9A227] rounded-full"
+                              : "rounded-full border border-gray-300"
+                          }`}
+                        >
                           <AvatarFallback className="text-sm font-semibold">
                             {player.name
                               .split(" ")
@@ -241,44 +237,39 @@ export default function Page() {
                                 : player.gender || player.country}
                             </div>
                           )}
+                          <div className="mt-1">
+                            <ContractTierBadge tier={player.contractTier} />
+                          </div>
                         </div>
                       </div>
                     </div>
 
-                    <div className="mb-3">
-                      <div className="text-xl font-bold tabular-nums">{formatCurrencyUSD(totalEarnings)}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {activeTab === "thisyear" ? `${YEAR} Earnings` : "All-Time Earnings"}
+                    <div className="mb-3 flex items-center gap-2">
+                      <div>
+                        <div className="text-xl font-bold tabular-nums text-[#737373]">
+                          {formatCurrencyUSD(totalEarnings)}
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          {activeTab === "thisyear" ? `${YEAR} Earnings` : "All-Time Earnings"}
+                        </div>
                       </div>
+                      <VerificationStamp variant="estimated" />
                     </div>
 
-                    <div className="border-t border-muted-foreground/20 pt-2 mb-2">
-                      <div className="flex justify-between items-center text-sm mb-2">
-                        <div>
+                    <div className="border-t border-muted-foreground/20 pt-2">
+                      <div className="flex justify-between items-center text-sm">
+                        <div className="flex items-center gap-2">
                           <span className="text-muted-foreground">Prize: </span>
-                          <span className="font-semibold tabular-nums relative inline-block">
-                            {formatCurrencyUSD(player.rankValue)}
-                            <img
-                              src="/check-icon.svg"
-                              alt=""
-                              className="w-4 h-4 absolute top-1/2 -translate-y-1/2 -right-6"
-                            />
-                          </span>
+                          <span className="font-semibold tabular-nums">{formatCurrencyUSD(player.rankValue)}</span>
+                          <VerificationStamp variant="verified" />
                         </div>
-                        <div>
+                        <div className="flex items-center gap-2">
                           <span className="text-muted-foreground">Contract: </span>
-                          <span className="font-semibold tabular-nums">
+                          <span className="font-semibold tabular-nums text-[#737373]">
                             {formatCurrencyUSD(player.totals.reportedContracts || 0)}
                           </span>
+                          <VerificationStamp variant="estimated" />
                         </div>
-                      </div>
-
-                      <div className="flex flex-wrap items-center gap-1">
-                        {tours.length === 0 ? (
-                          <span className="text-gray-400">—</span>
-                        ) : (
-                          tours.map((tour) => <TourBadge key={tour} code={tour} primary={tour === primaryTour} />)
-                        )}
                       </div>
                     </div>
                   </div>
@@ -288,7 +279,9 @@ export default function Page() {
 
             <hr className="mt-4 mb-2 border-[#EAEAEA]" />
             <p className="text-xs text-[#6B6B6B] leading-[1.4] max-w-full md:max-w-[80%] mt-3 mb-4 flex items-start gap-1">
-              <img src="/check-icon.svg" alt="" className="w-3.5 h-3.5 inline-block mt-0.5 shrink-0" />
+              <span className="mt-0.5 shrink-0 mr-1">
+                <VerificationStamp />
+              </span>
               <span>
                 <strong>DinkBank Confirmed:</strong> Verified amounts from public reporting or official tour sources.
                 Totals may also be marked as confirmed when all underlying amounts are verified. Figures without a
@@ -299,13 +292,13 @@ export default function Page() {
             </p>
 
             <div className="mt-4">
-              <div className="hidden md:block text-center">
+              <div className="hidden lg:block text-center">
                 <Link href="/players">
                   <Button variant="secondary">View Full Leaderboard →</Button>
                 </Link>
               </div>
 
-              <div className="md:hidden text-center">
+              <div className="lg:hidden text-center">
                 {mobileDisplayCount === 5 ? (
                   <Button variant="secondary" onClick={() => setMobileDisplayCount(10)}>
                     Show Full Top 10

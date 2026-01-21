@@ -17,6 +17,8 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { ConfidenceBadge } from "@/components/confidence-badge"
+import { ContractTierBadge } from "@/components/contract-tier-badge"
+import { VerificationStamp } from "@/components/verification-stamp"
 import { formatCurrency, formatShortDate } from "@/lib/format"
 import { format } from "date-fns" // Added date-fns import for DOB formatting
 import { mockPlayers } from "@/lib/mock-data"
@@ -227,19 +229,14 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                 )}
               </div>
               {player.slug === "ben-johns" && (
-                <div className="flex gap-2 flex-wrap justify-center sm:justify-start mt-3">
-                  <span className="inline-flex items-center gap-1.5 rounded-full text-white text-sm font-medium px-3 py-1 bg-[rgba(11,26,63,1)]">
-                    <Check className="w-4 h-4" />
-                    UPA
-                  </span>
-                  <span className="inline-flex items-center gap-1.5 rounded-full text-[#0B1A40] text-sm font-medium px-3 py-1 bg-gradient-to-r from-[#F4D03F] via-[#D4AF37] to-[#B8860B] shadow-lg">
-                    <Star className="w-4 h-4 fill-[#0B1A40]" />
-                    UPA · Gold
-                  </span>
-                  <span className="inline-flex items-center gap-1.5 rounded-full text-white text-sm font-medium px-3 py-1 bg-[rgba(11,26,63,1)]">
-                    <TrendingUp className="w-4 h-4" />
-                    UPA · Futures
-                  </span>
+                <div className="mt-4">
+                  <h3 className="text-sm font-medium text-muted-foreground mb-2">UPA Contract Status</h3>
+                  <div className="flex gap-2 flex-wrap">
+                    <ContractTierBadge tier="standard" />
+                    <ContractTierBadge tier="gold" />
+                    <ContractTierBadge tier="futures" />
+                    <ContractTierBadge tier="unsigned" />
+                  </div>
                 </div>
               )}
               {player.sponsors && player.sponsors.length > 0 && (
@@ -392,11 +389,9 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                         {yearData.ppa > 0 ? (
                           <>
                             {formatCurrencyUSD(yearData.ppa)}
-                            <img
-                              src="/check-icon.svg"
-                              alt=""
-                              className="w-4 h-4 absolute top-1/2 -translate-y-1/2 -right-3"
-                            />
+                            <span className="absolute top-1/2 -translate-y-1/2 -right-3">
+                              <VerificationStamp variant="verified" />
+                            </span>
                           </>
                         ) : (
                           <span className="text-muted-foreground">—</span>
@@ -406,11 +401,9 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                         {yearData.app > 0 ? (
                           <>
                             {formatCurrencyUSD(yearData.app)}
-                            <img
-                              src="/check-icon.svg"
-                              alt=""
-                              className="w-4 h-4 absolute top-1/2 -translate-y-1/2 -right-3"
-                            />
+                            <span className="absolute top-1/2 -translate-y-1/2 -right-3">
+                              <VerificationStamp variant="verified" />
+                            </span>
                           </>
                         ) : (
                           <span className="text-muted-foreground">—</span>
@@ -420,11 +413,9 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                         {yearData.mlp > 0 ? (
                           <>
                             {formatCurrencyUSD(yearData.mlp)}
-                            <img
-                              src="/check-icon.svg"
-                              alt=""
-                              className="w-4 h-4 absolute top-1/2 -translate-y-1/2 -right-3"
-                            />
+                            <span className="absolute top-1/2 -translate-y-1/2 -right-3">
+                              <VerificationStamp variant="verified" />
+                            </span>
                           </>
                         ) : (
                           <span className="text-muted-foreground">—</span>
@@ -434,11 +425,9 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                         {yearData.major > 0 ? (
                           <>
                             {formatCurrencyUSD(yearData.major)}
-                            <img
-                              src="/check-icon.svg"
-                              alt=""
-                              className="w-4 h-4 absolute top-1/2 -translate-y-1/2 -right-3"
-                            />
+                            <span className="absolute top-1/2 -translate-y-1/2 -right-3">
+                              <VerificationStamp variant="verified" />
+                            </span>
                           </>
                         ) : (
                           <span className="text-muted-foreground">—</span>
@@ -467,52 +456,28 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                       <dt>PPA</dt>
                       <dd className="font-semibold inline-flex items-center gap-1.5">
                         {formatCurrencyUSD(yearData.ppa)}
-                        {yearData.ppa > 0 && (
-                          <img
-                            src="/check-icon.svg"
-                            alt=""
-                            className="w-4 h-4 inline-block flex-shrink-0 align-middle"
-                          />
-                        )}
+                        {yearData.ppa > 0 && <VerificationStamp variant="verified" />}
                       </dd>
                     </div>
                     <div className="flex justify-between">
                       <dt>APP</dt>
                       <dd className="font-semibold inline-flex items-center gap-1.5">
                         {formatCurrencyUSD(yearData.app)}
-                        {yearData.app > 0 && (
-                          <img
-                            src="/check-icon.svg"
-                            alt=""
-                            className="w-4 h-4 inline-block flex-shrink-0 align-middle"
-                          />
-                        )}
+                        {yearData.app > 0 && <VerificationStamp variant="verified" />}
                       </dd>
                     </div>
                     <div className="flex justify-between">
                       <dt>MLP</dt>
                       <dd className="font-semibold inline-flex items-center gap-1.5">
                         {formatCurrencyUSD(yearData.mlp)}
-                        {yearData.mlp > 0 && (
-                          <img
-                            src="/check-icon.svg"
-                            alt=""
-                            className="w-4 h-4 inline-block flex-shrink-0 align-middle"
-                          />
-                        )}
+                        {yearData.mlp > 0 && <VerificationStamp variant="verified" />}
                       </dd>
                     </div>
                     <div className="flex justify-between">
                       <dt>Major</dt>
                       <dd className="font-semibold inline-flex items-center gap-1.5">
                         {formatCurrencyUSD(yearData.major)}
-                        {yearData.major > 0 && (
-                          <img
-                            src="/check-icon.svg"
-                            alt=""
-                            className="w-4 h-4 inline-block flex-shrink-0 align-middle"
-                          />
-                        )}
+                        {yearData.major > 0 && <VerificationStamp variant="verified" />}
                       </dd>
                     </div>
                     <div className="flex justify-between">
@@ -525,8 +490,10 @@ export default function PlayerPage({ params }: PlayerPageProps) {
             </div>
 
             <div className="mt-4 border-t border-[#EAEAEA] pt-4">
-              <p className="text-xs text-[#6B6B6B] leading-[1.4] max-w-full md:max-w-[80%] mb-4 flex items-start gap-1">
-                <img src="/check-icon.svg" alt="" className="w-3.5 h-3.5 inline-block mt-0.5 shrink-0" />
+              <p className="text-xs text-[#6B6B6B] leading-[1.4] max-w-full md:max-w-[80%] mb-4 flex items-start gap-1.5">
+                <span className="mt-0.5 shrink-0">
+                  <VerificationStamp variant="verified" />
+                </span>
                 <span>
                   <strong>DinkBank Confirmed:</strong> Verified amounts from public reporting or official tour sources.
                   Totals may also be marked as confirmed when all underlying amounts are verified. Figures without a
