@@ -232,10 +232,18 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                 <div className="mt-4">
                   <h3 className="text-sm font-medium text-muted-foreground mb-2">UPA Contract Status</h3>
                   <div className="flex gap-2 flex-wrap">
-                    <ContractTierBadge tier="standard" />
-                    <ContractTierBadge tier="gold" />
-                    <ContractTierBadge tier="futures" />
-                    <ContractTierBadge tier="unsigned" />
+                    <span className="inline-flex items-center gap-1 rounded px-2 py-0.5 text-xs font-medium border bg-gray-50 dark:bg-gray-900/30 text-gray-700 dark:text-gray-300 border-gray-200/50 dark:border-gray-700/50">
+                      Signed • Standard Contract
+                    </span>
+                    <span className="inline-flex items-center gap-1 rounded px-2 py-0.5 text-xs font-medium border bg-amber-50/70 dark:bg-amber-950/20 text-amber-800 dark:text-amber-300 border-amber-200/40 dark:border-amber-800/40">
+                      Signed • Gold Card
+                    </span>
+                    <span className="inline-flex items-center gap-1 rounded px-2 py-0.5 text-xs font-medium border bg-blue-50/50 dark:bg-blue-950/20 text-blue-700 dark:text-blue-300 border-blue-200/30 dark:border-blue-800/30">
+                      Signed • Futures Contract
+                    </span>
+                    <span className="inline-flex items-center gap-1 rounded px-2 py-0.5 text-xs font-medium border bg-transparent dark:bg-transparent text-gray-500 dark:text-gray-400 border-gray-300 dark:border-gray-600">
+                      Unsigned
+                    </span>
                   </div>
                 </div>
               )}
