@@ -43,6 +43,7 @@ export interface EventPayout {
   bracket: "MS" | "WS" | "MD" | "WD" | "XD"
   prize: number
   playerId: string
+  contractTier?: ContractTier
   sources: {
     title: string
     url: string
@@ -770,7 +771,7 @@ export const mockPayouts: EventPayout[] = [
     eventSlug: "ppa-masters-2024",
     eventName: "PPA Masters 2024",
     tour: "PPA",
-    date: "2024-03-15",
+    date: "2026-03-15",
     city: "Indian Wells, CA",
     purse: 150000,
     result: "Winner",
@@ -781,7 +782,7 @@ export const mockPayouts: EventPayout[] = [
       {
         title: "PPA Tour Official Results",
         url: "https://ppatour.com/results/masters-2024",
-        date: "2024-03-15",
+        date: "2026-03-15",
         confidence: "confirmed",
       },
     ],
@@ -791,7 +792,7 @@ export const mockPayouts: EventPayout[] = [
     eventSlug: "mlp-premier-level-2024",
     eventName: "MLP Premier Level 2024",
     tour: "MLP",
-    date: "2024-04-20",
+    date: "2026-04-20",
     city: "Columbus, OH",
     purse: 200000,
     result: "Winner",
@@ -802,7 +803,7 @@ export const mockPayouts: EventPayout[] = [
       {
         title: "Major League Pickleball Results",
         url: "https://majorleaguepickleball.net/results/premier-2024",
-        date: "2024-04-20",
+        date: "2026-04-20",
         confidence: "confirmed",
       },
     ],
@@ -812,7 +813,7 @@ export const mockPayouts: EventPayout[] = [
     eventSlug: "app-tour-championship-2024",
     eventName: "APP Tour Championship 2024",
     tour: "APP",
-    date: "2024-05-10",
+    date: "2026-05-10",
     city: "Newport Beach, CA",
     purse: 125000,
     result: "Finalist",
@@ -823,7 +824,7 @@ export const mockPayouts: EventPayout[] = [
       {
         title: "APP Tour Championship Report",
         url: "https://apptour.org/championship-2024-results",
-        date: "2024-05-10",
+        date: "2026-05-10",
         confidence: "reported",
       },
     ],

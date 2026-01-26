@@ -14,7 +14,12 @@ export function getRankedPlayers(timeframe: "ytd" | "alltime" = "ytd") {
 }
 
 export function getPlayerPayouts(playerId: string) {
+  const player = mockPlayers.find((p) => p.id === playerId)
   return mockPayouts
     .filter((payout) => payout.playerId === playerId)
+    .map((payout) => ({
+      ...payout,
+      contractTier: player?.contractTier,
+    }))
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }
