@@ -58,7 +58,7 @@ function formatCurrencyUSD(n?: number) {
 
 export default function PlayerPage({ params }: PlayerPageProps) {
   const [activeTab, setActiveTab] = useState("career")
-  const [selectedYear, setSelectedYear] = useState("2024")
+  const [selectedYear, setSelectedYear] = useState("2026")
 
   const player = mockPlayers.find((p) => p.slug === params.slug)
 
@@ -512,6 +512,8 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="2026">2026</SelectItem>
+                    <SelectItem value="2025">2025</SelectItem>
                     <SelectItem value="2024">2024</SelectItem>
                     <SelectItem value="2023">2023</SelectItem>
                     <SelectItem value="2022">2022</SelectItem>
