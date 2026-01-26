@@ -192,19 +192,19 @@ export default function PlayerPage({ params }: PlayerPageProps) {
           <div className="flex flex-col sm:flex-row items-start sm:items-start gap-6">
             <Avatar className="h-32 w-32 sm:h-40 sm:w-40 mx-auto sm:mx-0">
               <AvatarImage src={player.headshotUrl || "/placeholder.svg"} alt={player.name} />
-              <AvatarFallback className="text-3xl sm:text-4xl">
+              <AvatarFallback className="text-3xl">
                 {player.name
                   .split(" ")
                   .map((n) => n[0])
                   .join("")}
               </AvatarFallback>
             </Avatar>
-            <div className="flex-1 text-center sm:text-left w-full">
+              <div className="flex-1 text-center sm:text-left w-full">
               <div className="flex flex-col">
-                <h1 className="text-3xl sm:text-4xl font-bold flex items-center justify-center sm:justify-start gap-2">
+                <h1 className="text-3xl font-bold flex items-center justify-center sm:justify-start gap-2">
                   {player.name}
                   {player.country && (
-                    <span className="text-2xl sm:text-3xl">
+                    <span className="text-3xl">
                       {player.country === "US" ? "🇺🇸" : player.country === "CA" ? "🇨🇦" : "🌍"}
                     </span>
                   )}
@@ -223,7 +223,7 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                 {player.bio ? (
                   <p className="text-base text-foreground leading-relaxed max-w-3xl">{player.bio}</p>
                 ) : (
-                  <div className="text-base sm:text-lg">
+                  <div className="text-base">
                     Plays: {player.handedness === "R" ? "Right-handed" : "Left-handed"}
                   </div>
                 )}
@@ -250,7 +250,7 @@ export default function PlayerPage({ params }: PlayerPageProps) {
               {player.sponsors && player.sponsors.length > 0 && (
                 <div className="flex gap-2 flex-wrap justify-center sm:justify-start mt-2">
                   {player.sponsors.map((sponsor) => (
-                    <Badge key={sponsor} variant="secondary" className="text-sm px-3 py-1">
+                    <Badge key={sponsor} variant="secondary" className="text-xs px-3 py-1">
                       {sponsor}
                     </Badge>
                   ))}
@@ -346,7 +346,7 @@ export default function PlayerPage({ params }: PlayerPageProps) {
           <Card className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-lg font-semibold">Career Earnings by Year</h2>
+                <h2 className="text-xl font-bold">Career Earnings by Year</h2>
               </div>
             </div>
 
@@ -456,8 +456,8 @@ export default function PlayerPage({ params }: PlayerPageProps) {
               {careerEarningsWithTotals.map((yearData) => (
                 <Card key={yearData.year} className="p-4 shadow-sm">
                   <div className="flex items-center justify-between mb-3">
-                    <span className="font-bold text-lg">{yearData.year}</span>
-                    <span className="font-bold text-lg">{formatCurrencyUSD(yearData.yearTotal)}</span>
+                    <span className="font-bold text-base">{yearData.year}</span>
+                    <span className="font-bold text-base">{formatCurrencyUSD(yearData.yearTotal)}</span>
                   </div>
                   <dl className="space-y-2 text-sm">
                     <div className="flex justify-between">
@@ -499,7 +499,7 @@ export default function PlayerPage({ params }: PlayerPageProps) {
           <Card className="p-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
               <div>
-                <h2 className="text-lg font-semibold">Tournament Results & Earnings</h2>
+                <h2 className="text-xl font-bold">Tournament Results & Earnings</h2>
                 <p className="text-sm text-muted-foreground">
                   {filteredPayouts.length === 0
                     ? `No results for ${selectedYear}.`
@@ -625,7 +625,7 @@ export default function PlayerPage({ params }: PlayerPageProps) {
         {activeTab === "transactions" && (
           <Card className="p-6">
             <div className="mb-4">
-              <h2 className="text-lg font-semibold">Contracts & Endorsements</h2>
+              <h2 className="text-xl font-bold">Contracts & Endorsements</h2>
               <p className="text-sm text-muted-foreground">
                 Known deals, endorsements, and other non-prize income reported by DinkBank. Some values estimated.
               </p>
@@ -644,11 +644,11 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                           status={transaction.confidence as "confirmed" | "reported" | "estimated"}
                         />
                       </div>
-                      <h3 className="font-semibold text-base sm:text-lg">{transaction.title}</h3>
+                      <h3 className="font-semibold text-base">{transaction.title}</h3>
                       <p className="text-sm text-muted-foreground">with {transaction.counterparty}</p>
                     </div>
                     <div className="text-left sm:text-right">
-                      <div className="font-bold text-xl">{formatCurrencyUSD(transaction.amount)}</div>
+                      <div className="font-bold text-base">{formatCurrencyUSD(transaction.amount)}</div>
                       <div className="text-sm text-muted-foreground">{formatShortDate(transaction.date)}</div>
                     </div>
                   </div>
