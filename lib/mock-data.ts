@@ -43,6 +43,7 @@ export interface EventPayout {
   bracket: "MS" | "WS" | "MD" | "WD" | "XD"
   prize: number
   playerId: string
+  contractTier?: ContractTier
   sources: {
     title: string
     url: string

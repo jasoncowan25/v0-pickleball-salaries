@@ -539,6 +539,7 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                         <th className="p-3 text-left text-sm font-medium text-muted-foreground">Event</th>
                         <th className="p-3 text-left text-sm font-medium text-muted-foreground">Tour</th>
                         <th className="p-3 text-left text-sm font-medium text-muted-foreground">Bracket</th>
+                        <th className="p-3 text-left text-sm font-medium text-muted-foreground">Tier</th>
                         <th className="p-3 text-left text-sm font-medium text-muted-foreground">Placement</th>
                         <th className="p-3 text-right text-sm font-medium text-muted-foreground">Prize</th>
                         <th className="p-3 text-right text-sm font-medium text-muted-foreground">Source</th>
@@ -561,6 +562,9 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                             <Badge className={`${getTourBadge(payout.tour)}`}>{payout.tour}</Badge>
                           </td>
                           <td className="p-3 text-muted-foreground">{payout.bracket}</td>
+                          <td className="p-3">
+                            <ContractTierBadge tier={payout.contractTier} />
+                          </td>
                           <td className="p-3 font-medium">{payout.result}</td>
                           <td className="p-3 text-right font-semibold tabular-nums">{formatCurrency(payout.prize)}</td>
                           <td className="p-3 text-right">
@@ -595,6 +599,10 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                         <div className="flex justify-between">
                           <span>Bracket</span>
                           <span>{payout.bracket}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span>Tier</span>
+                          <ContractTierBadge tier={payout.contractTier} />
                         </div>
                         <div className="flex justify-between">
                           <span>Placement</span>
