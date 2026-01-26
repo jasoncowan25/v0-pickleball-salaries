@@ -559,7 +559,7 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                             </Link>
                           </td>
                           <td className="p-3">
-                            <Badge className={`${getTourBadge(payout.tour)}`}>{payout.tour}</Badge>
+                            <Badge variant="secondary" className={getTourBadge(payout.tour)}>{payout.tour}</Badge>
                           </td>
                           <td className="p-3 text-muted-foreground">{payout.bracket}</td>
                           <td className="p-3">
@@ -593,7 +593,7 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                       <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3 flex-wrap">
                         <span>{formatShortDate(payout.date)}</span>
                         <span>•</span>
-                        <Badge className={`text-xs ${getTourBadge(payout.tour)}`}>{payout.tour}</Badge>
+                        <Badge variant="secondary" className={`text-xs ${getTourBadge(payout.tour)}`}>{payout.tour}</Badge>
                       </div>
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
