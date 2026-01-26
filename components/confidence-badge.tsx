@@ -7,33 +7,22 @@ export function ConfidenceBadge({ status, className = "" }: ConfidenceBadgeProps
   if (status === "confirmed") {
     return (
       <span className={`inline-flex items-center justify-center ${className}`}>
-        <div
-          className="flex items-center justify-center"
-          style={{
-            width: "20px",
-            height: "20px",
-            backgroundColor: "#F5F5F5",
-            border: "1px solid #D4D4D4",
-            borderRadius: "6px",
-          }}
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="text-gray-400"
         >
-          <svg
-            width="12"
-            height="12"
-            viewBox="0 0 12 12"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            style={{ color: "#525252" }}
-          >
-            <path
-              d="M10 3L4.5 8.5L2 6"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </div>
+          <path
+            d="M13.5 4.5L6 12L2.5 8.5"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
       </span>
     )
   }

@@ -115,9 +115,12 @@ export default function Page() {
     <div className="py-12">
       <div className="mb-6">
         <h1 className="text-3xl font-bold mb-2">Pickleball Earnings Leaders</h1>
-        <p className="text-muted-foreground mb-2 text-lg">
+        <p className="text-base text-muted-foreground">
           Welcome to DinkBank – a single, trusted place to see prize money and player contract figures across PPA, MLP,
           and APP tours.
+        </p>
+        <p className="text-sm text-muted-foreground mt-3">
+          Last DinkBank update: {new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
         </p>
       </div>
 
@@ -127,35 +130,21 @@ export default function Page() {
         <KpiCard title="Contract Earnings" value={formatCurrencyUSD(totalContracts)} />
       </div>
 
-      <Card className="mb-6 bg-amber-50 border-amber-200">
-        <div className="p-4">
-          <h3 className="text-sm font-semibold mb-1">2026 Contract Figures — Under Review</h3>
-          <p className="text-sm text-muted-foreground">
-            2026 contract earnings currently reflect the same estimated amounts used for 2025 while DinkBank evaluates
-            the impact of recent UPA changes. All 2026 contract figures are estimates and subject to revision.
-          </p>
-        </div>
-      </Card>
-
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "thisyear" | "alltime")} className="mb-6">
-        <div className="flex justify-between mb-4 items-end">
+        <div className="mb-4">
           <TabsList>
             <TabsTrigger value="thisyear">This Year</TabsTrigger>
             <TabsTrigger value="alltime">All-Time</TabsTrigger>
           </TabsList>
-          <p className="text-sm text-muted-foreground">
-            Last updated:{" "}
-            {new Date().toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" })}
-          </p>
         </div>
 
         <TabsContent value={activeTab} className="space-y-6">
           <Card className="p-6">
             <div className="mb-4">
-              <h2 className="text-lg font-semibold">
+              <h2 className="text-xl font-bold">
                 {activeTab === "thisyear" ? `${YEAR} Top Earners` : "All-Time Top Earners"}
               </h2>
-              <p className="text-muted-foreground">UPA contract tiers shown</p>
+              <p className="text-sm text-muted-foreground">UPA contract tiers shown</p>
             </div>
 
             <div className="hidden lg:block overflow-x-auto">
@@ -192,6 +181,13 @@ export default function Page() {
                     </tr>
                   ))}
                 </tbody>
+                <tfoot>
+                  <tr>
+                    <td colSpan={columns.length} className="px-3 py-3 bg-gray-50/50 border-t text-sm text-muted-foreground">
+                      <strong className="font-semibold">DinkBank Methodology:</strong> Confirmed figures are verified using official or reputable public sources. Other figures are DinkBank estimates and may be updated. Contract amounts reflect base retainers only and exclude endorsements, appearance fees, and off-tour income. All amounts in USD.
+                    </td>
+                  </tr>
+                </tfoot>
               </table>
             </div>
 
@@ -225,7 +221,7 @@ export default function Page() {
                           <div className="text-sm text-muted-foreground font-medium">#{player.rank}</div>
                           <Link
                             href={`/players/${player.slug}`}
-                            className="text-lg sm:text-xl font-semibold leading-tight truncate block hover:underline"
+                            className="text-lg font-bold leading-tight truncate block hover:underline"
                             title={player.name}
                           >
                             {player.name}
@@ -277,20 +273,6 @@ export default function Page() {
               })}
             </div>
 
-            <hr className="mt-4 mb-2 border-[#EAEAEA]" />
-            <p className="text-xs text-[#6B6B6B] leading-[1.4] max-w-full md:max-w-[80%] mt-3 mb-4 flex items-start gap-1">
-              <span className="mt-0.5 shrink-0 mr-1">
-                <VerificationStamp />
-              </span>
-              <span>
-                <strong>DinkBank Confirmed:</strong> Verified amounts from public reporting or official tour sources.
-                Totals may also be marked as confirmed when all underlying amounts are verified. Figures without a
-                checkmark are estimates based on public data and DinkBank modeling and may be updated as new information
-                becomes available. Contract amounts reflect base retainers only and exclude endorsements or appearance
-                fees. All amounts in USD.
-              </span>
-            </p>
-
             <div className="mt-4">
               <div className="hidden lg:block text-center">
                 <Link href="/players">
@@ -317,13 +299,13 @@ export default function Page() {
       <div className="grid gap-6 md:grid-cols-2 md:items-start mb-6">
         <Card>
           <div className="p-6 my-0">
-            <h2 className="text-lg font-semibold mb-4">Featured Report</h2>
+            <h2 className="text-xl font-bold mb-4">Featured Report</h2>
             <Link href="/reports/2025-top-10-prize-money-earners" className="block group">
               <div className="my-0 space-y-3 px-3 py-1.5">
-                <h3 className="text-xl font-bold leading-tight group-hover:text-accent transition-colors mt-3">
+                <h3 className="text-lg font-bold leading-tight group-hover:text-accent transition-colors mt-3">
                   2025's Top 10 Prize Money Earners
                 </h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">
+                <p className="text-sm text-muted-foreground">
                   An earnings breakdown of the top-performing pros, drawn from prize money awarded across all major
                   tours in 2025.
                 </p>
@@ -341,14 +323,14 @@ export default function Page() {
 
         <Card>
           <div className="p-6">
-            <h2 className="text-lg font-semibold mb-4">Player News</h2>
+            <h2 className="text-xl font-bold mb-4">Player News</h2>
             <div className="space-y-3">
               <Link
                 href="/players/anna-leigh-waters"
                 className="block p-3 rounded-lg hover:bg-muted/50 transition-colors"
               >
-                <div className="text-xs text-muted-foreground mb-1">Jan 7, 2026</div>
-                <div className="font-semibold mb-1">Anna Leigh Waters</div>
+                <div className="text-sm text-muted-foreground mb-1">Jan 7, 2026</div>
+                <div className="font-bold mb-1">Anna Leigh Waters</div>
                 <div className="text-sm text-muted-foreground">ALW and Paddletek part ways</div>
               </Link>
 
@@ -356,14 +338,14 @@ export default function Page() {
                 href="/players/james-ignatowich"
                 className="block p-3 rounded-lg hover:bg-muted/50 transition-colors"
               >
-                <div className="text-xs text-muted-foreground mb-1">Jan 1, 2026</div>
-                <div className="font-semibold mb-1">James Ignatowich</div>
+                <div className="text-sm text-muted-foreground mb-1">Jan 1, 2026</div>
+                <div className="font-bold mb-1">James Ignatowich</div>
                 <div className="text-sm text-muted-foreground">UPA suspends Ignatowich</div>
               </Link>
 
               <Link href="/players/parris-todd" className="block p-3 rounded-lg hover:bg-muted/50 transition-colors">
-                <div className="text-xs text-muted-foreground mb-1">Jan 1, 2026</div>
-                <div className="font-semibold mb-1">Parris Todd</div>
+                <div className="text-sm text-muted-foreground mb-1">Jan 1, 2026</div>
+                <div className="font-bold mb-1">Parris Todd</div>
                 <div className="text-sm text-muted-foreground">
                   UPA hands Parris Todd two-event suspension, $50,000 fine
                 </div>
@@ -377,15 +359,15 @@ export default function Page() {
         <div className="p-6">
           <div className="flex items-center gap-2 mb-3">
             <img src="/images/dinkbank-favicon.png" alt="DinkBank" className="w-6 h-6" />
-            <h2 className="text-lg font-semibold">DinkBank Data</h2>
+            <h2 className="text-xl font-bold">DinkBank Data</h2>
           </div>
-          <p className="text-muted-foreground leading-relaxed">
+          <p className="text-sm text-muted-foreground">
             DinkBank provides structured earnings data for professional pickleball, including prize money, contracts,
             and season-long performance across major tours. Some figures shown are estimates based on public information
             and internal modeling and are refined as new data becomes available. Our goal is to offer a clear,
             transparent view of how players are compensated throughout the season.{" "}
             <Link href="/about" className="underline hover:text-[#1F1F1F]">
-              Learn More →
+              Learn More
             </Link>
           </p>
         </div>

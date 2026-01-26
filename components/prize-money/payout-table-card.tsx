@@ -14,6 +14,7 @@ interface PayoutTableCardProps {
   eventLabel: string
   sectionId: string
   defaultExpanded?: boolean
+  hideActions?: boolean
 }
 
 export function PayoutTableCard({
@@ -21,6 +22,7 @@ export function PayoutTableCard({
   eventLabel,
   sectionId,
   defaultExpanded = true,
+  hideActions = false,
 }: PayoutTableCardProps) {
   const [expanded, setExpanded] = useState(defaultExpanded)
   const [showNotes, setShowNotes] = useState(false)
@@ -118,23 +120,25 @@ export function PayoutTableCard({
           </div>
 
           {/* Footer with actions */}
-          <div className="flex items-center justify-between px-4 py-2 border-t bg-muted/20">
-            <div className="flex items-center gap-1">
-              <CopyCSVButton table={table} eventLabel={`${eventLabel} - ${table.divisionLabel}`} />
-              <CopyLinkButton sectionId={fullSectionId} />
+          {!hideActions && (
+            <div className="flex items-center justify-between px-4 py-2 border-t bg-muted/20">
+              <div className="flex items-center gap-1">
+                <CopyCSVButton table={table} eventLabel={`${eventLabel} - ${table.divisionLabel}`} />
+                <CopyLinkButton sectionId={fullSectionId} />
+              </div>
+              {hasNotes && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowNotes(!showNotes)}
+                  className="h-8 px-2 text-muted-foreground hover:text-foreground"
+                >
+                  <Info className="w-3.5 h-3.5 mr-1" />
+                  {showNotes ? "Hide Notes" : "Show Notes"}
+                </Button>
+              )}
             </div>
-            {hasNotes && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowNotes(!showNotes)}
-                className="h-8 px-2 text-muted-foreground hover:text-foreground"
-              >
-                <Info className="w-3.5 h-3.5 mr-1" />
-                {showNotes ? "Hide Notes" : "Show Notes"}
-              </Button>
-            )}
-          </div>
+          )}
         </div>
       )}
     </Card>

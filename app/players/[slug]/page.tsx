@@ -271,16 +271,6 @@ export default function PlayerPage({ params }: PlayerPageProps) {
           />
         </div>
 
-        {/* Added 2026 contract figures informational notice */}
-        <Card className="mb-6 bg-amber-50 border-amber-200">
-          <div className="p-3">
-            <p className="text-sm">
-              <span className="font-semibold">Note:</span> 2026 contract figures currently mirror 2025 estimates while
-              DinkBank evaluates recent UPA changes. All amounts shown are estimates and subject to revision.
-            </p>
-          </div>
-        </Card>
-
         <div className="w-full mb-6">
           {/* Mobile Segmented Control */}
           <div className="md:hidden">
@@ -365,23 +355,38 @@ export default function PlayerPage({ params }: PlayerPageProps) {
               <table className="w-full" aria-label="Career earnings by year">
                 <thead className="sticky top-0 bg-background">
                   <tr className="border-b">
-                    <th scope="col" className="p-3 text-left text-sm font-medium text-muted-foreground">
+                    <th scope="col" className="py-2 px-3 text-left font-medium text-muted-foreground text-xs uppercase tracking-wider">
                       Year
                     </th>
-                    <th scope="col" className="p-3 text-sm font-medium text-muted-foreground text-right">
-                      PPA
+                    <th scope="col" className="py-2 px-3 font-medium text-muted-foreground text-xs uppercase tracking-wider">
+                      <div className="grid grid-cols-[1fr_24px] gap-1.5 items-center">
+                        <div className="text-right">PPA</div>
+                        <div></div>
+                      </div>
                     </th>
-                    <th scope="col" className="p-3 text-sm font-medium text-muted-foreground text-right">
-                      APP
+                    <th scope="col" className="py-2 px-3 font-medium text-muted-foreground text-xs uppercase tracking-wider">
+                      <div className="grid grid-cols-[1fr_24px] gap-1.5 items-center">
+                        <div className="text-right">APP</div>
+                        <div></div>
+                      </div>
                     </th>
-                    <th scope="col" className="p-3 text-sm font-medium text-muted-foreground text-right">
-                      MLP
+                    <th scope="col" className="py-2 px-3 font-medium text-muted-foreground text-xs uppercase tracking-wider">
+                      <div className="grid grid-cols-[1fr_24px] gap-1.5 items-center">
+                        <div className="text-right">MLP</div>
+                        <div></div>
+                      </div>
                     </th>
-                    <th scope="col" className="p-3 text-sm font-medium text-muted-foreground text-right">
-                      Contracts
+                    <th scope="col" className="py-2 px-3 font-medium text-muted-foreground text-xs uppercase tracking-wider">
+                      <div className="grid grid-cols-[1fr_24px] gap-1.5 items-center">
+                        <div className="text-right">Contracts</div>
+                        <div></div>
+                      </div>
                     </th>
-                    <th scope="col" className="p-3 bg-muted/30 text-sm font-medium text-muted-foreground text-right">
-                      Total
+                    <th scope="col" className="py-2 px-3 bg-muted/30 font-medium text-muted-foreground text-xs uppercase tracking-wider">
+                      <div className="grid grid-cols-[1fr_24px] gap-1.5 items-center">
+                        <div className="text-right">Total</div>
+                        <div></div>
+                      </div>
                     </th>
                   </tr>
                 </thead>
@@ -393,61 +398,56 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                       tabIndex={0}
                     >
                       <td className="p-3 font-semibold">{yearData.year}</td>
-                      <td className="p-3 text-right tabular-nums relative">
-                        {yearData.ppa > 0 ? (
-                          <>
-                            {formatCurrencyUSD(yearData.ppa)}
-                            <span className="absolute top-1/2 -translate-y-1/2 -right-3">
-                              <VerificationStamp variant="verified" />
-                            </span>
-                          </>
-                        ) : (
-                          <span className="text-muted-foreground">—</span>
-                        )}
+                      <td className="p-3 text-right">
+                        <div className="inline-flex items-center gap-1.5">
+                          <span className="tabular-nums">
+                            {yearData.ppa > 0 ? formatCurrencyUSD(yearData.ppa) : <span className="text-muted-foreground">—</span>}
+                          </span>
+                          {yearData.ppa > 0 && <VerificationStamp variant="verified" />}
+                        </div>
                       </td>
-                      <td className="p-3 text-right tabular-nums relative">
-                        {yearData.app > 0 ? (
-                          <>
-                            {formatCurrencyUSD(yearData.app)}
-                            <span className="absolute top-1/2 -translate-y-1/2 -right-3">
-                              <VerificationStamp variant="verified" />
-                            </span>
-                          </>
-                        ) : (
-                          <span className="text-muted-foreground">—</span>
-                        )}
+                      <td className="p-3 text-right">
+                        <div className="inline-flex items-center gap-1.5">
+                          <span className="tabular-nums">
+                            {yearData.app > 0 ? formatCurrencyUSD(yearData.app) : <span className="text-muted-foreground">—</span>}
+                          </span>
+                          {yearData.app > 0 && <VerificationStamp variant="verified" />}
+                        </div>
                       </td>
-                      <td className="p-3 text-right tabular-nums relative">
-                        {yearData.mlp > 0 ? (
-                          <>
-                            {formatCurrencyUSD(yearData.mlp)}
-                            <span className="absolute top-1/2 -translate-y-1/2 -right-3">
-                              <VerificationStamp variant="verified" />
-                            </span>
-                          </>
-                        ) : (
-                          <span className="text-muted-foreground">—</span>
-                        )}
+                      <td className="p-3 text-right">
+                        <div className="inline-flex items-center gap-1.5">
+                          <span className="tabular-nums">
+                            {yearData.mlp > 0 ? formatCurrencyUSD(yearData.mlp) : <span className="text-muted-foreground">—</span>}
+                          </span>
+                          {yearData.mlp > 0 && <VerificationStamp variant="verified" />}
+                        </div>
                       </td>
-                      <td className="p-3 text-right tabular-nums relative">
-                        {yearData.major > 0 ? (
-                          <>
-                            {formatCurrencyUSD(yearData.major)}
-                            <span className="absolute top-1/2 -translate-y-1/2 -right-3">
-                              <VerificationStamp variant="verified" />
-                            </span>
-                          </>
-                        ) : (
-                          <span className="text-muted-foreground">—</span>
-                        )}
+                      <td className="p-3 text-right">
+                        <div className="grid grid-cols-[1fr_24px] gap-1.5 items-center">
+                          <div className="text-right tabular-nums">{formatCurrencyUSD(yearData.contracts)}</div>
+                          <div className="flex items-center justify-center">
+                            <VerificationStamp variant="estimated" />
+                          </div>
+                        </div>
                       </td>
-                      <td className="p-3 text-right tabular-nums">{formatCurrencyUSD(yearData.contracts)}</td>
-                      <td className="p-3 text-right font-semibold tabular-nums bg-gray-50">
-                        {formatCurrencyUSD(yearData.yearTotal)}
+                      <td className="p-3 text-right font-semibold bg-gray-50">
+                        <div className="grid grid-cols-[1fr_24px] gap-1.5 items-center">
+                          <div className="text-right tabular-nums">{formatCurrencyUSD(yearData.yearTotal)}</div>
+                          <div className="flex items-center justify-center">
+                            <VerificationStamp variant="estimated" />
+                          </div>
+                        </div>
                       </td>
                     </tr>
                   ))}
                 </tbody>
+                <tfoot>
+                  <tr>
+                    <td colSpan={6} className="px-3 py-3 bg-gray-50/50 border-t text-sm text-muted-foreground">
+                      <strong className="font-semibold">DinkBank Methodology:</strong> Confirmed figures are verified using official or reputable public sources. Other figures are DinkBank estimates and may be updated. Contract amounts reflect base retainers only and exclude endorsements, appearance fees, and off-tour income. All amounts in USD.
+                    </td>
+                  </tr>
+                </tfoot>
               </table>
             </div>
 
@@ -482,13 +482,6 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                       </dd>
                     </div>
                     <div className="flex justify-between">
-                      <dt>Major</dt>
-                      <dd className="font-semibold inline-flex items-center gap-1.5">
-                        {formatCurrencyUSD(yearData.major)}
-                        {yearData.major > 0 && <VerificationStamp variant="verified" />}
-                      </dd>
-                    </div>
-                    <div className="flex justify-between">
                       <dt>Contracts</dt>
                       <dd className="font-semibold">{formatCurrencyUSD(yearData.contracts)}</dd>
                     </div>
@@ -497,20 +490,7 @@ export default function PlayerPage({ params }: PlayerPageProps) {
               ))}
             </div>
 
-            <div className="mt-4 border-t border-[#EAEAEA] pt-4">
-              <p className="text-xs text-[#6B6B6B] leading-[1.4] max-w-full md:max-w-[80%] mb-4 flex items-start gap-1.5">
-                <span className="mt-0.5 shrink-0">
-                  <VerificationStamp variant="verified" />
-                </span>
-                <span>
-                  <strong>DinkBank Confirmed:</strong> Verified amounts from public reporting or official tour sources.
-                  Totals may also be marked as confirmed when all underlying amounts are verified. Figures without a
-                  checkmark are estimates based on public data and DinkBank modeling and may be updated as new
-                  information becomes available. Contract amounts reflect base retainers only and exclude endorsements
-                  or appearance fees. All amounts in USD.
-                </span>
-              </p>
-            </div>
+
           </Card>
         )}
 
@@ -653,7 +633,7 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                           {transaction.type}
                         </Badge>
                         <ConfidenceBadge
-                          confidence={transaction.confidence as "confirmed" | "reported" | "estimated"}
+                          status={transaction.confidence as "confirmed" | "reported" | "estimated"}
                         />
                       </div>
                       <h3 className="font-semibold text-base sm:text-lg">{transaction.title}</h3>
@@ -686,15 +666,15 @@ export default function PlayerPage({ params }: PlayerPageProps) {
           <div className="p-6">
             <div className="flex items-center gap-2 mb-3">
               <img src="/images/dinkbank-favicon.png" alt="DinkBank" className="w-6 h-6" />
-              <h2 className="text-lg font-semibold">DinkBank Data</h2>
+              <h2 className="text-xl font-bold">DinkBank Data</h2>
             </div>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-sm text-muted-foreground">
               DinkBank provides structured earnings data for professional pickleball, including prize money, contracts,
               and season-long performance across major tours. Some figures shown are estimates based on public
               information and internal modeling and are refined as new data becomes available. Our goal is to offer a
               clear, transparent view of how players are compensated throughout the season.{" "}
               <Link href="/about" className="underline hover:text-[#1F1F1F]">
-                Learn More →
+                Learn More
               </Link>
             </p>
           </div>

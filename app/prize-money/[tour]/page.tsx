@@ -7,6 +7,8 @@ import { Trophy, Users } from "lucide-react"
 import { formatCurrencyUSD } from "@/lib/format"
 import { TourSwitcher } from "@/components/TourSwitcher"
 import { TOUR_CONFIG, isValidTour, type TourId } from "@/lib/tour-config"
+import { getPrizeMoneyData } from "@/lib/prize-money-data"
+import { TourSection } from "@/components/prize-money/tour-section"
 
 // 2026 PPA Prize Money by Event Type (Gold Card tier, per player)
 const PPA_SLAMS_GOLD = {
@@ -823,9 +825,27 @@ export default function TourPrizeMoneyPage() {
             2026-2028.
           </p>
         </>
+      ) : tour === "app" ? (
+        <>
+          {/* APP Tour Prize Money using new structure */}
+          {(() => {
+            const prizeData = getPrizeMoneyData("2026")
+            const appData = prizeData.tours.find((t) => t.tour === "APP")
+            if (!appData) {
+              return (
+                <Card className="overflow-hidden opacity-50">
+                  <div className="p-8 text-center text-muted-foreground">
+                    <p className="text-sm">APP prize money data not found.</p>
+                  </div>
+                </Card>
+              )
+            }
+            return <TourSection tourSection={appData} />
+          })()}
+        </>
       ) : (
         <>
-          {/* Placeholder for APP */}
+          {/* Placeholder for other tours */}
           <div className="space-y-6">
             {/* Hero Cards Skeleton */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

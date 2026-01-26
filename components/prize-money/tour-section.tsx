@@ -20,6 +20,7 @@ export function TourSection({ tourSection, defaultEventTypeId }: TourSectionProp
 
   const currentEventType = tourSection.eventTypes.find((et) => et.id === selectedEventType)
   const sectionId = `${tourSection.tour.toLowerCase()}`
+  const isAPP = tourSection.tour === "APP"
 
   return (
     <section id={sectionId} className="scroll-mt-24">
@@ -29,7 +30,7 @@ export function TourSection({ tourSection, defaultEventTypeId }: TourSectionProp
           <div>
             <div className="flex items-center gap-2 mb-1">
               <h2 className="text-xl font-bold">{tourSection.tourLabel}</h2>
-              <CopyLinkButton sectionId={sectionId} />
+              {!isAPP && <CopyLinkButton sectionId={sectionId} />}
             </div>
             <p className="text-muted-foreground">{tourSection.description}</p>
           </div>
@@ -63,13 +64,16 @@ export function TourSection({ tourSection, defaultEventTypeId }: TourSectionProp
                 table={table}
                 eventLabel={`${tourSection.tourLabel} ${currentEventType.label}`}
                 sectionId={`${sectionId}-${currentEventType.id}`}
+                hideActions={isAPP}
               />
             ))}
           </div>
         )}
 
         {/* Sources */}
-        <SourcesBlock sources={tourSection.sources} effectiveSeason={tourSection.effectiveSeason} />
+        {!isAPP && (
+          <SourcesBlock sources={tourSection.sources} effectiveSeason={tourSection.effectiveSeason} />
+        )}
       </Card>
     </section>
   )

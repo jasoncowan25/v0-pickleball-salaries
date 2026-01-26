@@ -5,7 +5,7 @@ export default function ReportsPage() {
     <main className="py-12">
       <div className="mb-6">
         <h1 className="text-3xl font-bold mb-2">Reports & Analysis</h1>
-        <p className="text-muted-foreground mb-2 text-lg">
+        <p className="text-base text-muted-foreground mb-2">
           In-depth reports and analysis of professional pickleball earnings, trends, and player performance.
         </p>
       </div>

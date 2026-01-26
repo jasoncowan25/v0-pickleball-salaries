@@ -1,6 +1,5 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
 import type { EventType } from "@/lib/prize-money-data"
 
 interface EventTypeSelectorProps {
@@ -11,17 +10,20 @@ interface EventTypeSelectorProps {
 
 export function EventTypeSelector({ eventTypes, value, onChange }: EventTypeSelectorProps) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="inline-flex flex-wrap rounded-lg border bg-muted/30 p-1 w-full sm:w-auto">
       {eventTypes.map((eventType) => (
-        <Button
+        <button
           key={eventType.id}
-          variant={value === eventType.id ? "default" : "outline"}
-          size="sm"
           onClick={() => onChange(eventType.id)}
-          className={value === eventType.id ? "bg-primary text-primary-foreground" : ""}
+          type="button"
+          className={`flex-1 sm:flex-none px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
+            value === eventType.id
+              ? "bg-background text-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
         >
           {eventType.label}
-        </Button>
+        </button>
       ))}
     </div>
   )

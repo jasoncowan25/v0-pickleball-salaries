@@ -310,6 +310,145 @@ const mlpAppearancePayouts: PayoutTable[] = [
 ]
 
 // APP Payout Data
+const appProsTier1Payouts: PayoutTable[] = [
+  {
+    division: "mens-singles",
+    divisionLabel: "Tier 1 (150k) - Singles",
+    payoutBasis: "per-player",
+    rows: [
+      { placement: "1st Place", amount: 3000 },
+      { placement: "2nd Place", amount: 2250 },
+      { placement: "3rd", amount: 1800 },
+      { placement: "4th", amount: 1350 },
+      { placement: "Qtrs", amount: 900 },
+      { placement: "9th", amount: 450 },
+    ],
+  },
+  {
+    division: "mens-doubles",
+    divisionLabel: "Tier 1 (150k) - Doubles",
+    payoutBasis: "per-team",
+    rows: [
+      { placement: "1st Place", amount: 6000, note: "Split between partners" },
+      { placement: "2nd Place", amount: 4500, note: "Split between partners" },
+      { placement: "3rd", amount: 3600, note: "Split between partners" },
+      { placement: "4th", amount: 2700, note: "Split between partners" },
+      { placement: "Qtrs", amount: 1800, note: "Split between partners" },
+      { placement: "9th", amount: 900, note: "Split between partners" },
+    ],
+  },
+]
+
+const appProsTier2Payouts: PayoutTable[] = [
+  {
+    division: "mens-singles",
+    divisionLabel: "Tier 2 (100k) - Singles",
+    payoutBasis: "per-player",
+    rows: [
+      { placement: "1st Place", amount: 2000 },
+      { placement: "2nd Place", amount: 1500 },
+      { placement: "3rd", amount: 1200 },
+      { placement: "4th", amount: 900 },
+      { placement: "Qtrs", amount: 600 },
+      { placement: "9th", amount: 300 },
+    ],
+  },
+  {
+    division: "mens-doubles",
+    divisionLabel: "Tier 2 (100k) - Doubles",
+    payoutBasis: "per-team",
+    rows: [
+      { placement: "1st Place", amount: 4000, note: "Split between partners" },
+      { placement: "2nd Place", amount: 3000, note: "Split between partners" },
+      { placement: "3rd", amount: 2400, note: "Split between partners" },
+      { placement: "4th", amount: 1800, note: "Split between partners" },
+      { placement: "Qtrs", amount: 1200, note: "Split between partners" },
+      { placement: "9th", amount: 600, note: "Split between partners" },
+    ],
+  },
+]
+
+const appChampionsProsTier1Payouts: PayoutTable[] = [
+  {
+    division: "mens-singles",
+    divisionLabel: "Tier 1 (150k) - Singles",
+    payoutBasis: "per-player",
+    rows: [
+      { placement: "1st Place", amount: 2250 },
+      { placement: "2nd Place", amount: 1200 },
+      { placement: "3rd", amount: 750 },
+      { placement: "4th", amount: 375 },
+      { placement: "5th/6th", amount: 187.5 },
+    ],
+  },
+  {
+    division: "mens-doubles",
+    divisionLabel: "Tier 1 (150k) - Gender Doubles",
+    payoutBasis: "per-team",
+    rows: [
+      { placement: "1st Place", amount: 4000, note: "Split between partners" },
+      { placement: "2nd Place", amount: 2200, note: "Split between partners" },
+      { placement: "3rd", amount: 1600, note: "Split between partners" },
+      { placement: "4th", amount: 1000, note: "Split between partners" },
+      { placement: "5th/6th", amount: 500, note: "Split between partners" },
+    ],
+  },
+  {
+    division: "mixed-doubles",
+    divisionLabel: "Tier 1 (150k) - Mixed Doubles",
+    payoutBasis: "per-team",
+    rows: [
+      { placement: "1st Place", amount: 4000, note: "Split between partners" },
+      { placement: "2nd Place", amount: 2200, note: "Split between partners" },
+      { placement: "3rd", amount: 1600, note: "Split between partners" },
+      { placement: "4th", amount: 1000, note: "Split between partners" },
+      { placement: "5th/6th", amount: 500, note: "Split between partners" },
+      { placement: "7th/8th", amount: 300, note: "Split between partners" },
+      { placement: "9th", amount: 250, note: "Split between partners" },
+      { placement: "10th", amount: 250, note: "Split between partners" },
+    ],
+  },
+]
+
+const appChampionsProsTier2Payouts: PayoutTable[] = [
+  {
+    division: "mens-singles",
+    divisionLabel: "Tier 2 (100k) - Singles",
+    payoutBasis: "per-player",
+    rows: [
+      { placement: "1st Place", amount: 1500 },
+      { placement: "2nd Place", amount: 800 },
+      { placement: "3rd", amount: 500 },
+      { placement: "4th", amount: 350 },
+      { placement: "5th/6th", amount: 250 },
+    ],
+  },
+  {
+    division: "mens-doubles",
+    divisionLabel: "Tier 2 (100k) - Gender Doubles",
+    payoutBasis: "per-team",
+    rows: [
+      { placement: "1st Place", amount: 3000, note: "Split between partners" },
+      { placement: "2nd Place", amount: 1500, note: "Split between partners" },
+      { placement: "3rd", amount: 1000, note: "Split between partners" },
+      { placement: "4th", amount: 700, note: "Split between partners" },
+      { placement: "5th/6th", amount: 500, note: "Split between partners" },
+    ],
+  },
+  {
+    division: "mixed-doubles",
+    divisionLabel: "Tier 2 (100k) - Mixed Doubles",
+    payoutBasis: "per-team",
+    rows: [
+      { placement: "1st Place", amount: 3000, note: "Split between partners" },
+      { placement: "2nd Place", amount: 1500, note: "Split between partners" },
+      { placement: "3rd", amount: 1000, note: "Split between partners" },
+      { placement: "4th", amount: 700, note: "Split between partners" },
+      { placement: "5th/6th", amount: 500, note: "Split between partners" },
+    ],
+  },
+]
+
 const appMajorPayouts: PayoutTable[] = [
   {
     division: "mens-singles",
@@ -492,6 +631,30 @@ export const prizeMoneyData: Record<number, YearData> = {
         description: "Association of Pickleball Professionals — developmental and pro tour",
         eventTypes: [
           {
+            id: "pros-tier1",
+            label: "APP Pros - Tier 1 (150k)",
+            description: "Tier 1 APP Pros events with $150k total purse",
+            tables: appProsTier1Payouts,
+          },
+          {
+            id: "pros-tier2",
+            label: "APP Pros - Tier 2 (100k)",
+            description: "Tier 2 APP Pros events with $100k total purse",
+            tables: appProsTier2Payouts,
+          },
+          {
+            id: "champions-pros-tier1",
+            label: "APP Champions Pros - Tier 1 (150k)",
+            description: "Tier 1 APP Champions Pros events with $150k total purse",
+            tables: appChampionsProsTier1Payouts,
+          },
+          {
+            id: "champions-pros-tier2",
+            label: "APP Champions Pros - Tier 2 (100k)",
+            description: "Tier 2 APP Champions Pros events with $100k total purse",
+            tables: appChampionsProsTier2Payouts,
+          },
+          {
             id: "majors",
             label: "Major / Signature Events",
             description: "Top-tier APP events with enhanced prize pools",
@@ -600,6 +763,42 @@ export const prizeMoneyData: Record<number, YearData> = {
         description: "Association of Pickleball Professionals — developmental and pro tour",
         eventTypes: [
           {
+            id: "pros-tier1",
+            label: "APP Pros - Tier 1 (150k)",
+            description: "Tier 1 APP Pros events with $150k total purse",
+            tables: appProsTier1Payouts.map((t) => ({
+              ...t,
+              rows: t.rows.map((r) => ({ ...r, amount: Math.round(r.amount * 0.9) })),
+            })),
+          },
+          {
+            id: "pros-tier2",
+            label: "APP Pros - Tier 2 (100k)",
+            description: "Tier 2 APP Pros events with $100k total purse",
+            tables: appProsTier2Payouts.map((t) => ({
+              ...t,
+              rows: t.rows.map((r) => ({ ...r, amount: Math.round(r.amount * 0.9) })),
+            })),
+          },
+          {
+            id: "champions-pros-tier1",
+            label: "APP Champions Pros - Tier 1 (150k)",
+            description: "Tier 1 APP Champions Pros events with $150k total purse",
+            tables: appChampionsProsTier1Payouts.map((t) => ({
+              ...t,
+              rows: t.rows.map((r) => ({ ...r, amount: Math.round(r.amount * 0.9) })),
+            })),
+          },
+          {
+            id: "champions-pros-tier2",
+            label: "APP Champions Pros - Tier 2 (100k)",
+            description: "Tier 2 APP Champions Pros events with $100k total purse",
+            tables: appChampionsProsTier2Payouts.map((t) => ({
+              ...t,
+              rows: t.rows.map((r) => ({ ...r, amount: Math.round(r.amount * 0.9) })),
+            })),
+          },
+          {
             id: "majors",
             label: "Major / Signature Events",
             description: "Top-tier APP events with enhanced prize pools",
@@ -633,6 +832,11 @@ export const availableYears = Object.keys(prizeMoneyData)
   .sort((a, b) => b - a)
 
 export const currentYear = availableYears[0]
+
+export function getPrizeMoneyData(year: string | number): YearData | undefined {
+  const yearNum = typeof year === "string" ? Number.parseInt(year, 10) : year
+  return prizeMoneyData[yearNum]
+}
 
 export function getYearData(year: number): YearData | undefined {
   return prizeMoneyData[year]

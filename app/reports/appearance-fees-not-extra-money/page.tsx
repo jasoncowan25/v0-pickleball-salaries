@@ -16,8 +16,8 @@ export default function AppearanceFeesReportPage() {
 
       {/* Hero Section */}
       <div className="space-y-4">
-        <h1 className="text-4xl font-bold tracking-tight">Why "Appearance Fees" Often Aren't Extra Money</h1>
-        <p className="text-lg text-muted-foreground">
+        <h1 className="text-3xl font-bold">Why "Appearance Fees" Often Aren't Extra Money</h1>
+        <p className="text-base text-muted-foreground">
           Understanding how appearance fees in pro pickleball often function as contract guarantees rather than
           performance-based prize money.
         </p>
@@ -31,7 +31,7 @@ export default function AppearanceFeesReportPage() {
       {/* Overview Section */}
       <Card>
         <CardContent className="pt-6 space-y-4">
-          <h2 className="text-2xl font-bold">Overview</h2>
+          <h2 className="text-xl font-bold">Overview</h2>
           <p>
             In pro pickleball, "appearance fees" are often described like bonuses paid to get stars to show up. In many
             tour structures, they function more like scheduled payments from pre-negotiated player contracts—so the
@@ -43,7 +43,7 @@ export default function AppearanceFeesReportPage() {
       {/* What an appearance fee means in mature sports */}
       <Card>
         <CardContent className="pt-6 space-y-4">
-          <h2 className="text-2xl font-bold">What an appearance fee means in mature sports</h2>
+          <h2 className="text-xl font-bold">What an appearance fee means in mature sports</h2>
           <p>In established individual sports, an appearance fee is typically:</p>
           <ul className="list-disc pl-6 space-y-2">
             <li>A discretionary payment to a specific athlete to participate</li>
@@ -60,7 +60,7 @@ export default function AppearanceFeesReportPage() {
       {/* How it's often used in modern pickleball */}
       <Card>
         <CardContent className="pt-6 space-y-4">
-          <h2 className="text-2xl font-bold">How it's often used in modern pickleball</h2>
+          <h2 className="text-xl font-bold">How it's often used in modern pickleball</h2>
           <p>In several publicly described tour payout structures, "appearance fees" are commonly used as:</p>
           <ul className="list-disc pl-6 space-y-2">
             <li>A distribution channel for guaranteed contract payments</li>
@@ -82,7 +82,7 @@ export default function AppearanceFeesReportPage() {
       {/* Why the advertised purse can differ */}
       <Card>
         <CardContent className="pt-6 space-y-4">
-          <h2 className="text-2xl font-bold">Why the advertised purse can differ from "play-for" prize money</h2>
+          <h2 className="text-xl font-bold">Why the advertised purse can differ from "play-for" prize money</h2>
           <p>Common components included in headline purse figures:</p>
           <ul className="list-disc pl-6 space-y-2">
             <li>Guaranteed payments (sometimes labeled as appearance fees)</li>
@@ -99,7 +99,7 @@ export default function AppearanceFeesReportPage() {
       {/* Contract status can change what players receive */}
       <Card>
         <CardContent className="pt-6 space-y-4">
-          <h2 className="text-2xl font-bold">Contract status can change what players actually receive</h2>
+          <h2 className="text-xl font-bold">Contract status can change what players actually receive</h2>
           <p>
             Some published rules and payout grids have included contract-linked conditions that affect payouts, such as:
           </p>
@@ -123,7 +123,7 @@ export default function AppearanceFeesReportPage() {
       {/* Closing */}
       <Card>
         <CardContent className="pt-6 space-y-4">
-          <h2 className="text-2xl font-bold">Closing</h2>
+          <h2 className="text-xl font-bold">Closing</h2>
           <p>
             In short, appearance fees are often contract guarantees labeled inside the purse, not extra prize money
             earned by results.
