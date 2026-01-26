@@ -133,6 +133,7 @@ function PlayersPageContent() {
   const year = searchParams.get("year") || currentYear.toString()
   const gender = (searchParams.get("gender") as Gender | "all") || "all"
   const tour = (searchParams.get("tour") as Tour | "all") || "all"
+  const contractTier = (searchParams.get("contractTier") as "gold" | "standard" | "futures" | "unsigned" | "all") || "all"
   const sortColumn = searchParams.get("sort") || "total"
   const sortDirection = (searchParams.get("dir") as "asc" | "desc") || "desc"
   const currentPage = Number.parseInt(searchParams.get("page") || "1")
@@ -217,6 +218,7 @@ function PlayersPageContent() {
     const filtered = filteredByTour.filter((player) => {
       if (gender !== "all" && player.gender !== gender) return false
       if (search && !player.name.toLowerCase().includes(search.toLowerCase())) return false
+      if (contractTier !== "all" && player.contractTier !== contractTier) return false
       return true
     })
 
@@ -314,15 +316,12 @@ function PlayersPageContent() {
 
   const handleYearChange = (newYear: string) => {
     console.log("[v0] handleYearChange - called with:", newYear)
-    console.log("[v0] handleYearChange - current gender:", gender)
-    console.log("[v0] handleYearChange - current year:", year)
+    setFilter({ year: newYear !== currentYear.toString() ? newYear : null, page: "1" })
+  }
 
-    // Apply both year and gender in a single setFilter call to avoid race conditions
-    setFilter({
-      year: newYear,
-      gender: gender !== "all" ? gender : null,
-      page: "1",
-    })
+  const handleContractTierChange = (newContractTier: "gold" | "standard" | "futures" | "unsigned" | "all") => {
+    console.log("[v0] handleContractTierChange - called with:", newContractTier)
+    setFilter({ contractTier: newContractTier === "all" ? null : newContractTier, page: "1" })
   }
 
   const kpiFilters = useMemo(() => {
@@ -402,8 +401,12 @@ function PlayersPageContent() {
       filters.push({ key: "gender", label: `Gender: ${gender === "M" ? "Men" : "Women"}`, value: gender })
     if (year !== currentYear.toString()) filters.push({ key: "year", label: `Year: ${year}`, value: year })
     if (tour !== "all") filters.push({ key: "tour", label: `Tour: ${tour.toUpperCase()}`, value: tour })
+    if (contractTier !== "all") {
+      const tierLabels = { gold: "Gold Card", standard: "Standard", futures: "Futures", unsigned: "Unsigned" }
+      filters.push({ key: "contractTier", label: `Tier: ${tierLabels[contractTier]}`, value: contractTier })
+    }
     return filters
-  }, [search, gender, year, tour, currentYear])
+  }, [search, gender, year, tour, contractTier, currentYear])
 
   const clearFilterLegacy = (key: string) => {
     if (key === "search") {
@@ -414,6 +417,8 @@ function PlayersPageContent() {
       setFilter({ year: currentYear.toString(), page: "1" })
     } else if (key === "tour") {
       setFilter({ tour: null, page: "1" })
+    } else if (key === "contractTier") {
+      setFilter({ contractTier: null, page: "1" })
     }
   }
 
@@ -423,6 +428,7 @@ function PlayersPageContent() {
       gender: null,
       year: currentYear.toString(),
       tour: null,
+      contractTier: null,
       page: "1",
       sort: null,
       dir: null,
@@ -470,8 +476,10 @@ function PlayersPageContent() {
         onClose={() => setIsFilterSheetOpen(false)}
         gender={gender}
         year={year}
+        contractTier={contractTier}
         onGenderChange={handleGenderChange}
         onYearChange={handleYearChange}
+        onContractTierChange={handleContractTierChange}
         onApplyBothFilters={handleApplyBothFilters}
         onApplyFilters={() => setIsFilterSheetOpen(false)}
         onResetFilters={clearAllFiltersLegacy}
@@ -480,7 +488,7 @@ function PlayersPageContent() {
       <main className="container py-12">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Pro Pickleball Player Earnings</h1>
-          <p className="text-muted-foreground mb-2 text-lg">
+          <p className="text-base text-muted-foreground mb-2">
             View all tracked pro pickleball players ranked by earnings, with filters to explore by tour, gender, or
             year.
           </p>
@@ -490,9 +498,11 @@ function PlayersPageContent() {
           search={search}
           gender={gender}
           year={year}
+          contractTier={contractTier}
           onSearchChange={handleSearchChange}
           onGenderChange={handleGenderChange}
           onYearChange={handleYearChange}
+          onContractTierChange={handleContractTierChange}
           onClearAll={clearAllFiltersLegacy}
           activeFilters={activeFiltersLegacy}
           onClearFilter={clearFilterLegacy}
@@ -531,16 +541,6 @@ function PlayersPageContent() {
           />
         </div>
 
-        <Card className="mb-6 bg-amber-50 border-amber-200">
-          <div className="p-4">
-            <h3 className="text-sm font-semibold mb-1">2026 Contract Figures — Under Review</h3>
-            <p className="text-sm text-muted-foreground">
-              2026 contract earnings currently reflect the same estimated amounts used for 2025 while DinkBank evaluates
-              the impact of recent UPA changes. All 2026 contract figures are estimates and subject to revision.
-            </p>
-          </div>
-        </Card>
-
         <Card className="p-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4">
             <div>
@@ -572,117 +572,103 @@ function PlayersPageContent() {
                   <table className="w-full">
                     <thead>
                       <tr className="border-b">
-                        <th className="text-center p-3">
-                          <div
-                            onClick={() => handleSort("rank")}
-                            className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer flex items-center justify-center gap-1 ${sortColumn === "rank" || sortColumn === "total" ? "bg-muted/40" : ""}`}
-                            aria-sort={
-                              sortColumn === "rank" || sortColumn === "total"
-                                ? sortDirection === "asc"
-                                  ? "ascending"
-                                  : "descending"
-                                : "none"
-                            }
-                          >
+                        <th
+                          onClick={() => handleSort("rank")}
+                          className={`text-center py-2 px-3 font-medium text-muted-foreground text-xs uppercase tracking-wider hover:bg-muted/20 cursor-pointer ${sortColumn === "rank" ? "bg-muted/40" : ""}`}
+                          aria-sort={
+                            sortColumn === "rank" ? (sortDirection === "asc" ? "ascending" : "descending") : "none"
+                          }
+                        >
+                          <div className="flex items-center justify-center gap-1">
                             Rank <SortIcon column="rank" />
                           </div>
                         </th>
-                        <th className="text-left p-3">
-                          <div
-                            onClick={() => handleSort("name")}
-                            className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer flex items-center gap-1 ${sortColumn === "name" ? "bg-muted/40" : ""}`}
-                            aria-sort={
-                              sortColumn === "name" ? (sortDirection === "asc" ? "ascending" : "descending") : "none"
-                            }
-                          >
+                        <th
+                          onClick={() => handleSort("name")}
+                          className={`text-left py-2 px-3 font-medium text-muted-foreground text-xs uppercase tracking-wider hover:bg-muted/20 cursor-pointer ${sortColumn === "name" ? "bg-muted/40" : ""}`}
+                          aria-sort={
+                            sortColumn === "name" ? (sortDirection === "asc" ? "ascending" : "descending") : "none"
+                          }
+                        >
+                          <div className="flex items-center gap-1">
                             Player <SortIcon column="name" />
                           </div>
                         </th>
-                        <th className="text-left p-3">
-                          <div className="font-semibold px-2 py-1">Contract Tier</div>
+                        <th className="text-left py-2 px-3 font-medium text-muted-foreground text-xs uppercase tracking-wider">
+                          Contract Tier
                         </th>
-                        <th className="text-right p-3">
-                          <div
-                            onClick={() => handleSort("ppa")}
-                            className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer ${sortColumn === "ppa" ? "bg-muted/40" : ""}`}
-                            aria-sort={
-                              sortColumn === "ppa" ? (sortDirection === "asc" ? "ascending" : "descending") : "none"
-                            }
-                          >
-                            <div className="grid grid-cols-[1fr_24px] gap-3 items-center">
-                              <div className="text-right flex items-center justify-end gap-1">
-                                PPA <SortIcon column="ppa" />
-                              </div>
-                              <div></div>
+                        <th
+                          onClick={() => handleSort("ppa")}
+                          className={`py-2 px-3 font-medium text-muted-foreground text-xs uppercase tracking-wider hover:bg-muted/20 cursor-pointer ${sortColumn === "ppa" ? "bg-muted/40" : ""}`}
+                          aria-sort={
+                            sortColumn === "ppa" ? (sortDirection === "asc" ? "ascending" : "descending") : "none"
+                          }
+                        >
+                          <div className="grid grid-cols-[1fr_24px] gap-1.5 items-center">
+                            <div className="text-right flex items-center justify-end gap-1">
+                              PPA <SortIcon column="ppa" />
                             </div>
+                            <div></div>
                           </div>
                         </th>
-                        <th className="text-right p-3">
-                          <div
-                            onClick={() => handleSort("app")}
-                            className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer ${sortColumn === "app" ? "bg-muted/40" : ""}`}
-                            aria-sort={
-                              sortColumn === "app" ? (sortDirection === "asc" ? "ascending" : "descending") : "none"
-                            }
-                          >
-                            <div className="grid grid-cols-[1fr_24px] gap-3 items-center">
-                              <div className="text-right flex items-center justify-end gap-1">
-                                APP <SortIcon column="app" />
-                              </div>
-                              <div></div>
+                        <th
+                          onClick={() => handleSort("app")}
+                          className={`py-2 px-3 font-medium text-muted-foreground text-xs uppercase tracking-wider hover:bg-muted/20 cursor-pointer ${sortColumn === "app" ? "bg-muted/40" : ""}`}
+                          aria-sort={
+                            sortColumn === "app" ? (sortDirection === "asc" ? "ascending" : "descending") : "none"
+                          }
+                        >
+                          <div className="grid grid-cols-[1fr_24px] gap-1.5 items-center">
+                            <div className="text-right flex items-center justify-end gap-1">
+                              APP <SortIcon column="app" />
                             </div>
+                            <div></div>
                           </div>
                         </th>
-                        <th className="text-right p-3">
-                          <div
-                            onClick={() => handleSort("mlp")}
-                            className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer ${sortColumn === "mlp" ? "bg-muted/40" : ""}`}
-                            aria-sort={
-                              sortColumn === "mlp" ? (sortDirection === "asc" ? "ascending" : "descending") : "none"
-                            }
-                          >
-                            <div className="grid grid-cols-[1fr_24px] gap-3 items-center">
-                              <div className="text-right flex items-center justify-end gap-1">
-                                MLP <SortIcon column="mlp" />
-                              </div>
-                              <div></div>
+                        <th
+                          onClick={() => handleSort("mlp")}
+                          className={`py-2 px-3 font-medium text-muted-foreground text-xs uppercase tracking-wider hover:bg-muted/20 cursor-pointer ${sortColumn === "mlp" ? "bg-muted/40" : ""}`}
+                          aria-sort={
+                            sortColumn === "mlp" ? (sortDirection === "asc" ? "ascending" : "descending") : "none"
+                          }
+                        >
+                          <div className="grid grid-cols-[1fr_24px] gap-1.5 items-center">
+                            <div className="text-right flex items-center justify-end gap-1">
+                              MLP <SortIcon column="mlp" />
                             </div>
+                            <div></div>
                           </div>
                         </th>
-                        <th className="bg-muted/30 font-semibold tabular-nums text-right p-3 min-w-[100px]">
-                          <div
-                            onClick={() => handleSort("contract")}
-                            className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer ${sortColumn === "contract" ? "bg-muted/60" : ""}`}
-                            aria-sort={
-                              sortColumn === "contract"
-                                ? sortDirection === "asc"
-                                  ? "ascending"
-                                  : "descending"
-                                : "none"
-                            }
-                          >
-                            <div className="grid grid-cols-[1fr_24px] gap-3 items-center">
-                              <div className="text-right flex items-center justify-end gap-1">
-                                Contracts <SortIcon column="contract" />
-                              </div>
-                              <div></div>
+                        <th
+                          onClick={() => handleSort("contract")}
+                          className={`py-2 px-3 font-medium text-muted-foreground text-xs uppercase tracking-wider hover:bg-muted/20 cursor-pointer ${sortColumn === "contract" ? "bg-muted/40" : ""}`}
+                          aria-sort={
+                            sortColumn === "contract"
+                              ? sortDirection === "asc"
+                                ? "ascending"
+                                : "descending"
+                              : "none"
+                          }
+                        >
+                          <div className="grid grid-cols-[1fr_24px] gap-1.5 items-center">
+                            <div className="text-right flex items-center justify-end gap-1">
+                              Contracts <SortIcon column="contract" />
                             </div>
+                            <div></div>
                           </div>
                         </th>
-                        <th className="bg-muted/30 font-semibold tabular-nums text-right p-3 min-w-[100px]">
-                          <div
-                            onClick={() => handleSort("total")}
-                            className={`font-semibold hover:bg-muted/20 px-2 py-1 rounded transition-colors cursor-pointer ${sortColumn === "total" ? "bg-muted/60" : ""}`}
-                            aria-sort={
-                              sortColumn === "total" ? (sortDirection === "asc" ? "ascending" : "descending") : "none"
-                            }
-                          >
-                            <div className="grid grid-cols-[1fr_24px] gap-3 items-center">
-                              <div className="text-right flex items-center justify-end gap-1">
-                                Total <SortIcon column="total" />
-                              </div>
-                              <div></div>
+                        <th
+                          onClick={() => handleSort("total")}
+                          className={`bg-muted/30 py-2 px-3 font-medium text-muted-foreground text-xs uppercase tracking-wider hover:bg-muted/20 cursor-pointer ${sortColumn === "total" ? "bg-muted/40" : ""}`}
+                          aria-sort={
+                            sortColumn === "total" ? (sortDirection === "asc" ? "ascending" : "descending") : "none"
+                          }
+                        >
+                          <div className="grid grid-cols-[1fr_24px] gap-1.5 items-center">
+                            <div className="text-right flex items-center justify-end gap-1">
+                              Total <SortIcon column="total" />
                             </div>
+                            <div></div>
                           </div>
                         </th>
                       </tr>
@@ -706,7 +692,7 @@ function PlayersPageContent() {
                               {player.contractTier && <ContractTierBadge tier={player.contractTier} />}
                             </td>
                             <td className="text-right p-3">
-                              <div className="grid grid-cols-[1fr_24px] gap-3 items-center">
+                              <div className="grid grid-cols-[1fr_24px] gap-1.5 items-center">
                                 <div className="text-right tabular-nums">
                                   {player.ppa > 0 ? formatCurrencyUSD(player.ppa) : "—"}
                                 </div>
@@ -716,7 +702,7 @@ function PlayersPageContent() {
                               </div>
                             </td>
                             <td className="text-right p-3">
-                              <div className="grid grid-cols-[1fr_24px] gap-3 items-center">
+                              <div className="grid grid-cols-[1fr_24px] gap-1.5 items-center">
                                 <div className="text-right tabular-nums">
                                   {player.app > 0 ? formatCurrencyUSD(player.app) : "—"}
                                 </div>
@@ -726,7 +712,7 @@ function PlayersPageContent() {
                               </div>
                             </td>
                             <td className="text-right p-3">
-                              <div className="grid grid-cols-[1fr_24px] gap-3 items-center">
+                              <div className="grid grid-cols-[1fr_24px] gap-1.5 items-center">
                                 <div className="text-right tabular-nums">
                                   {player.mlp > 0 ? formatCurrencyUSD(player.mlp) : "—"}
                                 </div>
@@ -736,7 +722,7 @@ function PlayersPageContent() {
                               </div>
                             </td>
                             <td className="text-right p-3">
-                              <div className="grid grid-cols-[1fr_24px] gap-3 items-center">
+                              <div className="grid grid-cols-[1fr_24px] gap-1.5 items-center">
                                 <div className="text-right tabular-nums text-[#737373]">
                                   {player.contract > 0 ? formatCurrencyUSD(player.contract) : "—"}
                                 </div>
@@ -746,7 +732,7 @@ function PlayersPageContent() {
                               </div>
                             </td>
                             <td className="bg-muted/30 font-semibold tabular-nums text-right p-3">
-                              <div className="grid grid-cols-[1fr_24px] gap-3 items-center">
+                              <div className="grid grid-cols-[1fr_24px] gap-1.5 items-center">
                                 <div className="text-right tabular-nums text-[#737373] font-semibold">
                                   {formatCurrencyUSD(player.total)}
                                 </div>
@@ -759,6 +745,13 @@ function PlayersPageContent() {
                         )
                       })}
                     </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colSpan={7} className="px-3 py-3 bg-gray-50/50 border-t text-sm text-muted-foreground">
+                          <strong className="font-semibold">DinkBank Methodology:</strong> Confirmed figures are verified using official or reputable public sources. Other figures are DinkBank estimates and may be updated. Contract amounts reflect base retainers only and exclude endorsements, appearance fees, and off-tour income. All amounts in USD.
+                        </td>
+                      </tr>
+                    </tfoot>
                   </table>
                 </div>
               </div>
@@ -790,6 +783,11 @@ function PlayersPageContent() {
                             <div className="text-xs text-muted-foreground mt-0.5">
                               {player.gender === "M" ? "Men" : "Women"} • {player.nation || "—"}
                             </div>
+                            {player.contractTier && (
+                              <div className="mt-1.5">
+                                <ContractTierBadge tier={player.contractTier} />
+                              </div>
+                            )}
                             <div className="mt-2 flex items-center gap-2">
                               <div className="text-2xl sm:text-3xl font-extrabold tabular-nums break-words text-[#737373]">
                                 {formatCurrencyUSD(player.total)}
@@ -801,16 +799,10 @@ function PlayersPageContent() {
                           <ChevronRight className="h-5 w-5 text-muted-foreground shrink-0 mt-1" />
                         </div>
 
-                        {player.contractTier && (
-                          <div className="mt-3">
-                            <ContractTierBadge tier={player.contractTier} />
-                          </div>
-                        )}
-
                         <div className="mt-2 grid grid-cols-1 gap-y-1 text-sm">
                           <div className="flex items-baseline justify-between gap-3">
                             <span className="text-muted-foreground">PPA:</span>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1.5">
                               <span className="font-medium tabular-nums">
                                 {player.ppa > 0 ? formatCurrencyUSD(player.ppa) : "—"}
                               </span>
@@ -819,7 +811,7 @@ function PlayersPageContent() {
                           </div>
                           <div className="flex items-baseline justify-between gap-3">
                             <span className="text-muted-foreground">APP:</span>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1.5">
                               <span className="font-medium tabular-nums">
                                 {player.app > 0 ? formatCurrencyUSD(player.app) : "—"}
                               </span>
@@ -828,7 +820,7 @@ function PlayersPageContent() {
                           </div>
                           <div className="flex items-baseline justify-between gap-3">
                             <span className="text-muted-foreground">MLP:</span>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1.5">
                               <span className="font-medium tabular-nums">
                                 {player.mlp > 0 ? formatCurrencyUSD(player.mlp) : "—"}
                               </span>
@@ -837,7 +829,7 @@ function PlayersPageContent() {
                           </div>
                           <div className="flex items-baseline justify-between gap-3">
                             <span className="text-muted-foreground">Contract:</span>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1.5">
                               <span className="font-medium tabular-nums text-[#737373]">
                                 {player.contract > 0 ? formatCurrencyUSD(player.contract) : "—"}
                               </span>
@@ -932,23 +924,7 @@ function PlayersPageContent() {
                 </div>
               </div>
 
-              {(filteredAndSortedPlayers.length > 0 || gender !== "all" || tour !== "all") && (
-                <>
-                  <hr className="mt-4 mb-2 border-[#EAEAEA]" />
-                  <p className="text-xs text-[#6B6B6B] leading-[1.4] max-w-full md:max-w-[80%] mt-3 mb-4 flex items-start gap-1">
-                    <span className="mt-0.5 shrink-0 mr-1">
-                      <VerificationStamp />
-                    </span>
-                    <span>
-                      <strong>DinkBank Confirmed:</strong> Verified amounts from public reporting or official tour sources.
-                      Totals may also be marked as confirmed when all underlying amounts are verified. Figures without a
-                      checkmark are estimates based on public data and DinkBank modeling and may be updated as new information
-                      becomes available. Contract amounts reflect base retainers only and exclude endorsements or appearance
-                      fees. All amounts in USD.
-                    </span>
-                  </p>
-                </>
-              )}
+
             </>
           )}
         </Card>
@@ -957,15 +933,15 @@ function PlayersPageContent() {
           <div className="p-6">
             <div className="flex items-center gap-2 mb-3">
               <img src="/images/dinkbank-favicon.png" alt="DinkBank" className="w-6 h-6" />
-              <h2 className="text-lg font-semibold">DinkBank Data</h2>
+              <h2 className="text-xl font-bold">DinkBank Data</h2>
             </div>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-sm text-muted-foreground">
               DinkBank provides structured earnings data for professional pickleball, including prize money, contracts,
               and season-long performance across major tours. Some figures shown are estimates based on public
               information and internal modeling and are refined as new data becomes available. Our goal is to offer a
               clear, transparent view of how players are compensated throughout the season.{" "}
               <Link href="/about" className="underline hover:text-[#1F1F1F]">
-                Learn More →
+                Learn More
               </Link>
             </p>
           </div>

@@ -56,27 +56,19 @@ export default function ClientLayout({
             <MainNav />
           </div>
 
-          <div className="md:hidden ml-auto">
+          <div className="md:hidden ml-auto -mr-2">
             <Sheet open={open} onOpenChange={setOpen} modal>
               <SheetTrigger asChild>
                 <Button
                   variant="ghost"
-                  size="sm"
-                  className="h-11 w-11 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                  size="icon"
+                  className="h-14 w-14 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                   aria-label="Open menu"
                 >
-                  <Menu className="h-5 w-5" />
+                  <Menu className="h-8 w-8" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-                <div className="flex justify-end">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-11 w-11 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                    aria-label="Close menu"
-                  ></Button>
-                </div>
                 <nav className="flex flex-col space-y-2 mt-6">
                   {mobileNavItems.map((item) => {
                     const active = isActive(pathname, item.href)

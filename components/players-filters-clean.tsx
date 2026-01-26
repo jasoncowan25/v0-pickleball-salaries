@@ -13,9 +13,11 @@ interface PlayersFiltersCleanProps {
   search: string
   gender: Gender | "all"
   year: string
+  contractTier: "gold" | "standard" | "futures" | "unsigned" | "all"
   onSearchChange: (value: string) => void
   onGenderChange: (value: Gender | "all") => void
   onYearChange: (value: string) => void
+  onContractTierChange: (value: "gold" | "standard" | "futures" | "unsigned" | "all") => void
   onClearAll: () => void
   activeFilters: Array<{ key: string; label: string; value: string }>
   onClearFilter: (key: string) => void
@@ -25,9 +27,11 @@ function PlayersFiltersClean({
   search,
   gender,
   year,
+  contractTier,
   onSearchChange,
   onGenderChange,
   onYearChange,
+  onContractTierChange,
   onClearAll,
   activeFilters,
   onClearFilter,
@@ -49,13 +53,20 @@ function PlayersFiltersClean({
     const currentYear = getDisplayYear()
     if (gender !== "all") count++
     if (year !== currentYear.toString()) count++
+    if (contractTier !== "all") count++
     if (search) count++
     return count
-  }, [gender, year, search])
+  }, [gender, year, contractTier, search])
 
   const getGenderLabel = () => {
     if (gender === "all") return "All Genders"
     return gender === "M" ? "Men" : "Women"
+  }
+
+  const getContractTierLabel = () => {
+    if (contractTier === "all") return "All Tiers"
+    const labels = { gold: "Gold Card", standard: "Standard", futures: "Futures", unsigned: "Unsigned" }
+    return labels[contractTier]
   }
 
   // Filter out tour from active filters since we don't show tour dropdown
@@ -98,6 +109,19 @@ function PlayersFiltersClean({
               <SelectItem value="2023">2023</SelectItem>
               <SelectItem value="2022">2022</SelectItem>
               <SelectItem value="2021">2021</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select value={contractTier} onValueChange={onContractTierChange}>
+            <SelectTrigger className="w-[140px]" aria-label="Contract Tier">
+              <SelectValue>{getContractTierLabel()}</SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Tiers</SelectItem>
+              <SelectItem value="gold">Gold Card</SelectItem>
+              <SelectItem value="standard">Standard</SelectItem>
+              <SelectItem value="futures">Futures</SelectItem>
+              <SelectItem value="unsigned">Unsigned</SelectItem>
             </SelectContent>
           </Select>
         </div>

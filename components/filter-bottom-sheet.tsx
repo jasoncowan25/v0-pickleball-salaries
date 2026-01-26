@@ -13,8 +13,10 @@ interface FilterBottomSheetProps {
   onClose: () => void
   gender: Gender | "all"
   year: string
+  contractTier: "gold" | "standard" | "futures" | "unsigned" | "all"
   onGenderChange: (value: Gender | "all") => void
   onYearChange: (value: string) => void
+  onContractTierChange: (value: "gold" | "standard" | "futures" | "unsigned" | "all") => void
   onApplyBothFilters?: (gender: Gender | "all", year: string) => void
   onApplyFilters: () => void
   onResetFilters: () => void
@@ -25,21 +27,25 @@ export function FilterBottomSheet({
   onClose,
   gender,
   year,
+  contractTier,
   onGenderChange,
   onYearChange,
+  onContractTierChange,
   onApplyBothFilters,
   onApplyFilters,
   onResetFilters,
 }: FilterBottomSheetProps) {
   const [localGender, setLocalGender] = useState<Gender | "all">(gender)
   const [localYear, setLocalYear] = useState(year)
+  const [localContractTier, setLocalContractTier] = useState<"gold" | "standard" | "futures" | "unsigned" | "all">(contractTier)
 
   useEffect(() => {
     if (isOpen) {
       setLocalGender(gender)
       setLocalYear(year)
+      setLocalContractTier(contractTier)
     }
-  }, [isOpen, gender, year])
+  }, [isOpen, gender, year, contractTier])
 
   const handleApply = () => {
     if (onApplyBothFilters) {
@@ -49,6 +55,7 @@ export function FilterBottomSheet({
       onGenderChange(localGender)
       onYearChange(localYear)
     }
+    onContractTierChange(localContractTier)
     onApplyFilters()
     onClose()
   }
@@ -57,8 +64,10 @@ export function FilterBottomSheet({
     const currentYear = getDisplayYear()
     setLocalGender("all")
     setLocalYear(currentYear.toString())
+    setLocalContractTier("all")
     onGenderChange("all")
     onYearChange(currentYear.toString())
+    onContractTierChange("all")
     onResetFilters()
     onClose()
   }
@@ -66,6 +75,12 @@ export function FilterBottomSheet({
   const getGenderLabel = (value: Gender | "all") => {
     if (value === "all") return "All Genders"
     return value === "M" ? "Men" : "Women"
+  }
+
+  const getContractTierLabel = (value: "gold" | "standard" | "futures" | "unsigned" | "all") => {
+    if (value === "all") return "All Tiers"
+    const labels = { gold: "Gold Card", standard: "Standard", futures: "Futures", unsigned: "Unsigned" }
+    return labels[value]
   }
 
   return (
@@ -104,6 +119,23 @@ export function FilterBottomSheet({
                 <SelectItem value="2023">2023</SelectItem>
                 <SelectItem value="2022">2022</SelectItem>
                 <SelectItem value="2021">2021</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Contract Tier Section */}
+          <div className="space-y-3">
+            <Label className="text-sm font-medium">Contract Tier</Label>
+            <Select value={localContractTier} onValueChange={(value) => setLocalContractTier(value as "gold" | "standard" | "futures" | "unsigned" | "all")}>
+              <SelectTrigger className="w-full h-11">
+                <SelectValue>{getContractTierLabel(localContractTier)}</SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Tiers</SelectItem>
+                <SelectItem value="gold">Gold Card</SelectItem>
+                <SelectItem value="standard">Standard</SelectItem>
+                <SelectItem value="futures">Futures</SelectItem>
+                <SelectItem value="unsigned">Unsigned</SelectItem>
               </SelectContent>
             </Select>
           </div>

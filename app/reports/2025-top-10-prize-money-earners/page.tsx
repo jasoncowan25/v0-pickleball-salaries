@@ -17,8 +17,8 @@ export default function Top10Report2025Page() {
 
       {/* Hero Section */}
       <div className="space-y-4">
-        <h1 className="text-4xl font-bold tracking-tight">2025's Top 10 Prize Money Earners</h1>
-        <p className="text-lg text-muted-foreground">
+        <h1 className="text-3xl font-bold">2025's Top 10 Prize Money Earners</h1>
+        <p className="text-base text-muted-foreground">
           A year-over-year look at the top prize-money earners in professional pickleball, how their rankings shifted
           from 2024, and where injuries and partnership changes shaped the final table.
         </p>
@@ -38,7 +38,7 @@ export default function Top10Report2025Page() {
       {/* Overview */}
       <Card>
         <CardContent className="pt-6 space-y-4">
-          <h2 className="text-2xl font-bold">Overview</h2>
+          <h2 className="text-xl font-bold">Overview</h2>
           <p>
             Prize money in professional pickleball continued to climb in 2025, with deeper draws and richer purses
             across PPA, MLP, and APP events. Using DinkBank's internal payout data, this report examines the top 10
@@ -60,7 +60,7 @@ export default function Top10Report2025Page() {
       {/* Methodology Snapshot */}
       <Card>
         <CardContent className="pt-6 space-y-4">
-          <h2 className="text-2xl font-bold">Methodology Snapshot</h2>
+          <h2 className="text-xl font-bold">Methodology Snapshot</h2>
           <ul className="list-disc pl-6 space-y-2">
             <li>
               <strong>Scope:</strong> PPA, MLP, and APP main draws only, 2025 season
@@ -98,7 +98,7 @@ export default function Top10Report2025Page() {
       {/* 2025 Top 10 vs 2024 Table */}
       <Card>
         <CardContent className="pt-6 space-y-4">
-          <h2 className="text-2xl font-bold">2025 Top 10 vs 2024</h2>
+          <h2 className="text-xl font-bold">2025 Top 10 vs 2024</h2>
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
@@ -193,7 +193,7 @@ export default function Top10Report2025Page() {
       {/* Player Breakdown */}
       <Card>
         <CardContent className="pt-6 space-y-6">
-          <h2 className="text-2xl font-bold">Player Breakdown</h2>
+          <h2 className="text-xl font-bold">Player Breakdown</h2>
 
           <div className="space-y-4">
             <h3 className="text-xl font-semibold">1. Anna Leigh Waters — $167,873 (stays #1)</h3>
@@ -382,7 +382,7 @@ export default function Top10Report2025Page() {
       {/* Who Dropped Out */}
       <Card>
         <CardContent className="pt-6 space-y-4">
-          <h2 className="text-2xl font-bold">Who Dropped Out of the Top 10?</h2>
+          <h2 className="text-xl font-bold">Who Dropped Out of the Top 10?</h2>
           <p>Three players who finished in the 2024 prize-money top 10 fell out of the list in 2025:</p>
 
           <div className="space-y-4">
@@ -416,7 +416,7 @@ export default function Top10Report2025Page() {
       {/* Takeaways */}
       <Card>
         <CardContent className="pt-6 space-y-4">
-          <h2 className="text-2xl font-bold">Takeaways for 2026</h2>
+          <h2 className="text-xl font-bold">Takeaways for 2026</h2>
           <ul className="list-disc pl-6 space-y-3">
             <li>
               <strong>Stability at the top, volatility below.</strong> Waters and Johns remain entrenched at the summit,
