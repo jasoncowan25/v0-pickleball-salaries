@@ -50,34 +50,8 @@ const divisionLabels: Record<Division, string> = {
 // PPA Payout Data
 const ppaSlamPayouts: PayoutTable[] = [
   {
-    division: "mens-singles",
-    divisionLabel: divisionLabels["mens-singles"],
-    payoutBasis: "per-player",
-    rows: [
-      { placement: "Champion", amount: 50000 },
-      { placement: "Runner-Up", amount: 25000 },
-      { placement: "Semifinalist", amount: 12500 },
-      { placement: "Quarterfinalist", amount: 6250 },
-      { placement: "Round of 16", amount: 3125 },
-      { placement: "Round of 32", amount: 1500 },
-    ],
-  },
-  {
-    division: "womens-singles",
-    divisionLabel: divisionLabels["womens-singles"],
-    payoutBasis: "per-player",
-    rows: [
-      { placement: "Champion", amount: 50000 },
-      { placement: "Runner-Up", amount: 25000 },
-      { placement: "Semifinalist", amount: 12500 },
-      { placement: "Quarterfinalist", amount: 6250 },
-      { placement: "Round of 16", amount: 3125 },
-      { placement: "Round of 32", amount: 1500 },
-    ],
-  },
-  {
     division: "mens-doubles",
-    divisionLabel: divisionLabels["mens-doubles"],
+    divisionLabel: "Doubles (Men's & Women's)",
     payoutBasis: "per-team",
     rows: [
       { placement: "Champion", amount: 60000, note: "Split between partners" },
@@ -88,20 +62,21 @@ const ppaSlamPayouts: PayoutTable[] = [
     ],
   },
   {
-    division: "womens-doubles",
-    divisionLabel: divisionLabels["womens-doubles"],
-    payoutBasis: "per-team",
+    division: "mens-singles",
+    divisionLabel: "Singles (Men's & Women's)",
+    payoutBasis: "per-player",
     rows: [
-      { placement: "Champion", amount: 60000, note: "Split between partners" },
-      { placement: "Runner-Up", amount: 30000, note: "Split between partners" },
-      { placement: "Semifinalist", amount: 15000, note: "Split between partners" },
-      { placement: "Quarterfinalist", amount: 7500, note: "Split between partners" },
-      { placement: "Round of 16", amount: 3750, note: "Split between partners" },
+      { placement: "Champion", amount: 50000 },
+      { placement: "Runner-Up", amount: 25000 },
+      { placement: "Semifinalist", amount: 12500 },
+      { placement: "Quarterfinalist", amount: 6250 },
+      { placement: "Round of 16", amount: 3125 },
+      { placement: "Round of 32", amount: 1500 },
     ],
   },
   {
     division: "mixed-doubles",
-    divisionLabel: divisionLabels["mixed-doubles"],
+    divisionLabel: "Mixed Doubles",
     payoutBasis: "per-team",
     rows: [
       { placement: "Champion", amount: 50000, note: "Split between partners" },
@@ -114,30 +89,8 @@ const ppaSlamPayouts: PayoutTable[] = [
 
 const ppaCupPayouts: PayoutTable[] = [
   {
-    division: "mens-singles",
-    divisionLabel: divisionLabels["mens-singles"],
-    payoutBasis: "per-player",
-    rows: [
-      { placement: "Champion", amount: 30000 },
-      { placement: "Runner-Up", amount: 15000 },
-      { placement: "Semifinalist", amount: 7500 },
-      { placement: "Quarterfinalist", amount: 3750 },
-    ],
-  },
-  {
-    division: "womens-singles",
-    divisionLabel: divisionLabels["womens-singles"],
-    payoutBasis: "per-player",
-    rows: [
-      { placement: "Champion", amount: 30000 },
-      { placement: "Runner-Up", amount: 15000 },
-      { placement: "Semifinalist", amount: 7500 },
-      { placement: "Quarterfinalist", amount: 3750 },
-    ],
-  },
-  {
     division: "mens-doubles",
-    divisionLabel: divisionLabels["mens-doubles"],
+    divisionLabel: "Doubles (Men's & Women's)",
     payoutBasis: "per-team",
     rows: [
       { placement: "Champion", amount: 40000, note: "Split between partners" },
@@ -147,19 +100,19 @@ const ppaCupPayouts: PayoutTable[] = [
     ],
   },
   {
-    division: "womens-doubles",
-    divisionLabel: divisionLabels["womens-doubles"],
-    payoutBasis: "per-team",
+    division: "mens-singles",
+    divisionLabel: "Singles (Men's & Women's)",
+    payoutBasis: "per-player",
     rows: [
-      { placement: "Champion", amount: 40000, note: "Split between partners" },
-      { placement: "Runner-Up", amount: 20000, note: "Split between partners" },
-      { placement: "Semifinalist", amount: 10000, note: "Split between partners" },
-      { placement: "Quarterfinalist", amount: 5000, note: "Split between partners" },
+      { placement: "Champion", amount: 30000 },
+      { placement: "Runner-Up", amount: 15000 },
+      { placement: "Semifinalist", amount: 7500 },
+      { placement: "Quarterfinalist", amount: 3750 },
     ],
   },
   {
     division: "mixed-doubles",
-    divisionLabel: divisionLabels["mixed-doubles"],
+    divisionLabel: "Mixed Doubles",
     payoutBasis: "per-team",
     rows: [
       { placement: "Champion", amount: 30000, note: "Split between partners" },
@@ -171,30 +124,8 @@ const ppaCupPayouts: PayoutTable[] = [
 
 const ppaOpenPayouts: PayoutTable[] = [
   {
-    division: "mens-singles",
-    divisionLabel: divisionLabels["mens-singles"],
-    payoutBasis: "per-player",
-    rows: [
-      { placement: "Champion", amount: 20000 },
-      { placement: "Runner-Up", amount: 10000 },
-      { placement: "Semifinalist", amount: 5000 },
-      { placement: "Quarterfinalist", amount: 2500 },
-    ],
-  },
-  {
-    division: "womens-singles",
-    divisionLabel: divisionLabels["womens-singles"],
-    payoutBasis: "per-player",
-    rows: [
-      { placement: "Champion", amount: 20000 },
-      { placement: "Runner-Up", amount: 10000 },
-      { placement: "Semifinalist", amount: 5000 },
-      { placement: "Quarterfinalist", amount: 2500 },
-    ],
-  },
-  {
     division: "mens-doubles",
-    divisionLabel: divisionLabels["mens-doubles"],
+    divisionLabel: "Doubles (Men's & Women's)",
     payoutBasis: "per-team",
     rows: [
       { placement: "Champion", amount: 25000, note: "Split between partners" },
@@ -204,19 +135,19 @@ const ppaOpenPayouts: PayoutTable[] = [
     ],
   },
   {
-    division: "womens-doubles",
-    divisionLabel: divisionLabels["womens-doubles"],
-    payoutBasis: "per-team",
+    division: "mens-singles",
+    divisionLabel: "Singles (Men's & Women's)",
+    payoutBasis: "per-player",
     rows: [
-      { placement: "Champion", amount: 25000, note: "Split between partners" },
-      { placement: "Runner-Up", amount: 12500, note: "Split between partners" },
-      { placement: "Semifinalist", amount: 6250, note: "Split between partners" },
-      { placement: "Quarterfinalist", amount: 3125, note: "Split between partners" },
+      { placement: "Champion", amount: 20000 },
+      { placement: "Runner-Up", amount: 10000 },
+      { placement: "Semifinalist", amount: 5000 },
+      { placement: "Quarterfinalist", amount: 2500 },
     ],
   },
   {
     division: "mixed-doubles",
-    divisionLabel: divisionLabels["mixed-doubles"],
+    divisionLabel: "Mixed Doubles",
     payoutBasis: "per-team",
     rows: [
       { placement: "Champion", amount: 20000, note: "Split between partners" },
@@ -228,30 +159,8 @@ const ppaOpenPayouts: PayoutTable[] = [
 
 const ppaChallengerPayouts: PayoutTable[] = [
   {
-    division: "mens-singles",
-    divisionLabel: divisionLabels["mens-singles"],
-    payoutBasis: "per-player",
-    rows: [
-      { placement: "Champion", amount: 10000 },
-      { placement: "Runner-Up", amount: 5000 },
-      { placement: "Semifinalist", amount: 2500 },
-      { placement: "Quarterfinalist", amount: 1250 },
-    ],
-  },
-  {
-    division: "womens-singles",
-    divisionLabel: divisionLabels["womens-singles"],
-    payoutBasis: "per-player",
-    rows: [
-      { placement: "Champion", amount: 10000 },
-      { placement: "Runner-Up", amount: 5000 },
-      { placement: "Semifinalist", amount: 2500 },
-      { placement: "Quarterfinalist", amount: 1250 },
-    ],
-  },
-  {
     division: "mens-doubles",
-    divisionLabel: divisionLabels["mens-doubles"],
+    divisionLabel: "Doubles (Men's & Women's)",
     payoutBasis: "per-team",
     rows: [
       { placement: "Champion", amount: 12000, note: "Split between partners" },
@@ -260,18 +169,19 @@ const ppaChallengerPayouts: PayoutTable[] = [
     ],
   },
   {
-    division: "womens-doubles",
-    divisionLabel: divisionLabels["womens-doubles"],
-    payoutBasis: "per-team",
+    division: "mens-singles",
+    divisionLabel: "Singles (Men's & Women's)",
+    payoutBasis: "per-player",
     rows: [
-      { placement: "Champion", amount: 12000, note: "Split between partners" },
-      { placement: "Runner-Up", amount: 6000, note: "Split between partners" },
-      { placement: "Semifinalist", amount: 3000, note: "Split between partners" },
+      { placement: "Champion", amount: 10000 },
+      { placement: "Runner-Up", amount: 5000 },
+      { placement: "Semifinalist", amount: 2500 },
+      { placement: "Quarterfinalist", amount: 1250 },
     ],
   },
   {
     division: "mixed-doubles",
-    divisionLabel: divisionLabels["mixed-doubles"],
+    divisionLabel: "Mixed Doubles",
     payoutBasis: "per-team",
     rows: [
       { placement: "Champion", amount: 10000, note: "Split between partners" },
@@ -312,8 +222,21 @@ const mlpAppearancePayouts: PayoutTable[] = [
 // APP Payout Data
 const appProsTier1Payouts: PayoutTable[] = [
   {
+    division: "mens-doubles",
+    divisionLabel: "Doubles (Men's & Women's)",
+    payoutBasis: "per-team",
+    rows: [
+      { placement: "1st Place", amount: 6000, note: "Split between partners" },
+      { placement: "2nd Place", amount: 4500, note: "Split between partners" },
+      { placement: "3rd", amount: 3600, note: "Split between partners" },
+      { placement: "4th", amount: 2700, note: "Split between partners" },
+      { placement: "Qtrs", amount: 1800, note: "Split between partners" },
+      { placement: "9th", amount: 900, note: "Split between partners" },
+    ],
+  },
+  {
     division: "mens-singles",
-    divisionLabel: "Tier 1 (150k) - Singles",
+    divisionLabel: "Singles (Men's & Women's)",
     payoutBasis: "per-player",
     rows: [
       { placement: "1st Place", amount: 3000 },
@@ -325,8 +248,8 @@ const appProsTier1Payouts: PayoutTable[] = [
     ],
   },
   {
-    division: "mens-doubles",
-    divisionLabel: "Tier 1 (150k) - Doubles",
+    division: "mixed-doubles",
+    divisionLabel: "Mixed Doubles",
     payoutBasis: "per-team",
     rows: [
       { placement: "1st Place", amount: 6000, note: "Split between partners" },
@@ -341,8 +264,21 @@ const appProsTier1Payouts: PayoutTable[] = [
 
 const appProsTier2Payouts: PayoutTable[] = [
   {
+    division: "mens-doubles",
+    divisionLabel: "Doubles (Men's & Women's)",
+    payoutBasis: "per-team",
+    rows: [
+      { placement: "1st Place", amount: 4000, note: "Split between partners" },
+      { placement: "2nd Place", amount: 3000, note: "Split between partners" },
+      { placement: "3rd", amount: 2400, note: "Split between partners" },
+      { placement: "4th", amount: 1800, note: "Split between partners" },
+      { placement: "Qtrs", amount: 1200, note: "Split between partners" },
+      { placement: "9th", amount: 600, note: "Split between partners" },
+    ],
+  },
+  {
     division: "mens-singles",
-    divisionLabel: "Tier 2 (100k) - Singles",
+    divisionLabel: "Singles (Men's & Women's)",
     payoutBasis: "per-player",
     rows: [
       { placement: "1st Place", amount: 2000 },
@@ -354,8 +290,8 @@ const appProsTier2Payouts: PayoutTable[] = [
     ],
   },
   {
-    division: "mens-doubles",
-    divisionLabel: "Tier 2 (100k) - Doubles",
+    division: "mixed-doubles",
+    divisionLabel: "Mixed Doubles",
     payoutBasis: "per-team",
     rows: [
       { placement: "1st Place", amount: 4000, note: "Split between partners" },
@@ -370,20 +306,8 @@ const appProsTier2Payouts: PayoutTable[] = [
 
 const appChampionsProsTier1Payouts: PayoutTable[] = [
   {
-    division: "mens-singles",
-    divisionLabel: "Tier 1 (150k) - Singles",
-    payoutBasis: "per-player",
-    rows: [
-      { placement: "1st Place", amount: 2250 },
-      { placement: "2nd Place", amount: 1200 },
-      { placement: "3rd", amount: 750 },
-      { placement: "4th", amount: 375 },
-      { placement: "5th/6th", amount: 187.5 },
-    ],
-  },
-  {
     division: "mens-doubles",
-    divisionLabel: "Tier 1 (150k) - Gender Doubles",
+    divisionLabel: "Doubles (Men's & Women's)",
     payoutBasis: "per-team",
     rows: [
       { placement: "1st Place", amount: 4000, note: "Split between partners" },
@@ -394,8 +318,20 @@ const appChampionsProsTier1Payouts: PayoutTable[] = [
     ],
   },
   {
+    division: "mens-singles",
+    divisionLabel: "Singles (Men's & Women's)",
+    payoutBasis: "per-player",
+    rows: [
+      { placement: "1st Place", amount: 2250 },
+      { placement: "2nd Place", amount: 1200 },
+      { placement: "3rd", amount: 750 },
+      { placement: "4th", amount: 375 },
+      { placement: "5th/6th", amount: 187.5 },
+    ],
+  },
+  {
     division: "mixed-doubles",
-    divisionLabel: "Tier 1 (150k) - Mixed Doubles",
+    divisionLabel: "Mixed Doubles",
     payoutBasis: "per-team",
     rows: [
       { placement: "1st Place", amount: 4000, note: "Split between partners" },
@@ -412,20 +348,8 @@ const appChampionsProsTier1Payouts: PayoutTable[] = [
 
 const appChampionsProsTier2Payouts: PayoutTable[] = [
   {
-    division: "mens-singles",
-    divisionLabel: "Tier 2 (100k) - Singles",
-    payoutBasis: "per-player",
-    rows: [
-      { placement: "1st Place", amount: 1500 },
-      { placement: "2nd Place", amount: 800 },
-      { placement: "3rd", amount: 500 },
-      { placement: "4th", amount: 350 },
-      { placement: "5th/6th", amount: 250 },
-    ],
-  },
-  {
     division: "mens-doubles",
-    divisionLabel: "Tier 2 (100k) - Gender Doubles",
+    divisionLabel: "Doubles (Men's & Women's)",
     payoutBasis: "per-team",
     rows: [
       { placement: "1st Place", amount: 3000, note: "Split between partners" },
@@ -436,8 +360,20 @@ const appChampionsProsTier2Payouts: PayoutTable[] = [
     ],
   },
   {
+    division: "mens-singles",
+    divisionLabel: "Singles (Men's & Women's)",
+    payoutBasis: "per-player",
+    rows: [
+      { placement: "1st Place", amount: 1500 },
+      { placement: "2nd Place", amount: 800 },
+      { placement: "3rd", amount: 500 },
+      { placement: "4th", amount: 350 },
+      { placement: "5th/6th", amount: 250 },
+    ],
+  },
+  {
     division: "mixed-doubles",
-    divisionLabel: "Tier 2 (100k) - Mixed Doubles",
+    divisionLabel: "Mixed Doubles",
     payoutBasis: "per-team",
     rows: [
       { placement: "1st Place", amount: 3000, note: "Split between partners" },
@@ -451,30 +387,8 @@ const appChampionsProsTier2Payouts: PayoutTable[] = [
 
 const appMajorPayouts: PayoutTable[] = [
   {
-    division: "mens-singles",
-    divisionLabel: divisionLabels["mens-singles"],
-    payoutBasis: "per-player",
-    rows: [
-      { placement: "Champion", amount: 25000 },
-      { placement: "Runner-Up", amount: 12500 },
-      { placement: "Semifinalist", amount: 6250 },
-      { placement: "Quarterfinalist", amount: 3125 },
-    ],
-  },
-  {
-    division: "womens-singles",
-    divisionLabel: divisionLabels["womens-singles"],
-    payoutBasis: "per-player",
-    rows: [
-      { placement: "Champion", amount: 25000 },
-      { placement: "Runner-Up", amount: 12500 },
-      { placement: "Semifinalist", amount: 6250 },
-      { placement: "Quarterfinalist", amount: 3125 },
-    ],
-  },
-  {
     division: "mens-doubles",
-    divisionLabel: divisionLabels["mens-doubles"],
+    divisionLabel: "Doubles (Men's & Women's)",
     payoutBasis: "per-team",
     rows: [
       { placement: "Champion", amount: 30000, note: "Split between partners" },
@@ -483,18 +397,19 @@ const appMajorPayouts: PayoutTable[] = [
     ],
   },
   {
-    division: "womens-doubles",
-    divisionLabel: divisionLabels["womens-doubles"],
-    payoutBasis: "per-team",
+    division: "mens-singles",
+    divisionLabel: "Singles (Men's & Women's)",
+    payoutBasis: "per-player",
     rows: [
-      { placement: "Champion", amount: 30000, note: "Split between partners" },
-      { placement: "Runner-Up", amount: 15000, note: "Split between partners" },
-      { placement: "Semifinalist", amount: 7500, note: "Split between partners" },
+      { placement: "Champion", amount: 25000 },
+      { placement: "Runner-Up", amount: 12500 },
+      { placement: "Semifinalist", amount: 6250 },
+      { placement: "Quarterfinalist", amount: 3125 },
     ],
   },
   {
     division: "mixed-doubles",
-    divisionLabel: divisionLabels["mixed-doubles"],
+    divisionLabel: "Mixed Doubles",
     payoutBasis: "per-team",
     rows: [
       { placement: "Champion", amount: 25000, note: "Split between partners" },
@@ -506,30 +421,8 @@ const appMajorPayouts: PayoutTable[] = [
 
 const appStandardPayouts: PayoutTable[] = [
   {
-    division: "mens-singles",
-    divisionLabel: divisionLabels["mens-singles"],
-    payoutBasis: "per-player",
-    rows: [
-      { placement: "Champion", amount: 10000 },
-      { placement: "Runner-Up", amount: 5000 },
-      { placement: "Semifinalist", amount: 2500 },
-      { placement: "Quarterfinalist", amount: 1250 },
-    ],
-  },
-  {
-    division: "womens-singles",
-    divisionLabel: divisionLabels["womens-singles"],
-    payoutBasis: "per-player",
-    rows: [
-      { placement: "Champion", amount: 10000 },
-      { placement: "Runner-Up", amount: 5000 },
-      { placement: "Semifinalist", amount: 2500 },
-      { placement: "Quarterfinalist", amount: 1250 },
-    ],
-  },
-  {
     division: "mens-doubles",
-    divisionLabel: divisionLabels["mens-doubles"],
+    divisionLabel: "Doubles (Men's & Women's)",
     payoutBasis: "per-team",
     rows: [
       { placement: "Champion", amount: 12000, note: "Split between partners" },
@@ -538,18 +431,19 @@ const appStandardPayouts: PayoutTable[] = [
     ],
   },
   {
-    division: "womens-doubles",
-    divisionLabel: divisionLabels["womens-doubles"],
-    payoutBasis: "per-team",
+    division: "mens-singles",
+    divisionLabel: "Singles (Men's & Women's)",
+    payoutBasis: "per-player",
     rows: [
-      { placement: "Champion", amount: 12000, note: "Split between partners" },
-      { placement: "Runner-Up", amount: 6000, note: "Split between partners" },
-      { placement: "Semifinalist", amount: 3000, note: "Split between partners" },
+      { placement: "Champion", amount: 10000 },
+      { placement: "Runner-Up", amount: 5000 },
+      { placement: "Semifinalist", amount: 2500 },
+      { placement: "Quarterfinalist", amount: 1250 },
     ],
   },
   {
     division: "mixed-doubles",
-    divisionLabel: divisionLabels["mixed-doubles"],
+    divisionLabel: "Mixed Doubles",
     payoutBasis: "per-team",
     rows: [
       { placement: "Champion", amount: 10000, note: "Split between partners" },
