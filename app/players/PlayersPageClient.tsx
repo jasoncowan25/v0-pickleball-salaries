@@ -545,14 +545,9 @@ function PlayersPageContent() {
         </div>
 
         <Card className="p-6">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4">
-            <div>
-              <h2 className="text-lg font-semibold">{tableHeading}</h2>
-              <p className="text-muted-foreground">{getSubtitle()}</p>
-            </div>
-            <div className="text-xs text-muted-foreground md:text-right">
-              Last updated: {new Date().toLocaleDateString()}
-            </div>
+          <div className="mb-4">
+            <h2 className="text-lg font-semibold">{tableHeading}</h2>
+            <p className="text-muted-foreground">{getSubtitle()}</p>
           </div>
 
           {showEmptyState ? (
