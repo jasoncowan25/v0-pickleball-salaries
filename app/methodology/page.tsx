@@ -37,7 +37,7 @@ export default function MethodologyPage() {
                   <VerificationStamp variant="estimated" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-medium mb-2">Estimated</h3>
+                  <h3 className="font-medium mb-2">DinkBank Estimated</h3>
                   <p className="text-sm text-muted-foreground">
                     Amounts shown with a ~ icon are estimates. These values are derived from publicly reported payout structures, comparable player results, historical prize distributions, and DinkBank's internal modeling when exact figures have not been published. Estimates may be updated as new information becomes available.
                   </p>
