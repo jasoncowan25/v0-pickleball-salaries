@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertTriangle, HelpCircle, Eye } from "lucide-react"
 import Image from "next/image"
+import { VerificationStamp } from "@/components/verification-stamp"
 
 export default function MethodologyPage() {
   return (
@@ -20,7 +21,9 @@ export default function MethodologyPage() {
             <h2 className="text-2xl font-semibold mb-4">Data Confidence Levels</h2>
             <div className="space-y-4">
               <div className="flex items-start gap-4">
-                <Image src="/check-icon.svg" alt="Confirmed" width={24} height={24} className="mt-1 flex-shrink-0" />
+                <div className="mt-1 flex-shrink-0">
+                  <VerificationStamp variant="verified" />
+                </div>
                 <div className="flex-1">
                   <h3 className="font-semibold mb-2">DinkBank Confirmed</h3>
                   <p className="text-muted-foreground">
@@ -30,8 +33,8 @@ export default function MethodologyPage() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="mt-1 flex-shrink-0 flex items-center justify-center w-6 h-6 text-muted-foreground text-xl leading-none">
-                  ~
+                <div className="mt-1 flex-shrink-0">
+                  <VerificationStamp variant="estimated" />
                 </div>
                 <div className="flex-1">
                   <h3 className="font-semibold mb-2">Estimated</h3>
