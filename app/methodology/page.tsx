@@ -24,17 +24,19 @@ export default function MethodologyPage() {
                 <div className="flex-1">
                   <h3 className="font-semibold mb-2">DinkBank Confirmed</h3>
                   <p className="text-muted-foreground">
-                    {"Identified by the yellow checkmark. These amounts are verified through publicly available announcements, credible third-party reporting, or direct organizer confirmation. Totals may also be marked as confirmed when all underlying amounts are verified."}
+                    {"Identified by the checkmark. These amounts are verified through publicly available announcements, credible third-party reporting, or direct organizer confirmation. Totals may also be marked as confirmed when all underlying amounts are verified."}
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start gap-4">
-                <HelpCircle className="h-6 w-6 mt-1 text-transparent text-transparent" />
+                <div className="mt-1 flex-shrink-0 flex items-center justify-center w-6 h-6 text-muted-foreground text-xl leading-none">
+                  ~
+                </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold mb-2">Estimated (No Checkmark Shown)</h3>
+                  <h3 className="font-semibold mb-2">Estimated</h3>
                   <p className="text-muted-foreground">
-                    Amounts without a checkmark are estimates. These values are derived from publicly reported payout structures, comparable player results, historical prize distributions, and DinkBank’s internal modeling when exact figures have not been published. Estimates may be updated as new information becomes available.
+                    Amounts shown with a ~ icon are estimates. These values are derived from publicly reported payout structures, comparable player results, historical prize distributions, and DinkBank's internal modeling when exact figures have not been published. Estimates may be updated as new information becomes available.
                   </p>
                 </div>
               </div>
