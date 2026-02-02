@@ -488,9 +488,12 @@ function PlayersPageContent() {
       <main className="container py-12">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Pro Pickleball Player Earnings</h1>
-          <p className="text-base text-muted-foreground mb-2">
+          <p className="text-base text-muted-foreground">
             View all tracked pro pickleball players ranked by earnings, with filters to explore by tour, gender, or
             year.
+          </p>
+          <p className="text-sm text-muted-foreground mt-3">
+            Last DinkBank update: {new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
           </p>
         </div>
 
