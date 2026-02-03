@@ -446,7 +446,9 @@ export default function TourPrizeMoneyPage() {
       {/* Page Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold mb-1">Prize Money</h1>
-        <p className="text-sm text-muted-foreground mb-4">{tourConfig.subtitle}</p>
+        <p className="text-sm text-muted-foreground mb-4">
+          Pro Pickleball Prize Money by Event, Finish & Contract Tier (PPA, MLP, APP)
+        </p>
 
         {/* Tour Switcher */}
         <TourSwitcher currentTour={tour} />
